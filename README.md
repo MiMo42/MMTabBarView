@@ -24,11 +24,21 @@ If you make any improvements, please submit them as pull requests.
 To, build, simply open default.xcworkspace, choose MMTabBarView Demo scheme and run.
 The workspace contains two projects, the MMTabBarView framework and the Demo application.
 
-Some components and lines originally were created by Positive Spin Media, and is BSD licensed.<br> 
-See: http://www.positivespinmedia.com/dev/PSMTabBarControl.html License
+## Installing
+Add the .framework bundle to your xcode project, and add it to the Linked Frameworks and Libraries (under Target -> Summary). Next, under Target -> Build Phases, Add a new build phase that copies it to the Frameworks directory of your app. (Add Build Phase > Copy Files. Destination: Frameworks)
 
-Copyright © 2005, Positive Spin Media. All rights reserved.
+## Copying
+Some components and lines originally were created by Positive Spin Media. The original is BSD licensed.<br> 
+See: http://www.positivespinmedia.com/dev/PSMTabBarControl.html License<br>
+Since 2005 there have been lots of commits by various contributors.<br>
+Thanks to the guys recently improved PSMTabBarControl and inspired me to finally do the re-write!
 
+## License
+Copyright © 2005, Positive Spin Media. All rights reserved.<br>
+The re-write is also BSD licensed.<br>
+Copyright © 2012, Michael Monscheuer. All rights reserved.<br>
+
+<hr>
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
 <pre><code>* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
