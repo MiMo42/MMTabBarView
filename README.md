@@ -3,8 +3,9 @@ MMTabBarView (beta)
 
 A Mac OS X tab bar view that works on 10.6-10.8 with Xcode 4.x.<br>
 MMTabBarView is a modernized and view based re-write of PSMTabBarControl, <br>
-which can be found here: https://github.com/dorianj/PSMTabBarControl
-Though its API is quite similar, it is not a drop-in replacement for PSMTabBarControl. 
+which can be found here: https://github.com/dorianj/PSMTabBarControl<br>
+Though MMTabBarView's API is quite similar, it is not a drop-in replacement for PSMTabBarControl:
+Due to conceptual and structural changes, the MMTabBarViewDelegate protocol is somewhat different.
 
 If you want to support this project, there are various ways in which you could do this:<br>
 
@@ -18,6 +19,11 @@ Donating via PayPal is as easy as clicking the donate button on this page:
 http://mimo42.github.com/MMTabBarView/
 
 If you make any improvements, please submit them as pull requests.
+
+## State
+
+The project is still in a beta state. Some Styles need to be adjusted.
+There is still some old code that should be replaced.
 
 ## Building
 
