@@ -1,0 +1,6 @@
+#include "Base.xcconfig"
+OTHER_LDFLAGS = -framework Foundation -framework AppKit
+PRODUCT_NAME = MMTabBarViewDemo
+INSTALL_PATH = $(HOME)/Applications
+INFOPLIST_FILE = MMTabBarViewDemo/MMTabBarViewDemo/MMTabBarView Demo-Info.plist
+ALWAYS_SEARCH_USER_PATHS = NO
