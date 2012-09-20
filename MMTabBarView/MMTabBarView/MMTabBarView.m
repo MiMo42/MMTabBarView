@@ -690,6 +690,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	}
 }
 
+- (BOOL)onlyShowCloseOnHover {
+	return _onlyShowCloseOnHover;
+}
+
+- (void)setOnlyShowCloseOnHover:(BOOL)value {
+	_onlyShowCloseOnHover = value;
+    [self update];
+}
+
 - (BOOL)canCloseOnlyTab {
 	return _canCloseOnlyTab;
 }
@@ -1835,6 +1844,7 @@ NSLog(@"did select:%@",tabViewItem);
 		[aCoder encodeObject:_addTabButton forKey:@"MMaddTabButton"];
 		[aCoder encodeObject:_style forKey:@"MMstyle"];
 		[aCoder encodeInteger:_orientation forKey:@"MMorientation"];
+		[aCoder encodeBool:_onlyShowCloseOnHover forKey:@"MMonlyShowCloseOnHover"];        
 		[aCoder encodeBool:_canCloseOnlyTab forKey:@"MMcanCloseOnlyTab"];
 		[aCoder encodeBool:_disableTabClose forKey:@"MMdisableTabClose"];
 		[aCoder encodeBool:_hideForSingleTab forKey:@"MMhideForSingleTab"];
@@ -1874,6 +1884,7 @@ NSLog(@"did select:%@",tabViewItem);
 			_addTabButton = [[aDecoder decodeObjectForKey:@"MMaddTabButton"] retain];
 			_style = [[aDecoder decodeObjectForKey:@"PSMstyle"] retain];
 			_orientation = (MMTabBarOrientation)[aDecoder decodeIntegerForKey:@"MMorientation"];
+			_onlyShowCloseOnHover = [aDecoder decodeBoolForKey:@"MMonlyShowCloseOnHover"];            
 			_canCloseOnlyTab = [aDecoder decodeBoolForKey:@"MMcanCloseOnlyTab"];
 			_disableTabClose = [aDecoder decodeBoolForKey:@"MMdisableTabClose"];
 			_hideForSingleTab = [aDecoder decodeBoolForKey:@"MMhideForSingleTab"];
@@ -2016,6 +2027,7 @@ NSLog(@"did select:%@",tabViewItem);
 
         // default config
 	_orientation = MMTabBarHorizontalOrientation;
+    _onlyShowCloseOnHover = NO;
 	_canCloseOnlyTab = NO;
 	_disableTabClose = NO;
 	_showAddTabButton = NO;

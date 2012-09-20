@@ -65,6 +65,7 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
     // configuration
     id <MMTabStyle>                 _style;
+    BOOL                            _onlyShowCloseOnHover;    
     BOOL                            _canCloseOnlyTab;
     BOOL                            _disableTabClose;
     BOOL                            _hideForSingleTab;
@@ -179,6 +180,8 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
 - (MMTabBarOrientation)orientation;
 - (void)setOrientation:(MMTabBarOrientation)value;
+- (BOOL)onlyShowCloseOnHover;
+- (void)setOnlyShowCloseOnHover:(BOOL)value;
 - (BOOL)canCloseOnlyTab;
 - (void)setCanCloseOnlyTab:(BOOL)value;
 - (BOOL)disableTabClose;
