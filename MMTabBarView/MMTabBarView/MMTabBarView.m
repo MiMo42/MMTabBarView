@@ -36,6 +36,7 @@
 - (void)_commonInit;
 
 // providing defaults
+- (CGFloat)_tabBarButtonPadding;
 - (CGFloat)_heightOfTabBarButtons;
 - (CGFloat)_rightMargin;
 - (CGFloat)_leftMargin;
@@ -907,6 +908,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (MMOverflowPopUpButton *)overflowPopUpButton {
 	return _overflowPopUpButton;
+}
+
+- (CGFloat)tabBarButtonPadding {
+    if ([_style respondsToSelector:@selector(tabBarButtonPaddingForTabBarView:)])
+        return [_style tabBarButtonPaddingForTabBarView:self];
+    
+    return [self _tabBarButtonPadding];
 }
 
 -(CGFloat)heightOfTabBarButtons
@@ -2087,6 +2095,10 @@ NSLog(@"did select:%@",tabViewItem);
     } else {
         [_addTabButton setHidden:YES];
     }
+}
+
+- (CGFloat)_tabBarButtonPadding {
+    return 0.0;
 }
 
 - (CGFloat)_heightOfTabBarButtons {

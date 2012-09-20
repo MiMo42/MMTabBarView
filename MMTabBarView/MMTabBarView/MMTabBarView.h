@@ -223,6 +223,7 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)setDelegate:(id<MMTabBarViewDelegate>)object;
 - (MMRolloverButton *)addTabButton;
 - (MMOverflowPopUpButton *)overflowPopUpButton;
+- (CGFloat)tabBarButtonPadding;
 - (CGFloat)heightOfTabBarButtons;
 
 #pragma mark -
