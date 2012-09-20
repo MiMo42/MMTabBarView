@@ -384,7 +384,7 @@
 	BOOL selected = [cell state] == NSOnState;
 	if (!showsBaselineSeparator || selected) {
 		// selected tab
-		NSRect aRect = NSMakeRect(cellFrame.origin.x + 0.5, cellFrame.origin.y - 0.5, cellFrame.size.width, cellFrame.size.height);
+		NSRect aRect = NSMakeRect(cellFrame.origin.x + 0.5, cellFrame.origin.y - 0.5, cellFrame.size.width-1.0, cellFrame.size.height);
 		if (selected) {
 			aRect.origin.y -= 1.0;
 			aRect.size.height += 1.0;
