@@ -12,12 +12,6 @@
 		0634F0A6160A0D6200A6C86A /* largeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0A5160A0D6200A6C86A /* largeImage.png */; };
 		0634F0AB160A0D7900A6C86A /* DemoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0A7160A0D7900A6C86A /* DemoWindow.xib */; };
 		0634F0B6160A1D5D00A6C86A /* MMTabBarView.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06DB23EA1609F5D80071BDA0 /* MMTabBarView.framework */; };
-		0634F0BE160A1F6500A6C86A /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0B8160A1F6500A6C86A /* Base.xcconfig */; };
-		0634F0BF160A1F6500A6C86A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0B9160A1F6500A6C86A /* Debug.xcconfig */; };
-		0634F0C0160A1F6500A6C86A /* MMTabBarViewDemo-Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0BA160A1F6500A6C86A /* MMTabBarViewDemo-Base.xcconfig */; };
-		0634F0C1160A1F6500A6C86A /* MMTabBarViewDemo-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0BB160A1F6500A6C86A /* MMTabBarViewDemo-Debug.xcconfig */; };
-		0634F0C2160A1F6500A6C86A /* MMTabBarViewDemo-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0BC160A1F6500A6C86A /* MMTabBarViewDemo-Release.xcconfig */; };
-		0634F0C3160A1F6500A6C86A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0BD160A1F6500A6C86A /* Release.xcconfig */; };
 		06DB23CE1609F5B90071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23CD1609F5B90071BDA0 /* Cocoa.framework */; };
 		06DB23D81609F5B90071BDA0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06DB23D61609F5B90071BDA0 /* InfoPlist.strings */; };
 		06DB23DA1609F5B90071BDA0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB23D91609F5B90071BDA0 /* main.m */; };
@@ -214,7 +208,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MM;
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Michael Monscheuer";
 			};
 			buildConfigurationList = 06DB23C31609F5B90071BDA0 /* Build configuration list for PBXProject "MMTabBarView Demo" */;
@@ -244,12 +238,6 @@
 				06DB23E41609F5BA0071BDA0 /* MainMenu.xib in Resources */,
 				0634F0A6160A0D6200A6C86A /* largeImage.png in Resources */,
 				0634F0AB160A0D7900A6C86A /* DemoWindow.xib in Resources */,
-				0634F0BE160A1F6500A6C86A /* Base.xcconfig in Resources */,
-				0634F0BF160A1F6500A6C86A /* Debug.xcconfig in Resources */,
-				0634F0C0160A1F6500A6C86A /* MMTabBarViewDemo-Base.xcconfig in Resources */,
-				0634F0C1160A1F6500A6C86A /* MMTabBarViewDemo-Debug.xcconfig in Resources */,
-				0634F0C2160A1F6500A6C86A /* MMTabBarViewDemo-Release.xcconfig in Resources */,
-				0634F0C3160A1F6500A6C86A /* Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
