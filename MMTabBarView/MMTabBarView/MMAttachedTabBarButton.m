@@ -97,8 +97,10 @@
 
         // select immediately
     if ([tabBarView selectsTabsOnMouseDown]) {
-        [previousSelectedButton setState:NSOffState];
-        [self performClick:self];
+        if (self != previousSelectedButton) {
+            [previousSelectedButton setState:NSOffState];
+            [self performClick:self];
+        }
     }
     
         // eventually begin dragging of button
