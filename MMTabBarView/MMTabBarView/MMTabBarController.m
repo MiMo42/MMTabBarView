@@ -194,6 +194,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 					BOOL remainingButtonsMustGoToOverflow = NO;
 
 					totalOccupiedWidth = [[newWidths valueForKeyPath:@"@sum.intValue"] integerValue];
+                    if ([newWidths count] > 0)
+                        totalOccupiedWidth += ([newWidths count]-1)*[_control tabBarButtonPadding];
 
 					/* Can I squeeze it in without violating min button width? This is the width we would take up
 					 * if every button so far were at the control minimum size (or their current size if that is less than the control minimum).
@@ -294,10 +296,13 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 						for(q = 0; q < [newWidths count]; q++) {
 							[newWidths replaceObjectAtIndex:q withObject:[NSNumber numberWithDouble:revisedWidth]];
 							totalOccupiedWidth += revisedWidth;
+                            if (q+1 != [newWidths count])
+                                totalOccupiedWidth += [_control tabBarButtonPadding];
 						}
 						// just squeezed this one in...
 						[newWidths addObject:[NSNumber numberWithDouble:revisedWidth]];
 						totalOccupiedWidth += revisedWidth;
+                        totalOccupiedWidth += [_control tabBarButtonPadding];
 						numberOfVisibleButtons++;
                         
                     // couldn't fit that last one...
@@ -316,6 +321,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
                             for(q = 0; q < [newWidths count]; q++) {
                                 [newWidths replaceObjectAtIndex:q withObject:[NSNumber numberWithDouble:revisedWidth]];
                                 totalOccupiedWidth += revisedWidth;
+                                if (q+1 != [newWidths count])
+                                    totalOccupiedWidth += [_control tabBarButtonPadding];
                             }
                         } else {
                             [self _shrinkWidths:newWidths towardMinimum:[_control buttonMinWidth] withAvailableWidth:availableWidth];
@@ -335,6 +342,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
                                     for(q = 0; q < [newWidths count]; q++) {
                                         [newWidths replaceObjectAtIndex:q withObject:[NSNumber numberWithDouble:revisedWidth]];
                                         totalOccupiedWidth += revisedWidth;
+                                        if (q+1 != [newWidths count])
+                                            totalOccupiedWidth += [_control tabBarButtonPadding];
                                     }
                                 }
                             }
@@ -348,6 +357,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 				numberOfVisibleButtons = buttonCount;
 				[newWidths addObject:[NSNumber numberWithDouble:width]];
 				totalOccupiedWidth += width;
+                if (i+1 != buttonCount)
+                    totalOccupiedWidth += [_control tabBarButtonPadding];
 			}
 		} else {
 			//lay out vertical tabs
@@ -400,7 +411,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 	NSRect buttonRect = [_control genericButtonRect];
 	MMAttachedTabBarButton *aButton;
 	NSTabViewItem *selectedTabViewItem = [[_control tabView] selectedTabViewItem];
-	NSMenuItem *menuItem;
+	NSMenuItem *menuItem = nil;
+    CGFloat buttonPadding = [_control tabBarButtonPadding];
 
 	[_overflowMenu release], _overflowMenu = nil;
 
@@ -465,9 +477,9 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 
 			// next...
             if ([_control orientation] == MMTabBarHorizontalOrientation)
-                buttonRect.origin.x += [[widths objectAtIndex:i] doubleValue];
+                buttonRect.origin.x += [[widths objectAtIndex:i] doubleValue] + buttonPadding;
             else
-                buttonRect.origin.y += buttonRect.size.height;
+                buttonRect.origin.y += buttonRect.size.height+buttonPadding;
                 
             if ([[_control delegate] respondsToSelector:@selector(tabView:tabViewItem:isInOverflowMenu:)]) {
                 [[_control delegate] tabView:[_control tabView] tabViewItem:[aButton tabViewItem] isInOverflowMenu:NO];

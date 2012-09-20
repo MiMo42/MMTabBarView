@@ -86,6 +86,10 @@ StaticImage(SafariIWITRightCap)
 	return 10.0f;
 }
 
+- (CGFloat)tabBarButtonPaddingForTabBarView:(MMTabBarView *)tabBarView {
+    return 5.0;
+}
+
 #pragma mark -
 #pragma mark Add Tab Button
 
@@ -228,6 +232,20 @@ StaticImage(SafariIWITRightCap)
     }
     
 	[NSGraphicsContext restoreGraphicsState];
+}
+
+-(NSRect)_separatorFrameForLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton forTabBarView:(MMTabBarView *)tabBarView {
+
+    NSRect bounds = [tabBarView bounds];
+
+    return NSMakeRect(NSMaxX([leftButton frame]), 0, NSMinX([rightButton frame])-NSMaxX([leftButton frame]), bounds.size.height);
+}
+
+- (void)drawSeparatorOfTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
+
+    NSRect frame = [self _separatorFrameForLeftButton:leftButton rightButton:rightButton forTabBarView:tabBarView];
+    [[NSColor redColor] set];
+    NSRectFill(frame);
 }
 
 @end

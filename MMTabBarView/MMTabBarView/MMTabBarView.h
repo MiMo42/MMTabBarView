@@ -274,6 +274,14 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)bindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton andTabViewItem:(NSTabViewItem *)item;
 - (void)unbindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton;
 
+#pragma mark -
+#pragma mark Drawing
+
+- (void)drawRect:(NSRect)rect;
+- (void)drawBezelInRect:(NSRect)rect;
+- (void)drawInteriorInRect:(NSRect)rect;
+- (void)drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
+
 @end
 
 @protocol MMTabBarViewDelegate <NSTabViewDelegate>

@@ -49,6 +49,7 @@
 - (void)_drawTabBarViewInRect:(NSRect)aRect;
 - (void)_drawBezelInRect:(NSRect)rect;
 - (void)_drawInteriorInRect:(NSRect)rect;
+- (void)_drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
 
 // determine positions
 - (void)_positionOverflowMenu;
@@ -240,7 +241,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (CGFloat)availableWidthForButtons {
 
     CGFloat result = [self frame].size.width - [self leftMargin] - [self rightMargin];
-    
+        
     result -= _resizeAreaCompensation;
     
         //Don't let attached buttons overlap the add tab button if it is visible
@@ -1633,6 +1634,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
 }
 
+- (void)drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
+
+    if ([_style respondsToSelector:@selector(drawSeparatorOfTabBarView:atIndex:withLeftButton:rightButton:inRect:)]) {
+        [_style drawSeparatorOfTabBarView:self atIndex:index withLeftButton:leftButton rightButton:rightButton inRect:rect];
+    } else {
+        [self _drawSeparatorAtIndex:index withLeftButton:leftButton rightButton:rightButton inRect:rect];
+    }
+}
+
 #pragma mark -
 #pragma mark Mouse Tracking
 
@@ -2228,6 +2238,31 @@ NSLog(@"did select:%@",tabViewItem);
         [centeredParagraphStyle release];
 		return;
 	}
+    
+        // draw separators
+    if ([self tabBarButtonPadding] > 0.0) {
+        NSArray *orderedButtons = [self orderedAttachedButtons];
+        NSUInteger numberOfButtons = [orderedButtons count];
+        if (numberOfButtons >= 2) {
+
+            MMAttachedTabBarButton *lastButton = [orderedButtons objectAtIndex:0];
+            
+            NSRange buttonRange = NSMakeRange(1, [orderedButtons count]-1);
+            orderedButtons = [[self orderedAttachedButtons] subarrayWithRange:buttonRange];
+
+            NSUInteger i = 1;
+
+            for (MMAttachedTabBarButton *aButton in orderedButtons) {
+                [self drawSeparatorAtIndex:i withLeftButton:lastButton rightButton:aButton inRect:rect];
+                
+                lastButton = aButton;
+                i++;
+            }        
+        }
+    }
+}
+- (void)_drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
+    // default implementation draws nothing
 }
 
 - (void)_positionOverflowMenu {
