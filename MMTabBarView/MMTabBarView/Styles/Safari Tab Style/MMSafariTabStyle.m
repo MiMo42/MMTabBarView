@@ -226,7 +226,7 @@ StaticImage(SafariIWITRightCap)
             }
     }
 
-    NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);
+    NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]); 
 */    
 }
 
