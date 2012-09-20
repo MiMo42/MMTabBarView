@@ -27,7 +27,7 @@
 
 @optional
 
-// control specific parameters
+// tab view specific parameters
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)rightMarginForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)topMarginForTabBarView:(MMTabBarView *)tabBarView;
