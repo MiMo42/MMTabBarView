@@ -21,6 +21,7 @@
 // tab bar config
 - (IBAction)configStyle:(id)sender;
 - (IBAction)configOrientation:(id)sender;
+- (IBAction)configOnlyShowCloseOnHover:(id)sender;
 - (IBAction)configCanCloseOnlyTab:(id)sender;
 - (IBAction)configDisableTabClose:(id)sender;
 - (IBAction)configAllowBackgroundClosing:(id)sender;
@@ -223,6 +224,13 @@
 
 	[[NSUserDefaults standardUserDefaults] setObject:[sender title]
 	 forKey:@"Orientation"];
+}
+
+- (void)configOnlyShowCloseOnHover:(id)sender {
+	[tabBar setOnlyShowCloseOnHover:[sender state]];
+
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:[sender state]]
+	 forKey:@"OnlyShowCloserOnHover"];
 }
 
 - (void)configCanCloseOnlyTab:(id)sender {
@@ -565,6 +573,7 @@
 	[popUp_orientation selectItemWithTitle:[defaults stringForKey:@"Orientation"]];
 	[popUp_tearOff selectItemWithTitle:[defaults stringForKey:@"Tear-Off"]];
 
+	[button_onlyShowCloseOnHover setState:[defaults boolForKey:@"OnlyShowCloseOnHover"]];
 	[button_canCloseOnlyTab setState:[defaults boolForKey:@"CanCloseOnlyTab"]];
 	[button_disableTabClosing setState:[defaults boolForKey:@"DisableTabClosing"]];
     [button_allowBackgroundClosing setState:[defaults boolForKey:@"AllowBackgroundClosing"]];
@@ -577,6 +586,7 @@
 
 	[self configStyle:popUp_style];
 	[self configOrientation:popUp_orientation];
+    [self configOnlyShowCloseOnHover:button_onlyShowCloseOnHover];    
 	[self configCanCloseOnlyTab:button_canCloseOnlyTab];
 	[self configDisableTabClose:button_disableTabClosing];
 	[self configAllowBackgroundClosing:button_allowBackgroundClosing];
