@@ -229,7 +229,6 @@
 }
 
 - (BOOL)shouldDisplayCloseButton {
-
     return [self hasCloseButton] && ![self suppressCloseButton];
 }
 
@@ -814,7 +813,7 @@ static inline NSSize scaleProportionally(NSSize imageSize, NSSize canvasSize, BO
     if ([self shouldDisplayCloseButton] == NO) {
         return NSZeroRect;
     }
-
+    
     NSRect drawingRect = [self drawingRectForBounds:theRect];
     NSSize closeButtonSize = [self closeButtonSizeForBounds:theRect];
     
@@ -1023,6 +1022,14 @@ static inline NSSize scaleProportionally(NSSize imageSize, NSSize canvasSize, BO
 - (void)_drawCloseButtonWithFrame:(NSRect)frame inView:(NSView *)controlView {
 
     // we draw nothing by default
+    
+        // update hidden state of close button
+    if ([[self tabBarView] onlyShowCloseOnHover]) {
+        [[self closeButton] setHidden:![self mouseHovered]];
+    } else {
+        if ([[self closeButton] isHidden] == YES)
+            [[self closeButton] setHidden:NO];
+    }
 }
 
 @end
