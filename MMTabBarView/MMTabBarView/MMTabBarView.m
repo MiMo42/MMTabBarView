@@ -19,6 +19,7 @@
 #import "MMAdiumTabStyle.h"
 #import "MMLiveChatTabStyle.h"
 #import "MMCardTabStyle.h"
+#import "MMSafariTabStyle.h"
 #import "MMTabDragAssistant.h"
 #import "MMTabBarController.h"
 #import "MMAttachedTabBarButton.h"
@@ -326,6 +327,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [self registerTabStyleClass:[MMMetalTabStyle class]];
     [self registerTabStyleClass:[MMCardTabStyle class]];
     [self registerTabStyleClass:[MMLiveChatTabStyle class]];
+    [self registerTabStyleClass:[MMSafariTabStyle class]];
 }
 
 + (void)registerTabStyleClass:(Class <MMTabStyle>)aStyleClass {
