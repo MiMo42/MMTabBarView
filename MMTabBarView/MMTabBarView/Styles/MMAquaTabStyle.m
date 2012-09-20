@@ -83,7 +83,7 @@
 }
 
 #pragma mark -
-#pragma mark Control Specifics
+#pragma mark Tab View Specifics
 
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
 	return 0.0f;

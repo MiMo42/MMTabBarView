@@ -62,7 +62,7 @@
 }
 
 #pragma mark -
-#pragma mark Control Specific
+#pragma mark Tab View Specific
 
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
