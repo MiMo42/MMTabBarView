@@ -1723,6 +1723,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     
 	if ([[self delegate] respondsToSelector:@selector(tabView:didSelectTabViewItem:)]) {
 		[[self delegate] performSelector:@selector(tabView:didSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
+    }
+    
+    if ([self tabBarButtonPadding] != 0.0) {
+        [self setNeedsDisplay:YES];
 	}
 /*
 	// here's a weird one - this message is sent before the "tabViewDidChangeNumberOfTabViewItems"

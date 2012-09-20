@@ -87,7 +87,7 @@ StaticImage(SafariIWITRightCap)
 }
 
 - (CGFloat)tabBarButtonPaddingForTabBarView:(MMTabBarView *)tabBarView {
-    return 5.0;
+    return 11.0;
 }
 
 #pragma mark -
@@ -157,16 +157,29 @@ StaticImage(SafariIWITRightCap)
 #pragma mark -
 #pragma mark Determining Cell Size
 
+/*
 - (NSRect)drawingRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell
 {
     return NSInsetRect(theRect, 10.0, 0.0);
 }
-
+*/
 #pragma mark -
 #pragma mark Drawing
 
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
+    NSRect cellFrame = frame;
+    
+    if ([[cell controlView] frame].size.height < 2)
+        return;
+
+    if ([cell state] == NSOnState) {
+        NSImage *center = _staticSafariAWATFillImage();
+    
+        NSDrawThreePartImage(cellFrame, nil, center, nil, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);
+    }
+    
+/*
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
     MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
     if (![button isKindOfClass:[MMAttachedTabBarButton class]])
@@ -214,6 +227,7 @@ StaticImage(SafariIWITRightCap)
     }
 
     NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);
+*/    
 }
 
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
@@ -244,8 +258,25 @@ StaticImage(SafariIWITRightCap)
 - (void)drawSeparatorOfTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
 
     NSRect frame = [self _separatorFrameForLeftButton:leftButton rightButton:rightButton forTabBarView:tabBarView];
-    [[NSColor redColor] set];
-    NSRectFill(frame);
+//    [[NSColor redColor] set];
+//    NSRectFill(frame);
+    
+    NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
+    
+    if ([leftButton state] == NSOnState) {
+        [_staticSafariAWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    } else if ([rightButton state] == NSOnState) {
+        [_staticSafariAWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    } else if (index < selIndex) {
+        [_staticSafariAWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    } else if (index > selIndex) {
+        [_staticSafariAWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    }
+/*
+    if ([rightButton state] == NSOnState) {
+        [_staticSafariAWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    }
+*/    
 }
 
 @end
