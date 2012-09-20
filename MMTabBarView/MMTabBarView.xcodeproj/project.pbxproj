@@ -103,6 +103,20 @@
 		0634F0CE160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C8160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig */; };
 		0634F0CF160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C9160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig */; };
 		0634F0D0160A1F8100A6C86A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0CA160A1F8100A6C86A /* Release.xcconfig */; };
+		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; };
+		06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */; };
+		06B51CD8160B561900153FA2 /* SafariAWATFill.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CCC160B561900153FA2 /* SafariAWATFill.png */; };
+		06B51CD9160B561900153FA2 /* SafariAWATLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CCD160B561900153FA2 /* SafariAWATLeftCap.png */; };
+		06B51CDA160B561900153FA2 /* SafariAWATRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CCE160B561900153FA2 /* SafariAWATRightCap.png */; };
+		06B51CDB160B561900153FA2 /* SafariAWBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CCF160B561900153FA2 /* SafariAWBG.png */; };
+		06B51CDC160B561900153FA2 /* SafariAWITLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD0160B561900153FA2 /* SafariAWITLeftCap.png */; };
+		06B51CDD160B561900153FA2 /* SafariAWITRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD1160B561900153FA2 /* SafariAWITRightCap.png */; };
+		06B51CDE160B561900153FA2 /* SafariIWATFill.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD2160B561900153FA2 /* SafariIWATFill.png */; };
+		06B51CDF160B561900153FA2 /* SafariIWATLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD3160B561900153FA2 /* SafariIWATLeftCap.png */; };
+		06B51CE0160B561900153FA2 /* SafariIWATRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD4160B561900153FA2 /* SafariIWATRightCap.png */; };
+		06B51CE1160B561900153FA2 /* SafariIWBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD5160B561900153FA2 /* SafariIWBG.png */; };
+		06B51CE2160B561900153FA2 /* SafariIWITLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD6160B561900153FA2 /* SafariIWITLeftCap.png */; };
+		06B51CE3160B561900153FA2 /* SafariIWITRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD7160B561900153FA2 /* SafariIWITRightCap.png */; };
 		06DB23AA1609F5830071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23A91609F5830071BDA0 /* Cocoa.framework */; };
 		06DB23B41609F5830071BDA0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06DB23B21609F5830071BDA0 /* InfoPlist.strings */; };
 		06DB23B81609F5830071BDA0 /* MMTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB23B71609F5830071BDA0 /* MMTabBarView.m */; };
@@ -204,6 +218,20 @@
 		0634F0C8160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MMTabBarViewFramework-Debug.xcconfig"; path = "../Configurations/MMTabBarViewFramework-Debug.xcconfig"; sourceTree = "<group>"; };
 		0634F0C9160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MMTabBarViewFramework-Release.xcconfig"; path = "../Configurations/MMTabBarViewFramework-Release.xcconfig"; sourceTree = "<group>"; };
 		0634F0CA160A1F8100A6C86A /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = ../Configurations/Release.xcconfig; sourceTree = "<group>"; };
+		06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSafariTabStyle.h; sourceTree = "<group>"; };
+		06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSafariTabStyle.m; sourceTree = "<group>"; };
+		06B51CCC160B561900153FA2 /* SafariAWATFill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWATFill.png; path = Images/SafariAWATFill.png; sourceTree = "<group>"; };
+		06B51CCD160B561900153FA2 /* SafariAWATLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWATLeftCap.png; path = Images/SafariAWATLeftCap.png; sourceTree = "<group>"; };
+		06B51CCE160B561900153FA2 /* SafariAWATRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWATRightCap.png; path = Images/SafariAWATRightCap.png; sourceTree = "<group>"; };
+		06B51CCF160B561900153FA2 /* SafariAWBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWBG.png; path = Images/SafariAWBG.png; sourceTree = "<group>"; };
+		06B51CD0160B561900153FA2 /* SafariAWITLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWITLeftCap.png; path = Images/SafariAWITLeftCap.png; sourceTree = "<group>"; };
+		06B51CD1160B561900153FA2 /* SafariAWITRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWITRightCap.png; path = Images/SafariAWITRightCap.png; sourceTree = "<group>"; };
+		06B51CD2160B561900153FA2 /* SafariIWATFill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWATFill.png; path = Images/SafariIWATFill.png; sourceTree = "<group>"; };
+		06B51CD3160B561900153FA2 /* SafariIWATLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWATLeftCap.png; path = Images/SafariIWATLeftCap.png; sourceTree = "<group>"; };
+		06B51CD4160B561900153FA2 /* SafariIWATRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWATRightCap.png; path = Images/SafariIWATRightCap.png; sourceTree = "<group>"; };
+		06B51CD5160B561900153FA2 /* SafariIWBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWBG.png; path = Images/SafariIWBG.png; sourceTree = "<group>"; };
+		06B51CD6160B561900153FA2 /* SafariIWITLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWITLeftCap.png; path = Images/SafariIWITLeftCap.png; sourceTree = "<group>"; };
+		06B51CD7160B561900153FA2 /* SafariIWITRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWITRightCap.png; path = Images/SafariIWITRightCap.png; sourceTree = "<group>"; };
 		06DB23A61609F5830071BDA0 /* MMTabBarView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MMTabBarView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06DB23A91609F5830071BDA0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		06DB23AC1609F5830071BDA0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -280,6 +308,7 @@
 				0634F0321609FD9000A6C86A /* MMMetalTabStyle.m */,
 				0634F0331609FD9000A6C86A /* MMUnifiedTabStyle.h */,
 				0634F0341609FD9000A6C86A /* MMUnifiedTabStyle.m */,
+				06B51CB2160B558700153FA2 /* Safari Tab Style */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -395,6 +424,35 @@
 			name = Configurations;
 			sourceTree = "<group>";
 		};
+		06B51CB2160B558700153FA2 /* Safari Tab Style */ = {
+			isa = PBXGroup;
+			children = (
+				06B51CB3160B55C500153FA2 /* Images */,
+				06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */,
+				06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */,
+			);
+			path = "Safari Tab Style";
+			sourceTree = "<group>";
+		};
+		06B51CB3160B55C500153FA2 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				06B51CCC160B561900153FA2 /* SafariAWATFill.png */,
+				06B51CCD160B561900153FA2 /* SafariAWATLeftCap.png */,
+				06B51CCE160B561900153FA2 /* SafariAWATRightCap.png */,
+				06B51CCF160B561900153FA2 /* SafariAWBG.png */,
+				06B51CD0160B561900153FA2 /* SafariAWITLeftCap.png */,
+				06B51CD1160B561900153FA2 /* SafariAWITRightCap.png */,
+				06B51CD2160B561900153FA2 /* SafariIWATFill.png */,
+				06B51CD3160B561900153FA2 /* SafariIWATLeftCap.png */,
+				06B51CD4160B561900153FA2 /* SafariIWATRightCap.png */,
+				06B51CD5160B561900153FA2 /* SafariIWBG.png */,
+				06B51CD6160B561900153FA2 /* SafariIWITLeftCap.png */,
+				06B51CD7160B561900153FA2 /* SafariIWITRightCap.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		06DB239A1609F5820071BDA0 = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +551,7 @@
 				0634F03F1609FD9000A6C86A /* MMUnifiedTabStyle.h in Headers */,
 				0634F09A160A0CDB00A6C86A /* MMTabBarView.h in Headers */,
 				0634F0B2160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h in Headers */,
+				06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,6 +656,18 @@
 				0634F0CE160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig in Resources */,
 				0634F0CF160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig in Resources */,
 				0634F0D0160A1F8100A6C86A /* Release.xcconfig in Resources */,
+				06B51CD8160B561900153FA2 /* SafariAWATFill.png in Resources */,
+				06B51CD9160B561900153FA2 /* SafariAWATLeftCap.png in Resources */,
+				06B51CDA160B561900153FA2 /* SafariAWATRightCap.png in Resources */,
+				06B51CDB160B561900153FA2 /* SafariAWBG.png in Resources */,
+				06B51CDC160B561900153FA2 /* SafariAWITLeftCap.png in Resources */,
+				06B51CDD160B561900153FA2 /* SafariAWITRightCap.png in Resources */,
+				06B51CDE160B561900153FA2 /* SafariIWATFill.png in Resources */,
+				06B51CDF160B561900153FA2 /* SafariIWATLeftCap.png in Resources */,
+				06B51CE0160B561900153FA2 /* SafariIWATRightCap.png in Resources */,
+				06B51CE1160B561900153FA2 /* SafariIWBG.png in Resources */,
+				06B51CE2160B561900153FA2 /* SafariIWITLeftCap.png in Resources */,
+				06B51CE3160B561900153FA2 /* SafariIWITRightCap.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -631,6 +702,7 @@
 				0634F03E1609FD9000A6C86A /* MMMetalTabStyle.m in Sources */,
 				0634F0401609FD9000A6C86A /* MMUnifiedTabStyle.m in Sources */,
 				0634F0B3160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m in Sources */,
+				06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
