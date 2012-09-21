@@ -263,6 +263,9 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems;
 
+- (BOOL)isSliding;
+- (BOOL)isDragging;
+
 #pragma mark Tab Button Menu Support
 
 - (NSMenu *)menuForTabBarButton:(MMTabBarButton *)aButton withEvent:(NSEvent *)anEvent;

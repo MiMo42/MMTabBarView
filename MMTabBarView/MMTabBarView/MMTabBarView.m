@@ -1380,6 +1380,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     return [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButtonForDraggedItems];
 }
 
+- (BOOL)isSliding {
+    return [[MMTabDragAssistant sharedDragAssistant] isSliding];
+}
+
+- (BOOL)isDragging {
+    return [[MMTabDragAssistant sharedDragAssistant] isDragging];
+}
+
 #pragma mark -
 #pragma mark NSDraggingSource
 
