@@ -466,11 +466,11 @@
 	[viewImage unlockFocus];
 
 	if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-		offset->width = [(id < MMTabStyle >)[tabBarView style] leftMarginForTabBarView:tabBarView];
+		offset->width = [tabBarView leftMargin];
 		offset->height = 22;
 	} else {
 		offset->width = 0;
-		offset->height = 22 + [(id < MMTabStyle >)[tabBarView style] leftMarginForTabBarView:tabBarView];
+		offset->height = 22 + [tabBarView topMargin];
 	}
 
 	if (styleMask) {
@@ -488,7 +488,7 @@
     
     MMTabBarView *tabBarView = (MMTabBarView *)[aTabView delegate];
     
-	id <MMTabStyle> style = (id <MMTabStyle>)[tabBarView style];
+	id <MMTabStyle> style = [tabBarView style];
 
 	NSRect windowFrame = [[controller window] frame];
 	point.y += windowFrame.size.height - [[[controller window] contentView] frame].size.height;
