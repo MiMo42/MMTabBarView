@@ -19,7 +19,7 @@
     self = [super initWithViewAnimations:viewAnimations];
     if (self)
         {
-        [self setDuration:0.2];
+        [self setDuration:0.3];
         }
     
     return self;
