@@ -223,7 +223,6 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)setDelegate:(id<MMTabBarViewDelegate>)object;
 - (MMRolloverButton *)addTabButton;
 - (MMOverflowPopUpButton *)overflowPopUpButton;
-- (CGFloat)tabBarButtonPadding;
 - (CGFloat)heightOfTabBarButtons;
 - (BOOL)supportsOrientation:(MMTabBarOrientation)orientation;
 
@@ -281,7 +280,6 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)drawRect:(NSRect)rect;
 - (void)drawBezelInRect:(NSRect)rect;
 - (void)drawInteriorInRect:(NSRect)rect;
-- (void)drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
 
 @end
 

@@ -38,7 +38,6 @@
 - (NSSize)overflowButtonSizeForTabBarView:(MMTabBarView *)tabBarView;
 - (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)heightOfTabBarButtonsForTabBarView:(MMTabBarView *)tabBarView;
-- (CGFloat)tabBarButtonPaddingForTabBarView:(MMTabBarView *)tabBarView;
 
 // cell values
 - (NSAttributedString *)attributedObjectCountStringValueForTabCell:(MMTabBarButtonCell *)cell;
@@ -67,9 +66,6 @@
 - (void)drawTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 - (void)drawInteriorOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
-- (void)drawSeparatorOfTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
-- (void)drawLeftMarginOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
-- (void)drawRightMarginOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 
 - (void)drawTabBarCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView;
 - (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView;

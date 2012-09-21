@@ -37,7 +37,6 @@
 
 // providing defaults
 - (BOOL)_supportsOrientation:(MMTabBarOrientation)orientation;
-- (CGFloat)_tabBarButtonPadding;
 - (CGFloat)_heightOfTabBarButtons;
 - (CGFloat)_rightMargin;
 - (CGFloat)_leftMargin;
@@ -50,9 +49,6 @@
 - (void)_drawTabBarViewInRect:(NSRect)aRect;
 - (void)_drawBezelInRect:(NSRect)rect;
 - (void)_drawInteriorInRect:(NSRect)rect;
-- (void)_drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
-- (void)_drawLeftMarginInRect:(NSRect)rect;
-- (void)_drawRightMarginInRect:(NSRect)rect;
 
 // determine positions
 - (void)_positionOverflowMenu;
@@ -914,13 +910,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	return _overflowPopUpButton;
 }
 
-- (CGFloat)tabBarButtonPadding {
-    if ([_style respondsToSelector:@selector(tabBarButtonPaddingForTabBarView:)])
-        return [_style tabBarButtonPaddingForTabBarView:self];
-    
-    return [self _tabBarButtonPadding];
-}
-
 -(CGFloat)heightOfTabBarButtons
 {
     if ([_style respondsToSelector:@selector(heightOfTabBarButtonsForTabBarView:)])
@@ -1644,31 +1633,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
 }
 
-- (void)drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
-
-    if ([_style respondsToSelector:@selector(drawSeparatorOfTabBarView:atIndex:withLeftButton:rightButton:inRect:)]) {
-        [_style drawSeparatorOfTabBarView:self atIndex:index withLeftButton:leftButton rightButton:rightButton inRect:rect];
-    } else {
-        [self _drawSeparatorAtIndex:index withLeftButton:leftButton rightButton:rightButton inRect:rect];
-    }
-}
-
-- (void)drawLeftMarginInRect:(NSRect)rect {
-    if ([_style respondsToSelector:@selector(drawLeftMarginOfTabBarView:inRect:)]) {
-        [_style drawLeftMarginOfTabBarView:self inRect:rect];
-    } else {
-        [self _drawLeftMarginInRect:rect];
-    }
-}
-
-- (void)drawRightMarginInRect:(NSRect)rect {
-    if ([_style respondsToSelector:@selector(drawRightMarginOfTabBarView:inRect:)]) {
-        [_style drawRightMarginOfTabBarView:self inRect:rect];
-    } else {
-        [self _drawLeftMarginInRect:rect];
-    }
-}
-
 #pragma mark -
 #pragma mark Mouse Tracking
 
@@ -1751,9 +1715,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		[[self delegate] performSelector:@selector(tabView:didSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
     }
     
-    if ([self tabBarButtonPadding] != 0.0) {
-        [self setNeedsDisplay:YES];
-	}
 /*
 	// here's a weird one - this message is sent before the "tabViewDidChangeNumberOfTabViewItems"
 	// message, thus I can end up updating when there are no cells, if no tabs were (yet) present
@@ -2144,10 +2105,6 @@ NSLog(@"did select:%@",tabViewItem);
         return NO;
 }
 
-- (CGFloat)_tabBarButtonPadding {
-    return 0.0;
-}
-
 - (CGFloat)_heightOfTabBarButtons {
     return kMMTabBarViewHeight;
 }
@@ -2275,46 +2232,6 @@ NSLog(@"did select:%@",tabViewItem);
         [centeredParagraphStyle release];
 		return;
 	}
-    
-    if ([self leftMargin] > 0.0)
-        [self drawLeftMarginInRect:rect];
-    
-        // draw separators
-    if ([self tabBarButtonPadding] > 0.0) {
-        NSArray *orderedButtons = [self orderedAttachedButtons];
-        NSUInteger numberOfButtons = [orderedButtons count];
-        if (numberOfButtons >= 2) {
-
-            MMAttachedTabBarButton *lastButton = [orderedButtons objectAtIndex:0];
-            
-            NSRange buttonRange = NSMakeRange(1, [orderedButtons count]-1);
-            orderedButtons = [[self orderedAttachedButtons] subarrayWithRange:buttonRange];
-
-            NSUInteger i = 1;
-
-            for (MMAttachedTabBarButton *aButton in orderedButtons) {
-                [self drawSeparatorAtIndex:i withLeftButton:lastButton rightButton:aButton inRect:rect];
-                
-                lastButton = aButton;
-                i++;
-            }        
-        }
-    }
-
-    if ([self leftMargin] > 0.0)
-        [self drawRightMarginInRect:rect];
-}
-
-- (void)_drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
-    // default implementation draws nothing
-}
-
-- (void)_drawLeftMarginInRect:(NSRect)rect {
-    // default implementation draws nothing
-}
-
-- (void)_drawRightMarginInRect:(NSRect)rect {
-    // default implementation draws nothing
 }
 
 - (void)_positionOverflowMenu {

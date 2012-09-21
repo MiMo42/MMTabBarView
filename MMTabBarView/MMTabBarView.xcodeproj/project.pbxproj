@@ -117,6 +117,7 @@
 		06B51CE1160B561900153FA2 /* SafariIWBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD5160B561900153FA2 /* SafariIWBG.png */; };
 		06B51CE2160B561900153FA2 /* SafariIWITLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD6160B561900153FA2 /* SafariIWITLeftCap.png */; };
 		06B51CE3160B561900153FA2 /* SafariIWITRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CD7160B561900153FA2 /* SafariIWITRightCap.png */; };
+		06B51CE6160C60F200153FA2 /* SafariAWAFill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CE5160C60F200153FA2 /* SafariAWAFill@2x.png */; };
 		06DB23AA1609F5830071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23A91609F5830071BDA0 /* Cocoa.framework */; };
 		06DB23B41609F5830071BDA0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06DB23B21609F5830071BDA0 /* InfoPlist.strings */; };
 		06DB23B81609F5830071BDA0 /* MMTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB23B71609F5830071BDA0 /* MMTabBarView.m */; };
@@ -232,6 +233,7 @@
 		06B51CD5160B561900153FA2 /* SafariIWBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWBG.png; path = Images/SafariIWBG.png; sourceTree = "<group>"; };
 		06B51CD6160B561900153FA2 /* SafariIWITLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWITLeftCap.png; path = Images/SafariIWITLeftCap.png; sourceTree = "<group>"; };
 		06B51CD7160B561900153FA2 /* SafariIWITRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariIWITRightCap.png; path = Images/SafariIWITRightCap.png; sourceTree = "<group>"; };
+		06B51CE5160C60F200153FA2 /* SafariAWAFill@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWAFill@2x.png"; sourceTree = "<group>"; };
 		06DB23A61609F5830071BDA0 /* MMTabBarView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MMTabBarView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06DB23A91609F5830071BDA0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		06DB23AC1609F5830071BDA0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -437,6 +439,7 @@
 		06B51CB3160B55C500153FA2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				06B51CE5160C60F200153FA2 /* SafariAWAFill@2x.png */,
 				06B51CCC160B561900153FA2 /* SafariAWATFill.png */,
 				06B51CCD160B561900153FA2 /* SafariAWATLeftCap.png */,
 				06B51CCE160B561900153FA2 /* SafariAWATRightCap.png */,
@@ -668,6 +671,7 @@
 				06B51CE1160B561900153FA2 /* SafariIWBG.png in Resources */,
 				06B51CE2160B561900153FA2 /* SafariIWITLeftCap.png in Resources */,
 				06B51CE3160B561900153FA2 /* SafariIWITRightCap.png in Resources */,
+				06B51CE6160C60F200153FA2 /* SafariAWAFill@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
