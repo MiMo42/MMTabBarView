@@ -28,6 +28,7 @@
 @optional
 
 // tab view specific parameters
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation forTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)rightMarginForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)topMarginForTabBarView:(MMTabBarView *)tabBarView;
@@ -67,6 +68,8 @@
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 - (void)drawInteriorOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 - (void)drawSeparatorOfTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
+- (void)drawLeftMarginOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
+- (void)drawRightMarginOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 
 - (void)drawTabBarCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView;
 - (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView;
