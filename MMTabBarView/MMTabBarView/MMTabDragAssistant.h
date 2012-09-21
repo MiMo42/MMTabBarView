@@ -17,14 +17,14 @@
 
 extern NSString *AttachedTabBarButtonUTI;
 
-@interface MMTabDragAssistant : NSObject {
+@interface MMTabDragAssistant : NSObject <NSAnimationDelegate> {
 
 @private
 
 	NSPoint							_currentMouseLocation;
 
         // standard drag & drop support
-    MMTabPasteboardItem            *_pasteboardItem;
+    MMTabPasteboardItem             *_pasteboardItem;
 	MMTabBarView                    *_destinationTabBar;
 	NSMutableSet					*_participatingTabBars;
 	BOOL							_isDragging;
@@ -41,7 +41,7 @@ extern NSString *AttachedTabBarButtonUTI;
 	MMTabBarTearOffStyle			_currentTearOffStyle;
 
         // Animation
-    MMSlideButtonsAnimation        *_slideButtonsAnimation;
+    MMSlideButtonsAnimation         *_slideButtonsAnimation;
 }
 
 @property (retain) MMTabPasteboardItem *pasteboardItem;

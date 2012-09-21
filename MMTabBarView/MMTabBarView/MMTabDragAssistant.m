@@ -417,6 +417,43 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 }
 
 #pragma mark -
+#pragma mark NSAnimationDelegate
+
+- (void)animationDidStop:(NSAnimation *)animation {
+    if (animation == _slideButtonsAnimation) {
+    
+        NSArray *viewAnimations = [_slideButtonsAnimation viewAnimations];
+        
+        MMAttachedTabBarButton *aButton = nil;
+        for (NSDictionary *anAnimDict in viewAnimations) {
+            aButton = [anAnimDict objectForKey:NSViewAnimationTargetKey];
+            if ([aButton isKindOfClass:[MMAttachedTabBarButton class]]) {
+                [aButton slideAnimationDidEnd];
+            }
+        }
+    
+        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+    }
+}
+
+- (void)animationDidEnd:(NSAnimation *)animation {
+    if (animation == _slideButtonsAnimation) {
+    
+        NSArray *viewAnimations = [_slideButtonsAnimation viewAnimations];
+        
+        MMAttachedTabBarButton *aButton = nil;
+        for (NSDictionary *anAnimDict in viewAnimations) {
+            aButton = [anAnimDict objectForKey:NSViewAnimationTargetKey];
+            if ([aButton isKindOfClass:[MMAttachedTabBarButton class]]) {
+                [aButton slideAnimationDidEnd];
+            }
+        }
+    
+        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+    }
+}
+
+#pragma mark -
 #pragma mark Private
 
 - (NSImage *)_imageForViewOfAttachedButton:(MMAttachedTabBarButton *)aButton forTabBarView:(MMTabBarView *)tabBarView styleMask:(NSUInteger *)outMask {
@@ -817,6 +854,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             stackingFrame.origin.y += slidingAmount*slidingDirection;
             
         [aSlidingButton setStackingFrame:stackingFrame];
+        [aSlidingButton slideAnimationWillStart];
     }
 
     // calculate stacking frame of moved button
@@ -847,6 +885,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     [aButton setStackingFrame:stackingFrame];
     
     _slideButtonsAnimation = [[MMSlideButtonsAnimation alloc] initWithTabBarButtons:[NSSet setWithArray:slidingButtons]];
+    [_slideButtonsAnimation setDelegate:self];
     [_slideButtonsAnimation startAnimation];
 }
 
