@@ -73,15 +73,14 @@ StaticImage(SafariIWITRightCap)
 
 #pragma mark -
 #pragma mark Tab View Specific
-/*
+
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
-	return 11.0f;
+	return 6.0f;
 }
 
 - (CGFloat)rightMarginForTabBarView:(MMTabBarView *)tabBarView {
-	return 11.0f;
+	return 6.0f;
 }
-*/
 
 #pragma mark -
 #pragma mark Add Tab Button
@@ -158,52 +157,24 @@ StaticImage(SafariIWITRightCap)
 #pragma mark -
 #pragma mark Drawing
 
-- (void)_drawBackgroundAndSeparatorsOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView activeAppearance:(BOOL)active {
-/*
-    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-    NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
-    MMTabBarButton *button = [cell controlView];
-    MMAttachedTabBarButton *selectedButton = [tabBarView selectedAttachedButton];
+- (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
+	rect = [tabBarView bounds];
+	    
 	[NSGraphicsContext saveGraphicsState];
 
-    if (selectedButton == button) {
-        frame.size.width += 5.0;
-        frame.origin.x -= 5.0;
-    }
-    
-    NSBezierPath *clippingPath = [NSBezierPath bezierPathWithRect:frame];
-    [clippingPath setClip];
-    
-    NSImage *left = nil;
-    NSImage *center = nil;
-    NSImage *right = nil;
-
-    if ([tabBarView isWindowActive]) {
-        if ([cell state] == NSOnState) {
-            left = _staticSafariAWATLeftCapImage();
-            center = _staticSafariAWATFillImage();
-            right = _staticSafariAWATRightCapImage();
-        } else {
-        
-           // center = _staticSafariAWATFillImage();
-        }
+    // special case of hidden control; need line across top of cell
+    if (rect.size.height < 2) {
+        [[NSColor darkGrayColor] set];
+        NSRectFillUsingOperation(rect, NSCompositeSourceOver);
     } else {
-    
-        if ([cell state] == NSOnState) {
-            left = _staticSafariIWATLeftCapImage();
-            center = _staticSafariIWATFillImage();
-            right = _staticSafariIWATRightCapImage();
-        } else {
-            //center = _staticSafariIWATFillImage();
-        }
+        NSImage *bg = [tabBarView isWindowActive] ? _staticSafariAWBGImage() : _staticSafariIWBGImage();
+        NSDrawThreePartImage(rect, nil, bg, nil, NO, NSCompositeCopy, 1, [tabBarView isFlipped]);
+        
+        [self _drawButtonBezelsOfTabBarView:tabBarView inRect:rect];
     }
-
-    if (center != nil || left != nil || right != nil)
-        NSDrawThreePartImage(frame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);
     
 	[NSGraphicsContext restoreGraphicsState];
-*/    
 }
 
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
@@ -212,12 +183,10 @@ StaticImage(SafariIWITRightCap)
         return;
     
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-    
-    [self _drawBackgroundAndSeparatorsOfTabCell:cell withFrame:frame inView:controlView activeAppearance:[tabBarView isWindowActive]];
-/*
-    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-    
+        
     NSRect cellFrame = frame;
+    
+    cellFrame = NSInsetRect(cellFrame, -5.0, 0);
     
     if ([[cell controlView] frame].size.height < 2)
         return;
@@ -231,9 +200,6 @@ StaticImage(SafariIWITRightCap)
             left = _staticSafariAWATLeftCapImage();
             center = _staticSafariAWATFillImage();
             right = _staticSafariAWATRightCapImage();
-        } else {
-        
-           // center = _staticSafariAWATFillImage();
         }
     } else {
     
@@ -241,15 +207,15 @@ StaticImage(SafariIWITRightCap)
             left = _staticSafariIWATLeftCapImage();
             center = _staticSafariIWATFillImage();
             right = _staticSafariIWATRightCapImage();
-        } else {
-            //center = _staticSafariIWATFillImage();
         }
     }
 
     if (center != nil || left != nil || right != nil)
-        NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);
-*/    
+        NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);    
 }
+
+#pragma mark -
+#pragma Private Methods
 
 - (void)_drawSelectedBezelForButton:(MMAttachedTabBarButton *)button inTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index inRect:(NSRect)rect {
 
@@ -276,192 +242,122 @@ StaticImage(SafariIWITRightCap)
         NSDrawThreePartImage(buttonFrame, left, center, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
 }
 
--(NSRect)_separatorFrameForLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton forTabBarView:(MMTabBarView *)tabBarView {
+- (void)_drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)sortedButtons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
-    NSRect bounds = [tabBarView bounds];
-    
-    if (!leftButton || !rightButton) {
-        return NSZeroRect;
-    }
-    
-    return NSMakeRect(NSMaxX([leftButton frame])-5, 0, 11, bounds.size.height);
-}
+    BOOL isWindowActive = [tabBarView isWindowActive];
+    NSUInteger numberOfButtons = [sortedButtons count];
 
-- (void)_drawSeparatorOfTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
-
-    NSRect frame = [self _separatorFrameForLeftButton:leftButton rightButton:rightButton forTabBarView:tabBarView];
+    MMAttachedTabBarButton *prevButton = nil,
+                           *nextButton = nil;
     
-    if (NSEqualRects(NSZeroRect, frame))
+    if (index > 0)
+        prevButton = [sortedButtons objectAtIndex:index-1];
+    if (index+1 < numberOfButtons)
+        nextButton = [sortedButtons objectAtIndex:index+1];
+
+    NSImage *left = nil,
+            *right = nil;
+    NSRect buttonFrame = [button frame];
+    
+    if ([button state] == NSOnState) {
+    
+        [self _drawSelectedBezelForButton:button inTabBarView:tabBarView atIndex:index inRect:rect];
         return;
     
-    NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
+    }
+
+    buttonFrame = NSInsetRect(buttonFrame,-5.0,0);
     
-    if ([tabBarView isWindowActive]) {
-        if ([leftButton state] == NSOnState) {
-//            [_staticSafariAWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if ([rightButton state] == NSOnState) {
-  //          [_staticSafariAWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index < selIndex) {
-            [_staticSafariAWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index > selIndex) {
-            [_staticSafariAWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        // standard drawing while animated slide is going on
+    if ([button animatedSlide] == YES) {
+        
+        left = _staticSafariAWITLeftCapImage();
+        right = _staticSafariAWITRightCapImage();
+        
+        NSDrawThreePartImage(buttonFrame, left, nil, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
+        
+        return;
         }
+    
+        // draw first button
+    if (prevButton == nil) {
+    
+        if (index < selIndex) {
+            if (([nextButton state] == NSOnState && [tabBarView isSliding]) ||
+                [nextButton animatedSlide])
+                right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
+        }
+        // draw last button
+    } else if (nextButton == nil) {
+
+        if (index > selIndex) {
+            if (([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
+                left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
+        }
+    
+        // draw mid button
     } else {
-        if ([leftButton state] == NSOnState) {
-//            [_staticSafariIWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if ([rightButton state] == NSOnState) {
-//            [_staticSafariIWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index < selIndex) {
-            [_staticSafariIWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    
+        if (index < selIndex) {
+            left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
+            if (([nextButton state] == NSOnState && [tabBarView isSliding]) || [nextButton animatedSlide])
+                right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
         } else if (index > selIndex) {
-            [_staticSafariIWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+            if (([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
+                left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
+            right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
         }
     }
+
+    NSDrawThreePartImage(buttonFrame, left, nil, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
 }
 
-- (void)_drawTabBezelsOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+- (void)_drawButtonBezelsOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
-    NSArray *buttons = [tabBarView orderedAttachedButtons];
-
-    NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
-    MMAttachedTabBarButton *selButton = [tabBarView selectedAttachedButton];
-    
-        // draw separators
-    MMAttachedTabBarButton *lastButton = nil;
+    NSArray *sortedButtons = [tabBarView sortedAttachedButtonsUsingComparator:
+        ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
+        
+            NSRect stackingFrame1 = [but1 stackingFrame];
+            NSRect stackingFrame2 = [but2 stackingFrame];
+                        
+            if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
+                
+                if (stackingFrame1.origin.x > stackingFrame2.origin.x)
+                    return NSOrderedDescending;
+                else if (stackingFrame1.origin.x < stackingFrame2.origin.x)
+                    return NSOrderedAscending;
+                else
+                    return NSOrderedSame;
+            } else {
+                if (stackingFrame1.origin.y > stackingFrame2.origin.y)
+                    return NSOrderedDescending;
+                else if (stackingFrame1.origin.y < stackingFrame2.origin.y)
+                    return NSOrderedAscending;
+                else
+                    return NSOrderedSame;
+            }
+        }];
+        
+        // find selected button
+    NSUInteger selIndex = NSNotFound;
     NSUInteger i = 0;
-    for (MMAttachedTabBarButton *aButton in buttons) {
+    for (MMAttachedTabBarButton *aButton in sortedButtons) {
+        if ([aButton state] == NSOnState) {
+            selIndex = i;
+            break;
+        }
         
-        [self _drawSeparatorOfTabBarView:tabBarView atIndex:i withLeftButton:lastButton rightButton:aButton inRect:rect];
-        
-        lastButton = aButton;
         i++;
     }
     
-    [self _drawSeparatorOfTabBarView:tabBarView atIndex:i withLeftButton:lastButton rightButton:nil inRect:rect];
-    
-    if (selIndex != NSNotFound) {
-        [self _drawSelectedBezelForButton:selButton inTabBarView:tabBarView atIndex:selIndex inRect:rect];
-    }
-    
-/*
-    for (MMAttachedTabBarButton *aButton in buttons) {
-
-        NSImage *left = nil;
-        NSImage *center = nil;
-        NSImage *right = nil;
+        // draw a bezel for each button
+    i = 0;
+    for (MMAttachedTabBarButton *aButton in sortedButtons) {
         
-        if (i == selIndex) {
-            [self _drawSelectedBezelForButton:aButton inTabBarView:tabBarView atIndex:i inRect:rect];
-        } else if (i < selIndex) {
-            [self _drawLeftBezelForButton:aButton inTabBarView:tabBarView atIndex:i inRect:rect];
-        } else if (i > selIndex) {
-            [self _drawRightBezelForButton:aButton inTabBarView:tabBarView atIndex:i inRect:rect];
-        }
+        [self _drawBezelOfButton:aButton atIndex:i inButtons:sortedButtons indexOfSelectedButton:selIndex tabBarView:tabBarView inRect:rect];
         
-
-        if (center != nil || left != nil || right != nil)
-            NSDrawThreePartImage(buttonFrame, left, center, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
-        
-    i++;
-    }
-*/
-}
-
-- (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-
-	rect = [tabBarView bounds];
-	    
-	[NSGraphicsContext saveGraphicsState];
-
-    // special case of hidden control; need line across top of cell
-    if (rect.size.height < 2) {
-        [[NSColor darkGrayColor] set];
-        NSRectFillUsingOperation(rect, NSCompositeSourceOver);
-    } else {
-        NSImage *bg = [tabBarView isWindowActive] ? _staticSafariAWBGImage() : _staticSafariIWBGImage();
-        NSDrawThreePartImage(rect, nil, bg, nil, NO, NSCompositeCopy, 1, [tabBarView isFlipped]);
-        
-        [self _drawTabBezelsOfTabBarView:tabBarView inRect:rect];        
-    }
-    
-	[NSGraphicsContext restoreGraphicsState];
-}
-/*
-- (void)drawLeftMarginOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-
-    NSRect bounds = [tabBarView bounds];
-    CGFloat leftMargin = [tabBarView leftMargin];
-    
-    NSRect marginRect = bounds;
-    marginRect.size.width = leftMargin;
-
-    NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
-    
-    if ([tabBarView isWindowActive]) {
-        if (selIndex == 0) {
-            [_staticSafariAWATLeftCapImage() drawInRect:marginRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else {
-            // draw nothing
-        }
-    } else {
-        if (selIndex == 0) {
-            [_staticSafariIWATLeftCapImage() drawInRect:marginRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else {
-        }    
-    }
-    
-//    [[NSColor redColor] set];
-//    NSRectFill(marginRect);
-}
-
-- (void)drawRightMarginOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-
-    NSRect bounds = [tabBarView bounds];
-    CGFloat rightMargin = [tabBarView rightMargin];
-    
-    NSRect marginRect = bounds;
-    marginRect.origin.x = NSMaxX(marginRect)-rightMargin;
-    marginRect.size.width = rightMargin;
-    
-    [[NSColor redColor] set];
-    NSRectFill(marginRect);
-}
-*/
-/*
--(NSRect)_separatorFrameForLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton forTabBarView:(MMTabBarView *)tabBarView {
-
-    NSRect bounds = [tabBarView bounds];
-
-    return NSMakeRect(NSMaxX([leftButton frame]), 0, NSMinX([rightButton frame])-NSMaxX([leftButton frame]), bounds.size.height);
-}
-
-- (void)drawSeparatorOfTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
-
-    NSRect frame = [self _separatorFrameForLeftButton:leftButton rightButton:rightButton forTabBarView:tabBarView];
-    
-    NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
-    
-    if ([tabBarView isWindowActive]) {
-        if ([leftButton state] == NSOnState) {
-            [_staticSafariAWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if ([rightButton state] == NSOnState) {
-            [_staticSafariAWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index < selIndex) {
-            [_staticSafariAWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index > selIndex) {
-            [_staticSafariAWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        }
-    } else {
-        if ([leftButton state] == NSOnState) {
-            [_staticSafariIWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if ([rightButton state] == NSOnState) {
-            [_staticSafariIWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index < selIndex) {
-            [_staticSafariIWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        } else if (index > selIndex) {
-            [_staticSafariIWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-        }
+        i++;
     }
 }
-*/
+
 @end
