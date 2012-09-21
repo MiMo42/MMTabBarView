@@ -39,6 +39,8 @@
 - (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)heightOfTabBarButtonsForTabBarView:(MMTabBarView *)tabBarView;
 
+- (NSButton *)addTabButtonForTabBarView:(MMTabBarView *)tabBarView;
+
 // cell values
 - (NSAttributedString *)attributedObjectCountStringValueForTabCell:(MMTabBarButtonCell *)cell;
 - (NSAttributedString *)attributedStringValueForTabCell:(MMTabBarButtonCell *)cell;
