@@ -19,10 +19,12 @@
 
 @private
     NSTabViewItem *_tabViewItem;
+    BOOL _animatedSlide;
 }
 
 @property (readonly) NSTabViewItem *tabViewItem;
 @property (assign) NSRect slidingFrame;
+@property (readonly) BOOL animatedSlide;
 
 // designated initializer
 - (id)initWithFrame:(NSRect)frame tabViewItem:(NSTabViewItem *)anItem;
@@ -35,5 +37,11 @@
 
 - (NSRect)draggingRect;
 - (NSImage *)dragImage;
+
+#pragma mark -
+#pragma mark Animation Support
+
+- (void)slideAnimationWillStart;
+- (void)slideAnimationDidEnd;
 
 @end

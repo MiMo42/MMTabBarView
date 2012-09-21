@@ -25,6 +25,7 @@
 
 @synthesize tabViewItem = _tabViewItem;
 @dynamic slidingFrame;
+@synthesize animatedSlide = _animatedSlide;
 
 + (void)initialize {
     [super initialize];    
@@ -68,6 +69,14 @@
 
 - (void)setCell:(MMAttachedTabBarButtonCell *)aCell {
     [super setCell:aCell];
+}
+
+-(void)viewWillDraw {
+
+    NSView *superview = [self superview];    
+    [superview setNeedsDisplayInRect:[superview bounds]];
+
+    [super viewWillDraw];
 }
 
 #pragma mark -
@@ -172,6 +181,17 @@
 		[pi release];
 	}
 	return returnImage;
+}
+
+#pragma mark -
+#pragma mark Animation Support
+
+- (void)slideAnimationWillStart {
+    _animatedSlide = YES;
+}
+
+- (void)slideAnimationDidEnd {
+    _animatedSlide = NO;
 }
 
 #pragma mark -
