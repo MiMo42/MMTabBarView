@@ -52,6 +52,7 @@
 
 // determine positions
 - (void)_positionOverflowMenu;
+- (void)_positionAddTabButton;
 - (void)_checkWindowFrame;
 
 // convenience
@@ -66,6 +67,7 @@
 - (NSCursor *)_resizingMouseCursor;
 - (void)_beginResizingWithMouseDownEvent:(NSEvent *)theEvent;
 
+// misc
 - (BOOL)_shouldDisplayTabBar;
 
 // private actions
@@ -655,7 +657,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		}
 
         [[self attachedButtons] makeObjectsPerformSelector:@selector(setStyle:) withObject:_style];
-
+        
 		[self update:NO];
 	}
 }
@@ -688,7 +690,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	}
 
 	if (lastOrientation != _orientation) {
-		[self _positionOverflowMenu]; //move the overflow popup button to the right place
 		[self update:NO];
 	}
 }
@@ -737,13 +738,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setShowAddTabButton:(BOOL)value {
 	_showAddTabButton = value;
-	if (!NSIsEmptyRect([self addTabButtonRect])) {
-		[_addTabButton setFrame:[self addTabButtonRect]];
-	}
-
-	[_addTabButton setHidden:!_showAddTabButton];
-	[_addTabButton setNeedsDisplay:YES];
-
+    
 	[self update];
 }
 
@@ -1352,6 +1347,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             nil];
             [_slideButtonsAnimation addAnimationDictionary:addButtonAnimDict];
             [addButtonAnimDict release];
+        } else {
+            [self _positionAddTabButton];
         }
         
         [_slideButtonsAnimation setDelegate:self];
@@ -1362,8 +1359,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         for (MMAttachedTabBarButton *aButton in [self attachedButtons])
             [aButton setFrame:[aButton stackingFrame]];
 
-        if (_showAddTabButton)
-            [_addTabButton setFrame:[self addTabButtonRect]];
+        [self _positionAddTabButton];
+
         [self updateTrackingAreas];
 		[self setNeedsDisplay:YES];
 	}    
@@ -1815,6 +1812,8 @@ NSLog(@"did select:%@",tabViewItem);
 
     if (animation == _slideButtonsAnimation) {
         [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+
+        [self _positionAddTabButton];
         
         [self updateTrackingAreas];
         [self setNeedsDisplay:YES];
@@ -2084,34 +2083,7 @@ NSLog(@"did select:%@",tabViewItem);
 	[self addSubview:_overflowPopUpButton];
 	[self _positionOverflowMenu];
 
-        // new tab button
-	NSRect addTabButtonRect = [self addTabButtonRect];
-	_addTabButton = [[MMRolloverButton alloc] initWithFrame:addTabButtonRect];
-    
-    NSImage *newButtonImage = [_style addTabButtonImage];
-    if (newButtonImage) {
-        [_addTabButton setImage:newButtonImage];
-    }
-    newButtonImage = [_style addTabButtonPressedImage];
-    if (newButtonImage) {
-        [_addTabButton setAlternateImage:newButtonImage];
-    }
-    newButtonImage = [_style addTabButtonRolloverImage];
-    if (newButtonImage) {
-        [_addTabButton setRolloverImage:newButtonImage];
-    }
-    [_addTabButton setTitle:@""];
-    [_addTabButton setImagePosition:NSImageOnly];
-    [_addTabButton setRolloverButtonType:MMRolloverActionButton];
-    [_addTabButton setBordered:NO];
-    [_addTabButton setBezelStyle:NSShadowlessSquareBezelStyle];
-    [self addSubview:_addTabButton];
-
-    if (_showAddTabButton) {
-        [_addTabButton setHidden:NO];
-    } else {
-        [_addTabButton setHidden:YES];
-    }
+    [self _updateAddTabButton];
 }
 
 - (BOOL)_supportsOrientation:(MMTabBarOrientation)orientation {
@@ -2255,6 +2227,15 @@ NSLog(@"did select:%@",tabViewItem);
     NSRect buttonRect = [self overflowButtonRect];
     if (!NSEqualRects(buttonRect, NSZeroRect))
         [_overflowPopUpButton setFrame:buttonRect];
+}
+
+- (void)_positionAddTabButton {
+	if (!NSIsEmptyRect([self addTabButtonRect])) {
+		[_addTabButton setFrame:[self addTabButtonRect]];
+	}
+
+    [_addTabButton setHidden:!_showAddTabButton];
+    [_addTabButton setNeedsDisplay:YES];
 }
 
 - (void)_checkWindowFrame {
@@ -2474,6 +2455,41 @@ NSLog(@"did select:%@",tabViewItem);
         return NO;
 
     return YES;
+}
+
+- (void)_updateAddTabButton {
+
+    if (_addTabButton) {
+        [_addTabButton release], _addTabButton = nil;
+    }
+        // new tab button
+	NSRect addTabButtonRect = [self addTabButtonRect];
+	_addTabButton = [[MMRolloverButton alloc] initWithFrame:addTabButtonRect];
+    
+    NSImage *newButtonImage = [_style addTabButtonImage];
+    if (newButtonImage) {
+        [_addTabButton setImage:newButtonImage];
+    }
+    newButtonImage = [_style addTabButtonPressedImage];
+    if (newButtonImage) {
+        [_addTabButton setAlternateImage:newButtonImage];
+    }
+    newButtonImage = [_style addTabButtonRolloverImage];
+    if (newButtonImage) {
+        [_addTabButton setRolloverImage:newButtonImage];
+    }
+    [_addTabButton setTitle:@""];
+    [_addTabButton setImagePosition:NSImageOnly];
+    [_addTabButton setRolloverButtonType:MMRolloverActionButton];
+    [_addTabButton setBordered:NO];
+    [_addTabButton setBezelStyle:NSShadowlessSquareBezelStyle];
+    [self addSubview:_addTabButton];
+
+    if (_showAddTabButton) {
+        [_addTabButton setHidden:NO];
+    } else {
+        [_addTabButton setHidden:YES];
+    }
 }
 
 @end
