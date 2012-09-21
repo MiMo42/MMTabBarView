@@ -1811,8 +1811,8 @@ NSLog(@"did select:%@",tabViewItem);
 #pragma mark -
 #pragma mark NSAnimationDelegate
 
-- (void)animationDidEnd:(NSAnimation *)animation {
-    
+-(void)_finalizeAnimation:(NSAnimation *)animation {
+
     if (animation == _slideButtonsAnimation) {
         [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
         
@@ -1842,6 +1842,14 @@ NSLog(@"did select:%@",tabViewItem);
 			}
         }        
     }
+}
+
+- (void)animationDidStop:(NSAnimation *)animation {
+    [self _finalizeAnimation:animation];
+}
+
+- (void)animationDidEnd:(NSAnimation *)animation {
+    [self _finalizeAnimation:animation];
 }
 
 #pragma mark -

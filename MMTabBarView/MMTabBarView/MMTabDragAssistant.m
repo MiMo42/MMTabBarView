@@ -419,7 +419,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 #pragma mark -
 #pragma mark NSAnimationDelegate
 
-- (void)animationDidStop:(NSAnimation *)animation {
+- (void)_finalizeAnimation:(NSAnimation *)animation {
     if (animation == _slideButtonsAnimation) {
     
         NSArray *viewAnimations = [_slideButtonsAnimation viewAnimations];
@@ -436,21 +436,12 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     }
 }
 
+- (void)animationDidStop:(NSAnimation *)animation {
+    [self _finalizeAnimation:animation];
+}
+
 - (void)animationDidEnd:(NSAnimation *)animation {
-    if (animation == _slideButtonsAnimation) {
-    
-        NSArray *viewAnimations = [_slideButtonsAnimation viewAnimations];
-        
-        MMAttachedTabBarButton *aButton = nil;
-        for (NSDictionary *anAnimDict in viewAnimations) {
-            aButton = [anAnimDict objectForKey:NSViewAnimationTargetKey];
-            if ([aButton isKindOfClass:[MMAttachedTabBarButton class]]) {
-                [aButton slideAnimationDidEnd];
-            }
-        }
-    
-        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
-    }
+    [self _finalizeAnimation:animation];
 }
 
 #pragma mark -
