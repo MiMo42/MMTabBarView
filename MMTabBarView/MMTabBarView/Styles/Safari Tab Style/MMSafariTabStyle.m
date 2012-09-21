@@ -168,13 +168,19 @@ StaticImage(SafariIWITRightCap)
 
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
+    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    
     NSRect cellFrame = frame;
     
     if ([[cell controlView] frame].size.height < 2)
         return;
 
     if ([cell state] == NSOnState) {
-        NSImage *center = _staticSafariAWATFillImage();
+        NSImage *center = nil;
+        if ([tabBarView isWindowActive])
+            center = _staticSafariAWATFillImage();
+        else
+            center = _staticSafariIWATFillImage();
     
         NSDrawThreePartImage(cellFrame, nil, center, nil, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);
     }
@@ -241,7 +247,7 @@ StaticImage(SafariIWITRightCap)
         [[NSColor darkGrayColor] set];
         NSRectFillUsingOperation(rect, NSCompositeSourceOver);
     } else {
-        NSImage* bg = [[[tabBarView tabView] window] isKeyWindow] ? _staticSafariAWBGImage() : _staticSafariIWBGImage();
+        NSImage *bg = [tabBarView isWindowActive] ? _staticSafariAWBGImage() : _staticSafariIWBGImage();
         NSDrawThreePartImage(rect, nil, bg, nil, NO, NSCompositeCopy, 1, [tabBarView isFlipped]);
     }
     
@@ -263,14 +269,26 @@ StaticImage(SafariIWITRightCap)
     
     NSUInteger selIndex = [tabBarView indexOfTabViewItem:[tabBarView selectedTabViewItem]];
     
-    if ([leftButton state] == NSOnState) {
-        [_staticSafariAWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-    } else if ([rightButton state] == NSOnState) {
-        [_staticSafariAWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-    } else if (index < selIndex) {
-        [_staticSafariAWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-    } else if (index > selIndex) {
-        [_staticSafariAWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    if ([tabBarView isWindowActive]) {
+        if ([leftButton state] == NSOnState) {
+            [_staticSafariAWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        } else if ([rightButton state] == NSOnState) {
+            [_staticSafariAWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        } else if (index < selIndex) {
+            [_staticSafariAWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        } else if (index > selIndex) {
+            [_staticSafariAWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        }
+    } else {
+        if ([leftButton state] == NSOnState) {
+            [_staticSafariIWATRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        } else if ([rightButton state] == NSOnState) {
+            [_staticSafariIWATLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        } else if (index < selIndex) {
+            [_staticSafariIWITRightCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        } else if (index > selIndex) {
+            [_staticSafariIWITLeftCapImage() drawInRect:frame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        }
     }
 /*
     if ([rightButton state] == NSOnState) {
