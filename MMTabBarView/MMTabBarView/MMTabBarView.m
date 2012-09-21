@@ -36,6 +36,7 @@
 - (void)_commonInit;
 
 // providing defaults
+- (BOOL)_supportsOrientation:(MMTabBarOrientation)orientation;
 - (CGFloat)_tabBarButtonPadding;
 - (CGFloat)_heightOfTabBarButtons;
 - (CGFloat)_rightMargin;
@@ -50,6 +51,8 @@
 - (void)_drawBezelInRect:(NSRect)rect;
 - (void)_drawInteriorInRect:(NSRect)rect;
 - (void)_drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect;
+- (void)_drawLeftMarginInRect:(NSRect)rect;
+- (void)_drawRightMarginInRect:(NSRect)rect;
 
 // determine positions
 - (void)_positionOverflowMenu;
@@ -926,6 +929,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     return [self _heightOfTabBarButtons];
 }
 
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation {
+    if ([_style respondsToSelector:@selector(supportsOrientation:forTabBarView:)])
+        return [_style supportsOrientation:orientation forTabBarView:self];
+    
+    return [self _supportsOrientation:orientation];
+}
+
 #pragma mark -
 #pragma mark Resizing
 
@@ -1643,6 +1653,22 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
 }
 
+- (void)drawLeftMarginInRect:(NSRect)rect {
+    if ([_style respondsToSelector:@selector(drawLeftMarginOfTabBarView:inRect:)]) {
+        [_style drawLeftMarginOfTabBarView:self inRect:rect];
+    } else {
+        [self _drawLeftMarginInRect:rect];
+    }
+}
+
+- (void)drawRightMarginInRect:(NSRect)rect {
+    if ([_style respondsToSelector:@selector(drawRightMarginOfTabBarView:inRect:)]) {
+        [_style drawRightMarginOfTabBarView:self inRect:rect];
+    } else {
+        [self _drawLeftMarginInRect:rect];
+    }
+}
+
 #pragma mark -
 #pragma mark Mouse Tracking
 
@@ -2111,6 +2137,13 @@ NSLog(@"did select:%@",tabViewItem);
     }
 }
 
+- (BOOL)_supportsOrientation:(MMTabBarOrientation)orientation {
+    if (orientation == MMTabBarHorizontalOrientation)
+        return YES;
+    else
+        return NO;
+}
+
 - (CGFloat)_tabBarButtonPadding {
     return 0.0;
 }
@@ -2243,6 +2276,9 @@ NSLog(@"did select:%@",tabViewItem);
 		return;
 	}
     
+    if ([self leftMargin] > 0.0)
+        [self drawLeftMarginInRect:rect];
+    
         // draw separators
     if ([self tabBarButtonPadding] > 0.0) {
         NSArray *orderedButtons = [self orderedAttachedButtons];
@@ -2264,8 +2300,20 @@ NSLog(@"did select:%@",tabViewItem);
             }        
         }
     }
+
+    if ([self leftMargin] > 0.0)
+        [self drawRightMarginInRect:rect];
 }
+
 - (void)_drawSeparatorAtIndex:(NSUInteger)index withLeftButton:(MMTabBarButton *)leftButton rightButton:(MMTabBarButton *)rightButton inRect:(NSRect)rect {
+    // default implementation draws nothing
+}
+
+- (void)_drawLeftMarginInRect:(NSRect)rect {
+    // default implementation draws nothing
+}
+
+- (void)_drawRightMarginInRect:(NSRect)rect {
     // default implementation draws nothing
 }
 

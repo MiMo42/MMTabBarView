@@ -225,6 +225,7 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (MMOverflowPopUpButton *)overflowPopUpButton;
 - (CGFloat)tabBarButtonPadding;
 - (CGFloat)heightOfTabBarButtons;
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation;
 
 #pragma mark -
 #pragma mark Resizing
