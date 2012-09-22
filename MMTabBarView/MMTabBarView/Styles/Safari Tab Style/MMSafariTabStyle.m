@@ -29,9 +29,9 @@ StaticImage(TabClose_Front_Rollover)
 StaticImage(TabClose_Dirty)
 StaticImage(TabClose_Dirty_Pressed)
 StaticImage(TabClose_Dirty_Rollover)
-StaticImage(TabNew)
-StaticImage(TabNew_Pressed)
-StaticImage(TabNew_Rollover)
+StaticImage(SafariAWAddTabButton)
+StaticImage(SafariAWAddTabButtonPushed)
+StaticImage(SafariAWAddTabButtonRolloverPlus)
 StaticImage(SafariAWATFill)
 StaticImage(SafariAWATLeftCap)
 StaticImage(SafariAWATRightCap)
@@ -86,15 +86,15 @@ StaticImage(SafariIWITRightCap)
 #pragma mark Add Tab Button
 
 - (NSImage *)addTabButtonImage {
-	return _staticTabNewImage();
+	return _staticSafariAWAddTabButtonImage();
 }
 
 - (NSImage *)addTabButtonPressedImage {
-	return _staticTabNew_PressedImage();
+	return _staticSafariAWAddTabButtonPushedImage();
 }
 
 - (NSImage *)addTabButtonRolloverImage {
-	return _staticTabNew_RolloverImage();
+	return _staticSafariAWAddTabButtonRolloverPlusImage();
 }
 
 #pragma mark -
