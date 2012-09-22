@@ -16,7 +16,6 @@
 @interface MMAttachedTabBarButton (/*Private*/)
 
 - (MMAttachedTabBarButton *)_selectedAttachedTabBarButton;
-- (BOOL)_allowsDragging;
 - (NSRect)_draggingRect;
 
 @end
@@ -111,9 +110,9 @@
             [self performClick:self];
         }
     }
-    
+
         // eventually begin dragging of button
-    if ([self mm_dragShouldBeginFromMouseDown:theEvent withExpiration:[NSDate distantFuture]]) {
+    if ([tabBarView shouldStartDraggingAttachedTabBarButton:self withMouseDownEvent:theEvent]) {
         [tabBarView startDraggingAttachedTabBarButton:self withMouseDownEvent:theEvent];
     }
 }
@@ -201,21 +200,6 @@
 
     MMTabBarView *tabBarView = [self enclosingTabBarView];
     return [tabBarView selectedAttachedButton];
-}
-
-- (BOOL)_allowsDragging {
-
-    MMTabBarView *tabBarView = [self tabBarView];
-    NSTabView *tabView = [tabBarView tabView];
-    id <MMTabBarViewDelegate>tabBarViewDelegate = [tabBarView delegate];
-
-    // ask delegate 
-    if (tabBarViewDelegate && [tabBarViewDelegate respondsToSelector:@selector(tabView:shouldDragTabViewItem:inTabBar:)]) {
-        if ([tabBarViewDelegate tabView:tabView shouldDragTabViewItem:[self tabViewItem] inTabBar:tabBarView])
-            return YES;
-    }
-        
-    return NO;
 }
 
 - (NSRect)_draggingRect {
