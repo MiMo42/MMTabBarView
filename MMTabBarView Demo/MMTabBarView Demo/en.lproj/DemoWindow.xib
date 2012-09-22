@@ -187,6 +187,7 @@
 							<int key="NSCellFlags2">268436480</int>
 							<string key="NSContents"/>
 							<reference key="NSSupport" ref="222309317"/>
+							<string key="NSPlaceholderString">Change Title</string>
 							<reference key="NSControlView" ref="422209338"/>
 							<bool key="NSDrawsBackground">YES</bool>
 							<object class="NSColor" key="NSBackgroundColor" id="168526294">
