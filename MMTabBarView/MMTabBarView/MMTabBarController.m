@@ -134,14 +134,14 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 - (NSArray *)_generateWidthsFromAttachedButtons:(NSArray *)buttons {
     NSInteger buttonCount = [buttons count], i, numberOfVisibleButtons = ([_control orientation] == MMTabBarHorizontalOrientation) ? 1 : 0;
 	NSMutableArray *newWidths = [NSMutableArray arrayWithCapacity:buttonCount];
-	id <MMTabStyle> style = [_control style];
+
 	CGFloat availableWidth = [_control availableWidthForButtons], currentOrigin = 0, totalOccupiedWidth = 0.0, width;
 
 	NSRect buttonRect = [_control genericButtonRect];
 	MMAttachedTabBarButton *currentButton;
 
 	if ([_control orientation] == MMTabBarVerticalOrientation) {
-		currentOrigin = [style topMarginForTabBarView:_control];
+		currentOrigin = [_control topMargin];
 	}
 
 	for(i = 0; i < buttonCount; i++) {
