@@ -251,7 +251,6 @@
     }
 }
 
-
 #pragma mark -
 #pragma mark ---- tab bar config ----
 
@@ -263,106 +262,6 @@
 	 forKey:@"Style"]; 
 }
 
-/*
-- (MMTabBarOrientation)orientation {
-    return [tabBar orientation];
-}
-
-- (void)setOrientation:(MMTabBarOrientation)newOrientation {
-
-	if (newOrientation == [tabBar orientation]) {
-		return;
-	}
-
-        // assure that orientation is valid
-    if (![tabBar supportsOrientation:MMTabBarHorizontalOrientation] && newOrientation == MMTabBarHorizontalOrientation)
-        newOrientation = MMTabBarVerticalOrientation;
-    if (![tabBar supportsOrientation:MMTabBarVerticalOrientation] && newOrientation == MMTabBarVerticalOrientation)
-        newOrientation = MMTabBarHorizontalOrientation;
-    
-	//change the frame of the tab bar according to the orientation
-	NSRect tabBarFrame = [tabBar frame], tabViewFrame = [tabView frame];
-	NSRect totalFrame = NSUnionRect(tabBarFrame, tabViewFrame);
-
-	if (newOrientation == MMTabBarHorizontalOrientation) {
-		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : 22;
-		tabBarFrame.size.width = totalFrame.size.width;
-		tabBarFrame.origin.y = totalFrame.origin.y + totalFrame.size.height - tabBarFrame.size.height;
-		tabViewFrame.origin.x = 13;
-		tabViewFrame.size.width = totalFrame.size.width - 23;
-		tabViewFrame.size.height = totalFrame.size.height - tabBarFrame.size.height - 2;
-		[tabBar setAutoresizingMask:NSViewMinYMargin | NSViewWidthSizable];
-	} else {
-		tabBarFrame.size.height = totalFrame.size.height;
-		tabBarFrame.size.width = [tabBar isTabBarHidden] ? 1 : 120;
-		tabBarFrame.origin.y = totalFrame.origin.y;
-		tabViewFrame.origin.x = tabBarFrame.origin.x + tabBarFrame.size.width;
-		tabViewFrame.size.width = totalFrame.size.width - tabBarFrame.size.width;
-		tabViewFrame.size.height = totalFrame.size.height;
-		[tabBar setAutoresizingMask:NSViewHeightSizable];
-	}
-
-	tabBarFrame.origin.x = totalFrame.origin.x;
-	tabViewFrame.origin.y = totalFrame.origin.y;
-
-	[tabView setFrame:tabViewFrame];
-	[tabBar setFrame:tabBarFrame];
-
-	[tabBar setOrientation:newOrientation];
-    [popUp_orientation selectItemWithTag:newOrientation];
-	[[self window] display];
-
-    if (newOrientation == MMTabBarHorizontalOrientation) {
-        [[NSUserDefaults standardUserDefaults] setObject:[[popUp_orientation itemAtIndex:0] title] forKey:@"Orientation"];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setObject:[[popUp_orientation itemAtIndex:1] title] forKey:@"Orientation"];
-    }
-
-}
-*/
-/*
-- (void)configOrientation:(id)sender {
-	MMTabBarOrientation orientation = ([sender tag] == 0) ? MMTabBarHorizontalOrientation : MMTabBarVerticalOrientation;
-
-	if (orientation == [tabBar orientation]) {
-		return;
-	}
-
-	//change the frame of the tab bar according to the orientation
-	NSRect tabBarFrame = [tabBar frame], tabViewFrame = [tabView frame];
-	NSRect totalFrame = NSUnionRect(tabBarFrame, tabViewFrame);
-
-	if (orientation == MMTabBarHorizontalOrientation) {
-		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : 22;
-		tabBarFrame.size.width = totalFrame.size.width;
-		tabBarFrame.origin.y = totalFrame.origin.y + totalFrame.size.height - tabBarFrame.size.height;
-		tabViewFrame.origin.x = 13;
-		tabViewFrame.size.width = totalFrame.size.width - 23;
-		tabViewFrame.size.height = totalFrame.size.height - tabBarFrame.size.height - 2;
-		[tabBar setAutoresizingMask:NSViewMinYMargin | NSViewWidthSizable];
-	} else {
-		tabBarFrame.size.height = totalFrame.size.height;
-		tabBarFrame.size.width = [tabBar isTabBarHidden] ? 1 : 120;
-		tabBarFrame.origin.y = totalFrame.origin.y;
-		tabViewFrame.origin.x = tabBarFrame.origin.x + tabBarFrame.size.width;
-		tabViewFrame.size.width = totalFrame.size.width - tabBarFrame.size.width;
-		tabViewFrame.size.height = totalFrame.size.height;
-		[tabBar setAutoresizingMask:NSViewHeightSizable];
-	}
-
-	tabBarFrame.origin.x = totalFrame.origin.x;
-	tabViewFrame.origin.y = totalFrame.origin.y;
-
-	[tabView setFrame:tabViewFrame];
-	[tabBar setFrame:tabBarFrame];
-
-	[tabBar setOrientation:orientation];
-	[[self window] display];
-
-	[[NSUserDefaults standardUserDefaults] setObject:[sender title]
-	 forKey:@"Orientation"];
-}
-*/
 - (void)configOnlyShowCloseOnHover:(id)sender {
 	[tabBar setOnlyShowCloseOnHover:[sender state]];
 
