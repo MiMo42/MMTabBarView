@@ -96,6 +96,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 #pragma mark -
 #pragma mark Act As Dragging Source
 
+- (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event {
+    return [aButton mm_dragShouldBeginFromMouseDown:event withExpiration:[NSDate distantFuture]];
+}
+
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton fromTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event {
 
 	NSRect buttonFrame = [aButton frame];
@@ -178,32 +182,32 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
         //split off the dragged tab into a new window
 		if ([self destinationTabBar] == nil &&
-		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBar:)] &&
-		   [sourceDelegate tabView:[sourceTabBarView tabView] shouldDropTabViewItem:[draggedButton tabViewItem] inTabBar:nil] &&
-		   [sourceDelegate respondsToSelector:@selector(tabView:newTabBarForDraggedTabViewItem:atPoint:)]) {
+		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBarView:)] &&
+		   [sourceDelegate tabView:[sourceTabBarView tabView] shouldDropTabViewItem:[draggedButton tabViewItem] inTabBarView:nil] &&
+		   [sourceDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
            
-            MMTabBarView *control = [sourceDelegate tabView:sourceTabView newTabBarForDraggedTabViewItem:[draggedButton tabViewItem] atPoint:aPoint];
+            MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[draggedButton tabViewItem] atPoint:aPoint];
 
-			if (control) {
+			if (tabBarView) {
 
                     // remove tab view item from source tab view
                 [sourceTabBarView removeTabViewItem:[draggedButton tabViewItem]];
                 [sourceTabBarView update:NO];
                         
                     // insert the dragged button and tab view to new window
-                [control insertAttachedButton:draggedButton atTabItemIndex:0];
+                [tabBarView insertAttachedButton:draggedButton atTabItemIndex:0];
 
-				[control update:NO];   //make sure the new tab is set in the correct position
+				[tabBarView update:NO];   //make sure the new tab is set in the correct position
 
 				if (_currentTearOffStyle == MMTabBarTearOffAlphaWindow) {
-					[[control window] makeKeyAndOrderFront:nil];
+					[[tabBarView window] makeKeyAndOrderFront:nil];
 				} else {
 					//center the window over where we ended dragging
-					[self _expandWindow:[control window] atPoint:[NSEvent mouseLocation]];
+					[self _expandWindow:[tabBarView window] atPoint:[NSEvent mouseLocation]];
 				}
 
-				if ([sourceDelegate respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBar:)]) {
-					[sourceDelegate tabView:sourceTabView didDropTabViewItem:[draggedButton tabViewItem] inTabBar:control];
+				if ([sourceDelegate respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBarView:)]) {
+					[sourceDelegate tabView:sourceTabView didDropTabViewItem:[draggedButton tabViewItem] inTabBarView:tabBarView];
 				}
 			} else {
 				NSLog(@"Delegate returned no control to add to.");
@@ -335,8 +339,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
                                                         
     [tabBarView update:NO];
 
-	if ((sourceTabBarView != destTabBarView || sourceIndex != destinationIndex) && [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBar:)]) {
-		[[sourceTabBarView delegate] tabView:sourceTabView didDropTabViewItem:tabViewItem inTabBar:destTabBarView];
+	if ((sourceTabBarView != destTabBarView || sourceIndex != destinationIndex) && [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBarView:)]) {
+		[[sourceTabBarView delegate] tabView:sourceTabView didDropTabViewItem:tabViewItem inTabBarView:destTabBarView];
 	}
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMTabDragDidEndNotification object:nil];
@@ -889,8 +893,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
             
     if (sourceTabBarView && sourceTabBarView == tabBarView) {
-        if ([tabBarDelegate respondsToSelector:@selector(tabView:shouldAllowTabViewItem:toLeaveTabBar:)]) {
-            if (![tabBarDelegate tabView:sourceTabView shouldAllowTabViewItem:[draggedButton tabViewItem] toLeaveTabBar:tabBarView]) {
+        if ([tabBarDelegate respondsToSelector:@selector(tabView:shouldAllowTabViewItem:toLeaveTabBarView:)]) {
+            if (![tabBarDelegate tabView:sourceTabView shouldAllowTabViewItem:[draggedButton tabViewItem] toLeaveTabBarView:tabBarView]) {
             return;
             }
         }
@@ -945,7 +949,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 		//set the window's alpha mask to zero if the last tab is being dragged
 		//don't fade out the old window if the delegate doesn't respond to the new tab bar method, just to be safe
 		if ([[sourceTabBarView tabView] numberOfTabViewItems] == 1 && sourceTabBarView == tabBarView &&
-		   [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:newTabBarForDraggedTabViewItem:atPoint:)]) {
+		   [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
 			[[sourceTabBarView window] setAlphaValue:0.0];
 
 			if ([sourceTabBarView tearOffStyle] == MMTabBarTearOffAlphaWindow) {

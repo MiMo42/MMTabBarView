@@ -55,6 +55,7 @@ extern NSString *AttachedTabBarButtonUTI;
 + (MMTabDragAssistant *)sharedDragAssistant;
 
 // Functionality
+- (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event;
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton fromTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event;
 - (void)draggingEnteredTabBarView:(MMTabBarView *)tabBarView atPoint:(NSPoint)mouseLoc draggingInfo:(id <NSDraggingInfo>)sender;
 - (void)draggingUpdatedInTabBarView:(MMTabBarView *)tabBarView atPoint:(NSPoint)mouseLoc draggingInfo:(id <NSDraggingInfo>)sender;
