@@ -81,6 +81,10 @@ StaticImage(SafariIWITRightCap)
     return YES;
 }
 
+- (NSSize)addTabButtonSizeForTabBarView:(MMTabBarView *)tabBarView {
+    return NSMakeSize(22.0,[tabBarView frame].size.height);
+}
+
 #pragma mark -
 #pragma mark Add Tab Button
 
