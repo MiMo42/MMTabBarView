@@ -49,7 +49,7 @@ static NSImage* _static##name##Image() \
 @protocol MMTabStyle;
 
 typedef enum MMTabBarOrientation : NSUInteger {
-    MMTabBarHorizontalOrientation,
+    MMTabBarHorizontalOrientation = 0,
     MMTabBarVerticalOrientation
 } MMTabBarOrientation;
 

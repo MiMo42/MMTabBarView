@@ -629,7 +629,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Control Configuration
 
-- (id<MMTabStyle>)style {
+- (id <MMTabStyle>)style {
 	return _style;
 }
 
@@ -637,6 +637,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	if (_style != newStyle) {
 		[_style autorelease];
 		_style = [newStyle retain];
+
+            // assure that orientation is valid
+        if (![self supportsOrientation:MMTabBarHorizontalOrientation] && _orientation == MMTabBarHorizontalOrientation)
+            [self setOrientation:MMTabBarVerticalOrientation];
+        if (![self supportsOrientation:MMTabBarVerticalOrientation] && _orientation == MMTabBarVerticalOrientation)
+            [self setOrientation:MMTabBarHorizontalOrientation];
 
         [self _updateAddTabButton];     
 
@@ -2081,10 +2087,7 @@ NSLog(@"did select:%@",tabViewItem);
 }
 
 - (BOOL)_supportsOrientation:(MMTabBarOrientation)orientation {
-    if (orientation == MMTabBarHorizontalOrientation)
-        return YES;
-    else
-        return NO;
+    return YES;
 }
 
 - (CGFloat)_heightOfTabBarButtons {
