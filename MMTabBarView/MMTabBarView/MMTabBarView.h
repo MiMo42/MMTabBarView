@@ -29,6 +29,15 @@
 #define kMMObjectCounterRadius          7.0
 #define kMMTabBarViewSourceListHeight   28
 
+#define StaticImage(name) \
+static NSImage* _static##name##Image() \
+{ \
+    static NSImage* image = nil; \
+    if (!image) \
+        image = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@#name]]; \
+    return image; \
+}
+
 @class MMOverflowPopUpButton;
 @class MMRolloverButton;
 @class MMTabBarViewler;
