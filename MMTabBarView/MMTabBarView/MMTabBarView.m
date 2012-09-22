@@ -272,7 +272,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	}
 
 	//let room for overflow popup button
-    if ([self useOverflowMenu] && ![[self overflowPopUpButton] isHidden]) {
+    if ([self useOverflowMenu] && ![_overflowPopUpButton isHidden]) {
 		result -= [self overflowButtonRect].size.height;        
     }
     
@@ -638,23 +638,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		[_style autorelease];
 		_style = [newStyle retain];
 
-            // restyle add tab button
-		if (_addTabButton) {
-			NSImage *newButtonImage = [_style addTabButtonImage];
-			if (newButtonImage) {
-				[_addTabButton setImage:newButtonImage];
-			}
-
-			newButtonImage = [_style addTabButtonPressedImage];
-			if (newButtonImage) {
-				[_addTabButton setAlternateImage:newButtonImage];
-			}
-
-			newButtonImage = [_style addTabButtonRolloverImage];
-			if (newButtonImage) {
-				[_addTabButton setRolloverImage:newButtonImage];
-			}
-		}
+        [self _updateAddTabButton];     
 
         [[self attachedButtons] makeObjectsPerformSelector:@selector(setStyle:) withObject:_style];
         
@@ -897,14 +881,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
 }
 
-- (MMRolloverButton *)addTabButton {
-	return _addTabButton;
-}
-
-- (MMOverflowPopUpButton *)overflowPopUpButton {
-	return _overflowPopUpButton;
-}
-
 -(CGFloat)heightOfTabBarButtons
 {
     if ([_style respondsToSelector:@selector(heightOfTabBarButtonsForTabBarView:)])
@@ -1139,12 +1115,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         
             //send the delegate messages
 		if (_isHidden) {
-			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarDidHide:)]) {
-				[[self delegate] tabView:[self tabView] tabBarDidHide:self];
+			if ([_delegate respondsToSelector:@selector(tabView:tabBarViewDidHide:)]) {
+				[_delegate tabView:[self tabView] tabBarViewDidHide:self];
 			}
 		} else {
-			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarDidUnhide:)]) {
-				[[self delegate] tabView:[self tabView] tabBarDidUnhide:self];
+			if ([_delegate respondsToSelector:@selector(tabView:tabBarViewDidUnhide:)]) {
+				[_delegate tabView:[self tabView] tabBarViewDidUnhide:self];
 			}
         }
     }   
@@ -1976,6 +1952,13 @@ NSLog(@"did select:%@",tabViewItem);
 #pragma mark -
 #pragma mark Private Actions
 
+- (void)_addNewTab:(id)sender {
+
+    if (_delegate && [_delegate respondsToSelector:@selector(addNewTabToTabView:)]) {
+        [_delegate addNewTabToTabView:_tabView];
+    }
+}
+
 - (void)_overflowMenuAction:(id)sender {
 	NSTabViewItem *tabViewItem = (NSTabViewItem *)[sender representedObject];
 	[_tabView selectTabViewItem:tabViewItem];
@@ -2483,6 +2466,9 @@ NSLog(@"did select:%@",tabViewItem);
     [_addTabButton setRolloverButtonType:MMRolloverActionButton];
     [_addTabButton setBordered:NO];
     [_addTabButton setBezelStyle:NSShadowlessSquareBezelStyle];
+    [_addTabButton setTarget:self];
+    [_addTabButton setAction:@selector(_addNewTab:)];
+    
     [self addSubview:_addTabButton];
 
     if (_showAddTabButton) {

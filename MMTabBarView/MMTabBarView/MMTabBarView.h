@@ -221,8 +221,6 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)setTabView:(NSTabView *)view;
 - (id<MMTabBarViewDelegate>)delegate;
 - (void)setDelegate:(id<MMTabBarViewDelegate>)object;
-- (MMRolloverButton *)addTabButton;
-- (MMOverflowPopUpButton *)overflowPopUpButton;
 - (CGFloat)heightOfTabBarButtons;
 - (BOOL)supportsOrientation:(MMTabBarOrientation)orientation;
 
@@ -296,39 +294,52 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)tabView:(NSTabView *)aTabView didCloseTabViewItem:(NSTabViewItem *)tabViewItem;
 - (void)tabView:(NSTabView *)aTabView didDetachTabViewItem:(NSTabViewItem *)tabViewItem;
 
-//"Spring-loaded" tabs methods
-- (NSArray *)allowedDraggedTypesForTabView:(NSTabView *)aTabView;
-- (BOOL)tabView:(NSTabView *)aTabView acceptedDraggingInfo:(id <NSDraggingInfo>) draggingInfo onTabViewItem:(NSTabViewItem *)tabViewItem;
+//tab bar hiding methods
+- (void)tabView:(NSTabView *)aTabView tabBarViewDidHide:(MMTabBarView *)tabBarView;
+- (void)tabView:(NSTabView *)aTabView tabBarViewDidUnhide:(MMTabBarView *)tabBarView;
+
+//closing behavior
+- (BOOL)tabView:(NSTabView *)aTabView disableTabCloseForTabViewItem:(NSTabViewItem *)tabViewItem;
+
+- (void)addNewTabToTabView:(NSTabView *)aTabView;
 
 //Contextual menu method
 - (NSMenu *)tabView:(NSTabView *)aTabView menuForTabViewItem:(NSTabViewItem *)tabViewItem;
 
 //Drag and drop methods
-- (BOOL)tabView:(NSTabView *)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(MMTabBarView *)tabBarView;
-- (BOOL)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(MMTabBarView *)tabBarView;
-- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBar:(MMTabBarView *)tabBarView;
-- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(MMTabBarView *)tabBarView;
+- (BOOL)tabView:(NSTabView *)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView;
+- (BOOL)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView;
+- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBarView:(MMTabBarView *)tabBarView;
+- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView;
+
+//"Spring-loaded" tabs methods
+- (NSArray *)allowedDraggedTypesForTabView:(NSTabView *)aTabView;
+- (BOOL)tabView:(NSTabView *)aTabView acceptedDraggingInfo:(id <NSDraggingInfo>) draggingInfo onTabViewItem:(NSTabViewItem *)tabViewItem;
 
 //Tear-off tabs methods
 - (NSImage *)tabView:(NSTabView *)aTabView imageForTabViewItem:(NSTabViewItem *)tabViewItem offset:(NSSize *)offset styleMask:(NSUInteger *)styleMask;
-- (MMTabBarView *)tabView:(NSTabView *)aTabView newTabBarForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point;
+- (MMTabBarView *)tabView:(NSTabView *)aTabView newTabBarViewForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point;
 - (void)tabView:(NSTabView *)aTabView closeWindowForLastTabViewItem:(NSTabViewItem *)tabViewItem;
 
 //Overflow menu validation
 - (BOOL)tabView:(NSTabView *)aTabView validateOverflowMenuItem:(NSMenuItem *)menuItem forTabViewItem:(NSTabViewItem *)tabViewItem;
 - (void)tabView:(NSTabView *)aTabView tabViewItem:(NSTabViewItem *)tabViewItem isInOverflowMenu:(BOOL)inOverflowMenu;
 
-//tab bar hiding methods
-- (void)tabView:(NSTabView *)aTabView tabBarDidHide:(MMTabBarView *)tabBarView;
-- (void)tabView:(NSTabView *)aTabView tabBarDidUnhide:(MMTabBarView *)tabBarView;
-
-//closing
-- (BOOL)tabView:(NSTabView *)aTabView disableTabCloseForTabViewItem:(NSTabViewItem *)tabViewItem;
-
 //tooltips
 - (NSString *)tabView:(NSTabView *)aTabView toolTipForTabViewItem:(NSTabViewItem *)tabViewItem;
 
 //accessibility
 - (NSString *)accessibilityStringForTabView:(NSTabView *)aTabView objectCount:(NSInteger)objectCount;
+
+// Deprecated
+//Drag and drop methods
+- (BOOL)tabView:(NSTabView *)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem fromTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (BOOL)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (id)tabView:(NSTabView *)aTabView newTabBarForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point DEPRECATED_ATTRIBUTE;
+- (void)tabView:(NSTabView *)aTabView tabBarDidHide:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (void)tabView:(NSTabView *)aTabView tabBarDidUnhide:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (CGFloat)desiredWidthForVerticalTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
 
 @end
