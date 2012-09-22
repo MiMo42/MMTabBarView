@@ -333,13 +333,13 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
 // Deprecated
 //Drag and drop methods
-- (BOOL)tabView:(NSTabView *)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem fromTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
-- (BOOL)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
-- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
-- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
-- (id)tabView:(NSTabView *)aTabView newTabBarForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point DEPRECATED_ATTRIBUTE;
-- (void)tabView:(NSTabView *)aTabView tabBarDidHide:(id)tabBarControl DEPRECATED_ATTRIBUTE;
-- (void)tabView:(NSTabView *)aTabView tabBarDidUnhide:(id)tabBarControl DEPRECATED_ATTRIBUTE;
+- (BOOL)tabView:(NSTabView *)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem fromTabBar:(id)tabBarControl __attribute__((deprecated("implement -tabView:shouldDragTabViewItem:inTabBarView: instead.")));
+- (BOOL)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(id)tabBarControl __attribute__((deprecated("implement -tabView:shouldDropTabViewItem:inTabBarView: instead.")));
+- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBar:(id)tabBarControl __attribute__((deprecated("implement -tabView:shouldAllowTabViewItem:toLeaveTabBarView: instead.")));
+- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(id)tabBarControl __attribute__((deprecated("implement -tabView:didDropTabViewItem:inTabBarView: instead.")));
+- (id)tabView:(NSTabView *)aTabView newTabBarForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point __attribute__((deprecated("implement -tabView:newTabBarViewForDraggedTabViewItem:atPoint: instead.")));
+- (void)tabView:(NSTabView *)aTabView tabBarDidHide:(id)tabBarControl __attribute__((deprecated("implement -tabView:tabBarViewDidHide: instead.")));
+- (void)tabView:(NSTabView *)aTabView tabBarDidUnhide:(id)tabBarControl __attribute__((deprecated("implement -tabView:tabBarViewDidUnhide: instead.")));
 - (CGFloat)desiredWidthForVerticalTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
 
 @end

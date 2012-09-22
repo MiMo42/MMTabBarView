@@ -1405,8 +1405,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
         
         BOOL allowsDrop = NO;
-        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBar:)]) {
-            if ([myDelegate tabView:sourceTabView shouldDropTabViewItem:[draggedButton tabViewItem] inTabBar:self])
+        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBarView:)]) {
+            if ([myDelegate tabView:sourceTabView shouldDropTabViewItem:[draggedButton tabViewItem] inTabBarView:self])
                 allowsDrop = YES;
         }
         
@@ -1438,8 +1438,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
                     
         BOOL canDrop = NO;
-        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBar:)]) {
-            canDrop = [myDelegate tabView:sourceTabView shouldDropTabViewItem:[draggedButton tabViewItem] inTabBar:self];
+        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBarView:)]) {
+            canDrop = [myDelegate tabView:sourceTabView shouldDropTabViewItem:[draggedButton tabViewItem] inTabBarView:self];
         }
         
         if (canDrop) {
