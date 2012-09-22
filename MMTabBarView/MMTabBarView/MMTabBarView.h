@@ -257,6 +257,8 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
 #pragma mark Interface to Dragging Assistant
 
+- (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton withMouseDownEvent:(NSEvent *)event;
+
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton withMouseDownEvent:(NSEvent *)theEvent;
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems;

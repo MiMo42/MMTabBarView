@@ -308,8 +308,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (BOOL)allowsDetachedDraggingOfTabViewItem:(NSTabViewItem *)anItem {
 
-    if (_delegate && [_delegate respondsToSelector:@selector(tabView:shouldAllowTabViewItem:toLeaveTabBar:)]) {
-        return [_delegate tabView:_tabView shouldAllowTabViewItem:anItem toLeaveTabBar:self];
+    if (_delegate && [_delegate respondsToSelector:@selector(tabView:shouldAllowTabViewItem:toLeaveTabBarView:)]) {
+        return [_delegate tabView:_tabView shouldAllowTabViewItem:anItem toLeaveTabBarView:self];
     }
 
     return NO;
@@ -1345,6 +1345,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Interface to Dragging Assistant
 
+- (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton withMouseDownEvent:(NSEvent *)event {
+
+        // ask delegate 
+    if (_delegate && [_delegate respondsToSelector:@selector(tabView:shouldDragTabViewItem:inTabBarView:)]) {
+        if (![_delegate tabView:_tabView shouldDragTabViewItem:[aButton tabViewItem] inTabBarView:self])
+            return NO;
+    }
+    
+    return [[MMTabDragAssistant sharedDragAssistant] shouldStartDraggingAttachedTabBarButton:aButton ofTabBarView:self withMouseDownEvent:event];
+}
+
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton withMouseDownEvent:(NSEvent *)theEvent {
     [[MMTabDragAssistant sharedDragAssistant] startDraggingAttachedTabBarButton:aButton fromTabBarView:self withMouseDownEvent:theEvent];
 }
@@ -1808,12 +1819,12 @@ NSLog(@"did select:%@",tabViewItem);
         
             //send the delegate messages
 		if (isHidden) {
-			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarDidHide:)]) {
-				[[self delegate] tabView:[self tabView] tabBarDidHide:self];
+			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarViewDidHide:)]) {
+				[[self delegate] tabView:[self tabView] tabBarViewDidHide:self];
 			}
 		} else {
-			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarDidUnhide:)]) {
-				[[self delegate] tabView:[self tabView] tabBarDidUnhide:self];
+			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarViewDidUnhide:)]) {
+				[[self delegate] tabView:[self tabView] tabBarViewDidUnhide:self];
 			}
         }        
     }
