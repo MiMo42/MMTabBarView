@@ -62,10 +62,6 @@
     
 	[[self window] setToolbar:[toolbar autorelease]];
 
-	// hook up add tab button
-	[[tabBar addTabButton] setTarget:self];
-	[[tabBar addTabButton] setAction:@selector(addNewTab:)];
-
 	// remove any tabs present in the nib
     for (NSTabViewItem *item in [tabView tabViewItems]) {
 		[tabView removeTabViewItem:item];
@@ -393,12 +389,17 @@
 	NSLog(@"didCloseTabViewItem: %@", [tabViewItem label]);
 }
 
+- (void)addNewTabToTabView:(NSTabView *)aTabView {
+    [self addNewTab:aTabView];
+}
+
 - (NSArray *)allowedDraggedTypesForTabView:(NSTabView *)aTabView {
 	return [NSArray arrayWithObjects:NSFilenamesPboardType, NSStringPboardType, nil];
 }
 
-- (void)tabView:(NSTabView *)aTabView acceptedDraggingInfo:(id <NSDraggingInfo>)draggingInfo onTabViewItem:(NSTabViewItem *)tabViewItem {
+- (BOOL)tabView:(NSTabView *)aTabView acceptedDraggingInfo:(id <NSDraggingInfo>)draggingInfo onTabViewItem:(NSTabViewItem *)tabViewItem {
 	NSLog(@"acceptedDraggingInfo: %@ onTabViewItem: %@", [[draggingInfo draggingPasteboard] stringForType:[[[draggingInfo draggingPasteboard] types] objectAtIndex:0]], [tabViewItem label]);
+    return YES;
 }
 
 - (NSMenu *)tabView:(NSTabView *)aTabView menuForTabViewItem:(NSTabViewItem *)tabViewItem {
@@ -406,19 +407,19 @@
 	return nil;
 }
 
-- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBar:(MMTabBarView *)tabBarView {
+- (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBarView:(MMTabBarView *)tabBarView {
     return YES;
 }
 
-- (BOOL)tabView:(NSTabView*)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(MMTabBarView *)tabBarView {
+- (BOOL)tabView:(NSTabView*)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView {
 	return YES;
 }
 
-- (BOOL)tabView:(NSTabView*)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(MMTabBarView *)tabBarView {
+- (BOOL)tabView:(NSTabView*)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView {
 	return YES;
 }
 
-- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBar:(MMTabBarView *)tabBarView {
+- (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView {
 	NSLog(@"didDropTabViewItem: %@ inTabBar: %@", [tabViewItem label], tabBarView);
 }
 
@@ -480,7 +481,7 @@
 	return viewImage;
 }
 
-- (MMTabBarView *)tabView:(NSTabView *)aTabView newTabBarForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point {
+- (MMTabBarView *)tabView:(NSTabView *)aTabView newTabBarViewForDraggedTabViewItem:(NSTabViewItem *)tabViewItem atPoint:(NSPoint)point {
 	NSLog(@"newTabBarForDraggedTabViewItem: %@ atPoint: %@", [tabViewItem label], NSStringFromPoint(point));
 
 	//create a new window controller with no tab items
@@ -505,12 +506,12 @@
 	[[self window] close];
 }
 
-- (void)tabView:(NSTabView *)aTabView tabBarDidHide:(MMTabBarView *)tabBarView {
-	NSLog(@"tabBarDidHide: %@", tabBarView);
+- (void)tabView:(NSTabView *)aTabView tabBarViewDidHide:(MMTabBarView *)tabBarView {
+	NSLog(@"tabBarViewDidHide: %@", tabBarView);
 }
 
-- (void)tabView:(NSTabView *)aTabView tabBarDidUnhide:(MMTabBarView *)tabBarView {
-	NSLog(@"tabBarDidUnhide: %@", tabBarView);
+- (void)tabView:(NSTabView *)aTabView tabBarViewDidUnhide:(MMTabBarView *)tabBarView {
+	NSLog(@"tabBarViewDidUnhide: %@", tabBarView);
 }
 
 - (NSString *)tabView:(NSTabView *)aTabView toolTipForTabViewItem:(NSTabViewItem *)tabViewItem {

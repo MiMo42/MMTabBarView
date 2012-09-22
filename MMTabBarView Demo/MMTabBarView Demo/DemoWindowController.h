@@ -8,9 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class MMTabBarView;
+#import <MMTabBarView/MMTabBarView.h>
 
-@interface DemoWindowController : NSWindowController <NSToolbarDelegate> {
+@interface DemoWindowController : NSWindowController <NSToolbarDelegate, MMTabBarViewDelegate> {
 	IBOutlet NSTabView				*tabView;
 	IBOutlet NSTextField            *tabField;
 	IBOutlet NSDrawer				*drawer;
@@ -59,15 +59,7 @@
 
 - (MMTabBarView *)tabBar;
 
-// delegate
-- (void)tabView:(NSTabView *)aTabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
-- (BOOL)tabView:(NSTabView *)aTabView shouldCloseTabViewItem:(NSTabViewItem *)tabViewItem;
-- (void)tabView:(NSTabView *)aTabView didCloseTabViewItem:(NSTabViewItem *)tabViewItem;
-
 // toolbar
-- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag;
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar;
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar;
 - (IBAction)toggleToolbar:(id)sender;
 - (BOOL)validateToolbarItem:(NSToolbarItem *)theItem;
 
