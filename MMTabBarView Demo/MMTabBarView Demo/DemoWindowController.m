@@ -226,7 +226,6 @@
 	[tabView setFrame:tabViewFrame];
 	[tabBar setFrame:tabBarFrame];
 
-//	[tabBar setOrientation:newOrientation];
     [popUp_orientation selectItemWithTag:newOrientation];
 	[[self window] display];
 

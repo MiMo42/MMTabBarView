@@ -703,8 +703,7 @@
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
     
         if (![cell icon] || ([cell icon] && [cell shouldDisplayCloseButton] && ([closeButton mouseHovered] || [closeButtonCell mouseHovered])))
-    
-        [cell _drawCloseButtonWithFrame:frame inView:controlView];
+            [cell _drawCloseButtonWithFrame:frame inView:controlView];
     } else {
     
         if (![cell showObjectCount] || ([cell showObjectCount] && ([closeButton mouseHovered] || [closeButtonCell mouseHovered])))
