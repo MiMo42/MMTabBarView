@@ -35,6 +35,7 @@
 - (CGFloat)heightOfTabBarButtonsForTabBarView:(MMTabBarView *)tabBarView;
 
 - (void)updateAddButton:(MMRolloverButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView;
+- (void)updateOverflowPopUpButton:(MMOverflowPopUpButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView;
 
 // cell values
 - (NSAttributedString *)attributedObjectCountStringValueForTabCell:(MMTabBarButtonCell *)cell;
