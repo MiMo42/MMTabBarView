@@ -55,10 +55,6 @@
 	_closeDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
 	_closeDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
 
-	_addTabButtonImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNew"]];
-	_addTabButtonPressedImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewPressed"]];
-	_addTabButtonRolloverImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewRollover"]];
-
 	_gradientImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AdiumGradient"]];
 }
 
@@ -70,10 +66,6 @@
 	[_closeDirtyButton release];
 	[_closeDirtyButtonDown release];
 	[_closeDirtyButtonOver release];
-
-	[_addTabButtonImage release];
-	[_addTabButtonPressedImage release];
-	[_addTabButtonRolloverImage release];
 
 	[_gradientImage release];
 
@@ -121,21 +113,6 @@
         return 0.0;
     else
         return 10.0f;
-}
-
-#pragma mark -
-#pragma mark Add Tab Button
-
-- (NSImage *)addTabButtonImage {
-	return _addTabButtonImage;
-}
-
-- (NSImage *)addTabButtonPressedImage {
-	return _addTabButtonPressedImage;
-}
-
-- (NSImage *)addTabButtonRolloverImage {
-	return _addTabButtonRolloverImage;
 }
 
 #pragma mark -
@@ -762,9 +739,6 @@
 		[aCoder encodeObject:_closeDirtyButton forKey:@"closeDirtyButton"];
 		[aCoder encodeObject:_closeDirtyButtonDown forKey:@"closeDirtyButtonDown"];
 		[aCoder encodeObject:_closeDirtyButtonOver forKey:@"closeDirtyButtonOver"];
-		[aCoder encodeObject:_addTabButtonImage forKey:@"addTabButtonImage"];
-		[aCoder encodeObject:_addTabButtonPressedImage forKey:@"addTabButtonPressedImage"];
-		[aCoder encodeObject:_addTabButtonRolloverImage forKey:@"addTabButtonRolloverImage"];
 		[aCoder encodeBool:_drawsUnified forKey:@"drawsUnified"];
 		[aCoder encodeBool:_drawsRight forKey:@"drawsRight"];
 	}
@@ -779,9 +753,6 @@
 			_closeDirtyButton = [[aDecoder decodeObjectForKey:@"closeDirtyButton"] retain];
 			_closeDirtyButtonDown = [[aDecoder decodeObjectForKey:@"closeDirtyButtonDown"] retain];
 			_closeDirtyButtonOver = [[aDecoder decodeObjectForKey:@"closeDirtyButtonOver"] retain];
-			_addTabButtonImage = [[aDecoder decodeObjectForKey:@"addTabButtonImage"] retain];
-			_addTabButtonPressedImage = [[aDecoder decodeObjectForKey:@"addTabButtonPressedImage"] retain];
-			_addTabButtonRolloverImage = [[aDecoder decodeObjectForKey:@"addTabButtonRolloverImage"] retain];
 			_drawsUnified = [aDecoder decodeBoolForKey:@"drawsUnified"];
 			_drawsRight = [aDecoder decodeBoolForKey:@"drawsRight"];
 		}

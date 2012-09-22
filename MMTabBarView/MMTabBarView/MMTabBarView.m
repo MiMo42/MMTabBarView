@@ -2451,32 +2451,33 @@ NSLog(@"did select:%@",tabViewItem);
     return YES;
 }
 
+StaticImage(AquaTabNew)
+StaticImage(AquaTabNewPressed)
+StaticImage(AquaTabNewRollover)
+
 - (void)_updateAddTabButton {
 
     if (_addTabButton) {
+        [_addTabButton removeFromSuperview];    
         [_addTabButton release], _addTabButton = nil;
     }
         // new tab button
 	NSRect addTabButtonRect = [self addTabButtonRect];
 	_addTabButton = [[MMRolloverButton alloc] initWithFrame:addTabButtonRect];
     
-    NSImage *newButtonImage = [_style addTabButtonImage];
-    if (newButtonImage) {
-        [_addTabButton setImage:newButtonImage];
-    }
-    newButtonImage = [_style addTabButtonPressedImage];
-    if (newButtonImage) {
-        [_addTabButton setAlternateImage:newButtonImage];
-    }
-    newButtonImage = [_style addTabButtonRolloverImage];
-    if (newButtonImage) {
-        [_addTabButton setRolloverImage:newButtonImage];
-    }
+    [_addTabButton setImage:_staticAquaTabNewImage()];
+    [_addTabButton setAlternateImage:_staticAquaTabNewPressedImage()];
+    [_addTabButton setRolloverImage:_staticAquaTabNewRolloverImage()];
+    
     [_addTabButton setTitle:@""];
     [_addTabButton setImagePosition:NSImageOnly];
     [_addTabButton setRolloverButtonType:MMRolloverActionButton];
     [_addTabButton setBordered:NO];
     [_addTabButton setBezelStyle:NSShadowlessSquareBezelStyle];
+    
+    if (_style && [_style respondsToSelector:@selector(updateAddButton:ofTabBarView:)])
+        [_style updateAddButton:_addTabButton ofTabBarView:self];
+
     [_addTabButton setTarget:self];
     [_addTabButton setAction:@selector(_addNewTab:)];
     

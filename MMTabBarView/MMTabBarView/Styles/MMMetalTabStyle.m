@@ -13,6 +13,10 @@
 
 @implementation MMMetalTabStyle
 
+StaticImage(TabNewMetal)
+StaticImage(TabNewMetalPressed)
+StaticImage(TabNewMetalRollover)
+
 + (NSString *)name {
     return @"Metal";
 }
@@ -34,10 +38,6 @@
 		metalCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Dirty_Pressed"]];
 		metalCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Dirty_Rollover"]];
 
-		_addTabButtonImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabNewMetal"]];
-		_addTabButtonPressedImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabNewMetalPressed"]];
-		_addTabButtonRolloverImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabNewMetalRollover"]];
-
 		_objectCountStringAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Helvetica" size:11.0] toHaveTrait:NSBoldFontMask], NSFontAttributeName,
 										[[NSColor whiteColor] colorWithAlphaComponent:0.85], NSForegroundColorAttributeName,
 										nil, nil];
@@ -52,9 +52,6 @@
 	[metalCloseDirtyButton release];
 	[metalCloseDirtyButtonDown release];
 	[metalCloseDirtyButtonOver release];
-	[_addTabButtonImage release];
-	[_addTabButtonPressedImage release];
-	[_addTabButtonRolloverImage release];
 
 	[_objectCountStringAttributes release];
 
@@ -88,16 +85,11 @@
 #pragma mark -
 #pragma mark Add Tab Button
 
-- (NSImage *)addTabButtonImage {
-	return _addTabButtonImage;
-}
+- (void)updateAddButton:(MMRolloverButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView {
 
-- (NSImage *)addTabButtonPressedImage {
-	return _addTabButtonPressedImage;
-}
-
-- (NSImage *)addTabButtonRolloverImage {
-	return _addTabButtonRolloverImage;
+    [aButton setImage:_staticTabNewMetalImage()];
+    [aButton setAlternateImage:_staticTabNewMetalPressedImage()];
+    [aButton setRolloverImage:_staticTabNewMetalRolloverImage()];
 }
 
 #pragma mark -
@@ -391,9 +383,6 @@
 		[aCoder encodeObject:metalCloseDirtyButton forKey:@"metalCloseDirtyButton"];
 		[aCoder encodeObject:metalCloseDirtyButtonDown forKey:@"metalCloseDirtyButtonDown"];
 		[aCoder encodeObject:metalCloseDirtyButtonOver forKey:@"metalCloseDirtyButtonOver"];
-		[aCoder encodeObject:_addTabButtonImage forKey:@"addTabButtonImage"];
-		[aCoder encodeObject:_addTabButtonPressedImage forKey:@"addTabButtonPressedImage"];
-		[aCoder encodeObject:_addTabButtonRolloverImage forKey:@"addTabButtonRolloverImage"];
 	}
 }
 
@@ -407,9 +396,6 @@
 		metalCloseDirtyButton = [[aDecoder decodeObjectForKey:@"metalCloseDirtyButton"] retain];
 		metalCloseDirtyButtonDown = [[aDecoder decodeObjectForKey:@"metalCloseDirtyButtonDown"] retain];
 		metalCloseDirtyButtonOver = [[aDecoder decodeObjectForKey:@"metalCloseDirtyButtonOver"] retain];
-		_addTabButtonImage = [[aDecoder decodeObjectForKey:@"addTabButtonImage"] retain];
-		_addTabButtonPressedImage = [[aDecoder decodeObjectForKey:@"addTabButtonPressedImage"] retain];
-		_addTabButtonRolloverImage = [[aDecoder decodeObjectForKey:@"addTabButtonRolloverImage"] retain];
 	}
 	//}
 	return self;

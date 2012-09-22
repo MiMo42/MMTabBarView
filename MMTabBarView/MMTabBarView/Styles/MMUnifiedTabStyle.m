@@ -36,10 +36,6 @@
 		unifiedCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
 		unifiedCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
 
-		_addTabButtonImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNew"]];
-		_addTabButtonPressedImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewPressed"]];
-		_addTabButtonRolloverImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewRollover"]];
-
 		_leftMargin = 0.0;
 	}
 	return self;
@@ -52,9 +48,6 @@
 	[unifiedCloseDirtyButton release];
 	[unifiedCloseDirtyButtonDown release];
 	[unifiedCloseDirtyButtonOver release];
-	[_addTabButtonImage release];
-	[_addTabButtonPressedImage release];
-	[_addTabButtonRolloverImage release];
 
 	[super dealloc];
 }
@@ -81,21 +74,6 @@
         return 0.0f;
     else
         return 10.0f;
-}
-
-#pragma mark -
-#pragma mark Add Tab Button
-
-- (NSImage *)addTabButtonImage {
-	return _addTabButtonImage;
-}
-
-- (NSImage *)addTabButtonPressedImage {
-	return _addTabButtonPressedImage;
-}
-
-- (NSImage *)addTabButtonRolloverImage {
-	return _addTabButtonRolloverImage;
 }
 
 #pragma mark -
@@ -280,9 +258,6 @@
 		[aCoder encodeObject:unifiedCloseDirtyButton forKey:@"unifiedCloseDirtyButton"];
 		[aCoder encodeObject:unifiedCloseDirtyButtonDown forKey:@"unifiedCloseDirtyButtonDown"];
 		[aCoder encodeObject:unifiedCloseDirtyButtonOver forKey:@"unifiedCloseDirtyButtonOver"];
-		[aCoder encodeObject:_addTabButtonImage forKey:@"addTabButtonImage"];
-		[aCoder encodeObject:_addTabButtonPressedImage forKey:@"addTabButtonPressedImage"];
-		[aCoder encodeObject:_addTabButtonRolloverImage forKey:@"addTabButtonRolloverImage"];
 	}
 }
 
@@ -296,9 +271,6 @@
 		unifiedCloseDirtyButton = [[aDecoder decodeObjectForKey:@"unifiedCloseDirtyButton"] retain];
 		unifiedCloseDirtyButtonDown = [[aDecoder decodeObjectForKey:@"unifiedCloseDirtyButtonDown"] retain];
 		unifiedCloseDirtyButtonOver = [[aDecoder decodeObjectForKey:@"unifiedCloseDirtyButtonOver"] retain];
-		_addTabButtonImage = [[aDecoder decodeObjectForKey:@"addTabButtonImage"] retain];
-		_addTabButtonPressedImage = [[aDecoder decodeObjectForKey:@"addTabButtonPressedImage"] retain];
-		_addTabButtonRolloverImage = [[aDecoder decodeObjectForKey:@"addTabButtonRolloverImage"] retain];
 	}
 	//}
 	return self;

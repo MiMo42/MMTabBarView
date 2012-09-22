@@ -36,10 +36,6 @@
 		liveChatCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
 		liveChatCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
 
-		_addTabButtonImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNew"]];
-		_addTabButtonPressedImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewPressed"]];
-		_addTabButtonRolloverImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewRollover"]];
-
 		_objectCountStringAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
 										[[NSColor whiteColor] colorWithAlphaComponent:0.85], NSForegroundColorAttributeName,
 										[[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Lucida Grande" size:11.0] toHaveTrait:NSBoldFontMask], NSFontAttributeName,
@@ -56,10 +52,7 @@
 	[liveChatCloseDirtyButton release];
 	[liveChatCloseDirtyButtonDown release];
 	[liveChatCloseDirtyButtonOver release];
-	[_addTabButtonImage release];
-	[_addTabButtonPressedImage release];
-	[_addTabButtonRolloverImage release];
-
+    
 	[_objectCountStringAttributes release];
 
 	[super dealloc];
@@ -87,21 +80,6 @@
         return 0.0;
     else
         return 10.0f;
-}
-
-#pragma mark -
-#pragma mark Add Tab Button
-
-- (NSImage *)addTabButtonImage {
-	return _addTabButtonImage;
-}
-
-- (NSImage *)addTabButtonPressedImage {
-	return _addTabButtonPressedImage;
-}
-
-- (NSImage *)addTabButtonRolloverImage {
-	return _addTabButtonRolloverImage;
 }
 
 #pragma mark -

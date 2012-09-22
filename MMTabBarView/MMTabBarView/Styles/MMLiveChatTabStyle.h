@@ -16,9 +16,6 @@
 	NSImage				*liveChatCloseDirtyButton;
 	NSImage				*liveChatCloseDirtyButtonDown;
 	NSImage				*liveChatCloseDirtyButtonOver;
-	NSImage				*_addTabButtonImage;
-	NSImage				*_addTabButtonPressedImage;
-	NSImage				*_addTabButtonRolloverImage;
 
 	NSDictionary		*_objectCountStringAttributes;
 

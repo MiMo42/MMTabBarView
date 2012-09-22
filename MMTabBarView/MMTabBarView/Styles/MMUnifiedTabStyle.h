@@ -17,9 +17,6 @@
 	NSImage				*unifiedCloseDirtyButton;
 	NSImage				*unifiedCloseDirtyButtonDown;
 	NSImage				*unifiedCloseDirtyButtonOver;
-	NSImage				*_addTabButtonImage;
-	NSImage				*_addTabButtonPressedImage;
-	NSImage				*_addTabButtonRolloverImage;
 
 	CGFloat				_leftMargin;
 }

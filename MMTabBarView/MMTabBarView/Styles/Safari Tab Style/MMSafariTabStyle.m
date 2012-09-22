@@ -12,15 +12,6 @@
 #import "MMAttachedTabBarButton.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
-#define StaticImage(name) \
-static NSImage* _static##name##Image() \
-{ \
-    static NSImage* image = nil; \
-    if (!image) \
-        image = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@#name]]; \
-    return image; \
-}
-
 @implementation MMSafariTabStyle
 
 StaticImage(TabClose_Front)
@@ -85,16 +76,11 @@ StaticImage(SafariIWITRightCap)
 #pragma mark -
 #pragma mark Add Tab Button
 
-- (NSImage *)addTabButtonImage {
-	return _staticSafariAWAddTabButtonImage();
-}
+-(void)updateAddButton:(MMRolloverButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView {
 
-- (NSImage *)addTabButtonPressedImage {
-	return _staticSafariAWAddTabButtonPushedImage();
-}
-
-- (NSImage *)addTabButtonRolloverImage {
-	return _staticSafariAWAddTabButtonRolloverPlusImage();
+    [aButton setImage:_staticSafariAWAddTabButtonImage()];
+    [aButton setAlternateImage:_staticSafariAWAddTabButtonPushedImage()];
+    [aButton setRolloverImage:_staticSafariAWAddTabButtonRolloverPlusImage()];
 }
 
 #pragma mark -

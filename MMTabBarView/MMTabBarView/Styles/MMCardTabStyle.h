@@ -17,9 +17,6 @@
     NSImage *cardCloseDirtyButton;
     NSImage *cardCloseDirtyButtonDown;
     NSImage *cardCloseDirtyButtonOver;
-    NSImage *_addTabButtonImage;
-    NSImage *_addTabButtonPressedImage;
-    NSImage *_addTabButtonRolloverImage;
 	    
     CGFloat _horizontalInset;
     CGFloat _topMargin;

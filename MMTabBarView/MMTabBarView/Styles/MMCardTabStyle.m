@@ -43,11 +43,7 @@
         cardCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
         cardCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
         cardCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
-        
-        _addTabButtonImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNew"]];
-        _addTabButtonPressedImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewPressed"]];
-        _addTabButtonRolloverImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabNewRollover"]];
-                
+                        
 		_horizontalInset = 3.0;
 	}
     return self;
@@ -60,10 +56,7 @@
     [cardCloseDirtyButton release];
     [cardCloseDirtyButtonDown release];
     [cardCloseDirtyButtonOver release]; 
-    [_addTabButtonImage release];
-    [_addTabButtonPressedImage release];
-    [_addTabButtonRolloverImage release];
-        
+    
     [super dealloc];
 }
 
@@ -94,21 +87,6 @@
 - (CGFloat)heightOfTabBarButtonsForTabBarView:(MMTabBarView *)tabBarView {
 
     return kMMTabBarViewHeight - [self topMarginForTabBarView:tabBarView];
-}
-
-#pragma mark -
-#pragma mark Add Tab Button
-
-- (NSImage *)addTabButtonImage {
-    return _addTabButtonImage;
-}
-
-- (NSImage *)addTabButtonPressedImage {
-    return _addTabButtonPressedImage;
-}
-
-- (NSImage *)addTabButtonRolloverImage {
-    return _addTabButtonRolloverImage;
 }
 
 #pragma mark -

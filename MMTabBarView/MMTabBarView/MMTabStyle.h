@@ -20,11 +20,6 @@
 + (NSString *)name;
 - (NSString *)name;
 
-// add tab button
-- (NSImage *)addTabButtonImage;
-- (NSImage *)addTabButtonPressedImage;
-- (NSImage *)addTabButtonRolloverImage;
-
 @optional
 
 // tab view specific parameters
@@ -39,7 +34,7 @@
 - (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView;
 - (CGFloat)heightOfTabBarButtonsForTabBarView:(MMTabBarView *)tabBarView;
 
-- (NSButton *)addTabButtonForTabBarView:(MMTabBarView *)tabBarView;
+- (void)updateAddButton:(MMRolloverButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView;
 
 // cell values
 - (NSAttributedString *)attributedObjectCountStringValueForTabCell:(MMTabBarButtonCell *)cell;

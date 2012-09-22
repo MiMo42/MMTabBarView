@@ -22,9 +22,6 @@
 	NSImage									*aquaCloseDirtyButton;
 	NSImage									*aquaCloseDirtyButtonDown;
 	NSImage									*aquaCloseDirtyButtonOver;
-	NSImage									*_addTabButtonImage;
-	NSImage									*_addTabButtonPressedImage;
-	NSImage									*_addTabButtonRolloverImage;
 }
 
 - (void)loadImages;

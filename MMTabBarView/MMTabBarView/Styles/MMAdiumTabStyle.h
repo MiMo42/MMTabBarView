@@ -17,9 +17,6 @@
 	NSImage					*_closeDirtyButton;
 	NSImage					*_closeDirtyButtonDown;
 	NSImage					*_closeDirtyButtonOver;
-	NSImage					*_addTabButtonImage;
-	NSImage					*_addTabButtonPressedImage;
-	NSImage					*_addTabButtonRolloverImage;
 	NSImage					*_gradientImage;
 
 	BOOL					_drawsUnified;
