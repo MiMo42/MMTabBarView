@@ -20,7 +20,6 @@
 
 // tab bar config
 - (IBAction)configStyle:(id)sender;
-- (IBAction)configOrientation:(id)sender;
 - (IBAction)configOnlyShowCloseOnHover:(id)sender;
 - (IBAction)configCanCloseOnlyTab:(id)sender;
 - (IBAction)configDisableTabClose:(id)sender;
@@ -41,6 +40,7 @@
 @implementation DemoWindowController
 
 - (void)awakeFromNib {
+
 	[[NSUserDefaults standardUserDefaults] registerDefaults:
 	 [NSDictionary dictionaryWithObjectsAndKeys:
 		  @"Metal", @"Style",
@@ -61,6 +61,8 @@
     [toolbar setShowsBaselineSeparator:NO];
     
 	[[self window] setToolbar:[toolbar autorelease]];
+
+    [tabBar addObserver:self forKeyPath:@"orientation" options:NSKeyValueObservingOptionNew context:NULL];
 
 	// remove any tabs present in the nib
     for (NSTabViewItem *item in [tabView tabViewItems]) {
@@ -154,11 +156,15 @@
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-	if ([menuItem action] == @selector(closeTab:)) {
+
+    SEL itemAction = [menuItem action];
+    
+	if (itemAction == @selector(closeTab:)) {
 		if (![tabBar canCloseOnlyTab] && ([tabView numberOfTabViewItems] <= 1)) {
 			return NO;
 		}
-	}
+    }
+
 	return YES;
 }
 
@@ -167,21 +173,156 @@
 }
 
 - (void)windowWillClose:(NSNotification *)note {
+
+    [tabBar removeObserver:self forKeyPath:@"orientation"];
+
 	[self autorelease];
 }
+
+- (void)menuNeedsUpdate:(NSMenu *)menu {
+
+    if (menu == [popUp_orientation menu]) {
+    
+        for (NSMenuItem *anItem in [menu itemArray]) {
+
+            [anItem setEnabled:YES];
+            
+            if (![tabBar supportsOrientation:MMTabBarHorizontalOrientation] && [anItem tag] == 0)
+                [anItem setEnabled:NO];
+            
+            if (![tabBar supportsOrientation:MMTabBarVerticalOrientation] && [anItem tag] == 1)
+                [anItem setEnabled:NO];
+        }
+    }
+}
+
+-(void)_updateForOrientation:(MMTabBarOrientation)newOrientation {
+
+	//change the frame of the tab bar according to the orientation
+	NSRect tabBarFrame = [tabBar frame], tabViewFrame = [tabView frame];
+	NSRect totalFrame = NSUnionRect(tabBarFrame, tabViewFrame);
+
+	if (newOrientation == MMTabBarHorizontalOrientation) {
+		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : 22;
+		tabBarFrame.size.width = totalFrame.size.width;
+		tabBarFrame.origin.y = totalFrame.origin.y + totalFrame.size.height - tabBarFrame.size.height;
+		tabViewFrame.origin.x = 13;
+		tabViewFrame.size.width = totalFrame.size.width - 23;
+		tabViewFrame.size.height = totalFrame.size.height - tabBarFrame.size.height - 2;
+		[tabBar setAutoresizingMask:NSViewMinYMargin | NSViewWidthSizable];
+	} else {
+		tabBarFrame.size.height = totalFrame.size.height;
+		tabBarFrame.size.width = [tabBar isTabBarHidden] ? 1 : 120;
+		tabBarFrame.origin.y = totalFrame.origin.y;
+		tabViewFrame.origin.x = tabBarFrame.origin.x + tabBarFrame.size.width;
+		tabViewFrame.size.width = totalFrame.size.width - tabBarFrame.size.width;
+		tabViewFrame.size.height = totalFrame.size.height;
+		[tabBar setAutoresizingMask:NSViewHeightSizable];
+	}
+
+	tabBarFrame.origin.x = totalFrame.origin.x;
+	tabViewFrame.origin.y = totalFrame.origin.y;
+
+	[tabView setFrame:tabViewFrame];
+	[tabBar setFrame:tabBarFrame];
+
+//	[tabBar setOrientation:newOrientation];
+    [popUp_orientation selectItemWithTag:newOrientation];
+	[[self window] display];
+
+    if (newOrientation == MMTabBarHorizontalOrientation) {
+        [[NSUserDefaults standardUserDefaults] setObject:[[popUp_orientation itemAtIndex:0] title] forKey:@"Orientation"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setObject:[[popUp_orientation itemAtIndex:1] title] forKey:@"Orientation"];
+    }
+}
+
+#pragma mark -
+#pragma mark KVO 
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+
+    if (object == tabBar) {
+        if ([keyPath isEqualToString:@"orientation"]) {
+            [self _updateForOrientation:[[change objectForKey:NSKeyValueChangeNewKey] unsignedIntegerValue]];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
 
 #pragma mark -
 #pragma mark ---- tab bar config ----
 
 - (void)configStyle:(id)sender {
-	[tabBar setStyleNamed:[sender titleOfSelectedItem]];
 
+	[tabBar setStyleNamed:[sender titleOfSelectedItem]];
+    
 	[[NSUserDefaults standardUserDefaults] setObject:[sender titleOfSelectedItem]
-	 forKey:@"Style"];
+	 forKey:@"Style"]; 
 }
 
+/*
+- (MMTabBarOrientation)orientation {
+    return [tabBar orientation];
+}
+
+- (void)setOrientation:(MMTabBarOrientation)newOrientation {
+
+	if (newOrientation == [tabBar orientation]) {
+		return;
+	}
+
+        // assure that orientation is valid
+    if (![tabBar supportsOrientation:MMTabBarHorizontalOrientation] && newOrientation == MMTabBarHorizontalOrientation)
+        newOrientation = MMTabBarVerticalOrientation;
+    if (![tabBar supportsOrientation:MMTabBarVerticalOrientation] && newOrientation == MMTabBarVerticalOrientation)
+        newOrientation = MMTabBarHorizontalOrientation;
+    
+	//change the frame of the tab bar according to the orientation
+	NSRect tabBarFrame = [tabBar frame], tabViewFrame = [tabView frame];
+	NSRect totalFrame = NSUnionRect(tabBarFrame, tabViewFrame);
+
+	if (newOrientation == MMTabBarHorizontalOrientation) {
+		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : 22;
+		tabBarFrame.size.width = totalFrame.size.width;
+		tabBarFrame.origin.y = totalFrame.origin.y + totalFrame.size.height - tabBarFrame.size.height;
+		tabViewFrame.origin.x = 13;
+		tabViewFrame.size.width = totalFrame.size.width - 23;
+		tabViewFrame.size.height = totalFrame.size.height - tabBarFrame.size.height - 2;
+		[tabBar setAutoresizingMask:NSViewMinYMargin | NSViewWidthSizable];
+	} else {
+		tabBarFrame.size.height = totalFrame.size.height;
+		tabBarFrame.size.width = [tabBar isTabBarHidden] ? 1 : 120;
+		tabBarFrame.origin.y = totalFrame.origin.y;
+		tabViewFrame.origin.x = tabBarFrame.origin.x + tabBarFrame.size.width;
+		tabViewFrame.size.width = totalFrame.size.width - tabBarFrame.size.width;
+		tabViewFrame.size.height = totalFrame.size.height;
+		[tabBar setAutoresizingMask:NSViewHeightSizable];
+	}
+
+	tabBarFrame.origin.x = totalFrame.origin.x;
+	tabViewFrame.origin.y = totalFrame.origin.y;
+
+	[tabView setFrame:tabViewFrame];
+	[tabBar setFrame:tabBarFrame];
+
+	[tabBar setOrientation:newOrientation];
+    [popUp_orientation selectItemWithTag:newOrientation];
+	[[self window] display];
+
+    if (newOrientation == MMTabBarHorizontalOrientation) {
+        [[NSUserDefaults standardUserDefaults] setObject:[[popUp_orientation itemAtIndex:0] title] forKey:@"Orientation"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setObject:[[popUp_orientation itemAtIndex:1] title] forKey:@"Orientation"];
+    }
+
+}
+*/
+/*
 - (void)configOrientation:(id)sender {
-	MMTabBarOrientation orientation = ([sender indexOfSelectedItem] == 0) ? MMTabBarHorizontalOrientation : MMTabBarVerticalOrientation;
+	MMTabBarOrientation orientation = ([sender tag] == 0) ? MMTabBarHorizontalOrientation : MMTabBarVerticalOrientation;
 
 	if (orientation == [tabBar orientation]) {
 		return;
@@ -221,7 +362,7 @@
 	[[NSUserDefaults standardUserDefaults] setObject:[sender title]
 	 forKey:@"Orientation"];
 }
-
+*/
 - (void)configOnlyShowCloseOnHover:(id)sender {
 	[tabBar setOnlyShowCloseOnHover:[sender state]];
 
@@ -586,7 +727,9 @@
 	[button_allowScrubbing setState:[defaults boolForKey:@"AllowScrubbing"]];
 
 	[self configStyle:popUp_style];
-	[self configOrientation:popUp_orientation];
+    [tabBar setOrientation:[popUp_orientation selectedTag]];    
+//    [self _updateForOrientation:[popUp_orientation selectedTag]];
+
     [self configOnlyShowCloseOnHover:button_onlyShowCloseOnHover];    
 	[self configCanCloseOnlyTab:button_canCloseOnlyTab];
 	[self configDisableTabClose:button_disableTabClosing];

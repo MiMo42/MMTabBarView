@@ -10,7 +10,7 @@
 
 #import <MMTabBarView/MMTabBarView.h>
 
-@interface DemoWindowController : NSWindowController <NSToolbarDelegate, MMTabBarViewDelegate> {
+@interface DemoWindowController : NSWindowController <NSToolbarDelegate, MMTabBarViewDelegate, NSMenuDelegate> {
 	IBOutlet NSTabView				*tabView;
 	IBOutlet NSTextField            *tabField;
 	IBOutlet NSDrawer				*drawer;
