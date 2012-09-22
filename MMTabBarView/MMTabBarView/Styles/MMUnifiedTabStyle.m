@@ -72,8 +72,16 @@
 - (CGFloat)topMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
         return 0.0f;
-    else
-        return 10.0f;
+
+    return 0.0f;
+}
+
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation forTabBarView:(MMTabBarView *)tabBarView {
+
+    if (orientation != MMTabBarHorizontalOrientation)
+        return NO;
+    
+    return YES;
 }
 
 #pragma mark -

@@ -80,13 +80,21 @@
 - (CGFloat)topMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
         return 2.0;
-    else
-        return 10.0f;
+
+    return 0.0f;
 }
 
 - (CGFloat)heightOfTabBarButtonsForTabBarView:(MMTabBarView *)tabBarView {
 
     return kMMTabBarViewHeight - [self topMarginForTabBarView:tabBarView];
+}
+
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation forTabBarView:(MMTabBarView *)tabBarView {
+
+    if (orientation != MMTabBarHorizontalOrientation)
+        return NO;
+    
+    return YES;
 }
 
 #pragma mark -

@@ -73,6 +73,14 @@ StaticImage(SafariIWITRightCap)
 	return 6.0f;
 }
 
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation forTabBarView:(MMTabBarView *)tabBarView {
+
+    if (orientation != MMTabBarHorizontalOrientation)
+        return NO;
+    
+    return YES;
+}
+
 #pragma mark -
 #pragma mark Add Tab Button
 
