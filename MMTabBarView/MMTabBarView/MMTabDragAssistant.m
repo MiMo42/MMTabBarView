@@ -598,7 +598,15 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         
         
         for (MMAttachedTabBarButton *aSortedButton in sortedButtons) {
-            if (NSPointInRect(aPoint, [aSortedButton stackingFrame])) {
+        
+            NSPoint checkPoint = aPoint;
+            if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
+                checkPoint.y = NSMidY([tabBarView bounds]);
+            } else {
+                checkPoint.x = NSMidX([tabBarView bounds]);
+            }
+        
+            if (NSPointInRect(checkPoint, [aSortedButton stackingFrame])) {
                 overButton = aSortedButton;
                 overButtonIndex = [sortedButtons indexOfObjectIdenticalTo:aSortedButton];
                 break;
@@ -608,7 +616,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         if (overButton) {            
             if (overButton == aButton)
                 return overButtonIndex;
-                
+
             NSRect overButtonFrame = [overButton frame];
             
             if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
@@ -631,28 +639,27 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
                 }
             }
         } else {
-            if (NSPointInRect(aPoint, [tabBarView bounds])) {
-                if ([self isSliding])
-                    resultingIndex = [tabBarView numberOfVisibleTabViewItems]-1;
-                else if ([self isDragging]) {
-                    if ([tabBarView destinationIndexForDraggedItem] != NSNotFound)
-                        resultingIndex = [tabBarView destinationIndexForDraggedItem];
-                    else {
-                        NSRect lastFrame = [[tabBarView lastAttachedButton] frame];
-                        if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-                            if (aPoint.x > NSMaxX(lastFrame)) {
-                                resultingIndex = [tabBarView numberOfVisibleTabViewItems];
-                            }
-                        } else {
-                            if (aPoint.y > NSMaxY(lastFrame))
-                                resultingIndex = [tabBarView numberOfVisibleTabViewItems];
+
+            if ([self isSliding])
+                resultingIndex = [tabBarView numberOfVisibleTabViewItems]-1;
+            else if ([self isDragging]) {
+                if ([tabBarView destinationIndexForDraggedItem] != NSNotFound)
+                    resultingIndex = [tabBarView destinationIndexForDraggedItem];
+                else {
+                    NSRect lastFrame = [[tabBarView lastAttachedButton] frame];
+                    if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
+                        if (aPoint.x > NSMaxX(lastFrame)) {
+                            resultingIndex = [tabBarView numberOfVisibleTabViewItems];
                         }
+                    } else {
+                        if (aPoint.y > NSMaxY(lastFrame))
+                            resultingIndex = [tabBarView numberOfVisibleTabViewItems];
                     }
                 }
             }
         }
     }
-    
+
     return resultingIndex;
 }
 
@@ -687,7 +694,6 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             dragEvent = nextEvent;
             
             mouseLocation = [tabBarView convertPoint:[dragEvent locationInWindow] fromView:nil];
-            
             NSRect slidingFrame = [aButton slidingFrame];
             slidingFrame.origin.x = [dragEvent locationInWindow].x - mouseOffset.width;
             slidingFrame.origin.y = [dragEvent locationInWindow].y - mouseOffset.height;
