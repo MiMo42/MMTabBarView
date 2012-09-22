@@ -420,7 +420,7 @@
 }
 
 - (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView {
-	NSLog(@"didDropTabViewItem: %@ inTabBar: %@", [tabViewItem label], tabBarView);
+	NSLog(@"didDropTabViewItem: %@ inTabBarView: %@", [tabViewItem label], tabBarView);
 }
 
 - (NSImage *)tabView:(NSTabView *)aTabView imageForTabViewItem:(NSTabViewItem *)tabViewItem offset:(NSSize *)offset styleMask:(NSUInteger *)styleMask {
