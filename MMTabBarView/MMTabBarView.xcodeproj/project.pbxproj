@@ -97,12 +97,6 @@
 		0634F09A160A0CDB00A6C86A /* MMTabBarView.h in Headers */ = {isa = PBXBuildFile; fileRef = 06DB23B61609F5830071BDA0 /* MMTabBarView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0634F0B2160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 0634F0B0160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0634F0B3160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0634F0B1160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m */; };
-		0634F0CB160A1F8100A6C86A /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C5160A1F8100A6C86A /* Base.xcconfig */; };
-		0634F0CC160A1F8100A6C86A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C6160A1F8100A6C86A /* Debug.xcconfig */; };
-		0634F0CD160A1F8100A6C86A /* MMTabBarViewFramework-Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C7160A1F8100A6C86A /* MMTabBarViewFramework-Base.xcconfig */; };
-		0634F0CE160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C8160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig */; };
-		0634F0CF160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0C9160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig */; };
-		0634F0D0160A1F8100A6C86A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0CA160A1F8100A6C86A /* Release.xcconfig */; };
 		06978946160DBC36009BB894 /* SafariAWAddTabButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978942160DBC36009BB894 /* SafariAWAddTabButton.png */; };
 		06978947160DBC36009BB894 /* SafariAWAddTabButtonPushed.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978943160DBC36009BB894 /* SafariAWAddTabButtonPushed.png */; };
 		06978948160DBC36009BB894 /* SafariAWAddTabButtonRolloverPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978944160DBC36009BB894 /* SafariAWAddTabButtonRolloverPlus.png */; };
@@ -597,7 +591,7 @@
 		06DB239C1609F5820071BDA0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Michael Monscheuer";
 			};
 			buildConfigurationList = 06DB239F1609F5820071BDA0 /* Build configuration list for PBXProject "MMTabBarView" */;
@@ -665,12 +659,6 @@
 				0634F097160A0C8A00A6C86A /* TabNewMetal.png in Resources */,
 				0634F098160A0C8A00A6C86A /* TabNewMetalPressed.png in Resources */,
 				0634F099160A0C8A00A6C86A /* TabNewMetalRollover.png in Resources */,
-				0634F0CB160A1F8100A6C86A /* Base.xcconfig in Resources */,
-				0634F0CC160A1F8100A6C86A /* Debug.xcconfig in Resources */,
-				0634F0CD160A1F8100A6C86A /* MMTabBarViewFramework-Base.xcconfig in Resources */,
-				0634F0CE160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig in Resources */,
-				0634F0CF160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig in Resources */,
-				0634F0D0160A1F8100A6C86A /* Release.xcconfig in Resources */,
 				06B51CD8160B561900153FA2 /* SafariAWATFill.png in Resources */,
 				06B51CD9160B561900153FA2 /* SafariAWATLeftCap.png in Resources */,
 				06B51CDA160B561900153FA2 /* SafariAWATRightCap.png in Resources */,
