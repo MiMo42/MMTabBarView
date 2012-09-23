@@ -278,14 +278,14 @@ StaticImage(SafariIWITRightCap)
     
         if (selIndex == NSNotFound || index < selIndex) {
             if (([nextButton state] == NSOnState && [tabBarView isSliding]) ||
-                [nextButton animatedSlide])
+                [nextButton animatedSlide]  || [tabBarView destinationIndexForDraggedItem] == index+1)
                 right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
         }
         // draw last button
     } else if (nextButton == nil) {
 
         if (selIndex == NSNotFound || index > selIndex) {
-            if (selIndex == NSNotFound || ([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
+            if (selIndex == NSNotFound || ([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide]  || [tabBarView destinationIndexForDraggedItem]+1 == index)
                 left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
         }
         
@@ -297,7 +297,7 @@ StaticImage(SafariIWITRightCap)
     
         if (selIndex == NSNotFound || index < selIndex) {
             left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
-            if (([nextButton state] == NSOnState && [tabBarView isSliding]) || [nextButton animatedSlide])
+            if (([nextButton state] == NSOnState && [tabBarView isSliding]) || [nextButton animatedSlide] || [tabBarView destinationIndexForDraggedItem] == index+1)
                 right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
         } else if (index > selIndex) {
             if (([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
