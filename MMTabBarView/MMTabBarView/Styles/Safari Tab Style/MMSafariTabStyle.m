@@ -276,7 +276,7 @@ StaticImage(SafariIWITRightCap)
         // draw first button
     if (prevButton == nil) {
     
-        if (index < selIndex) {
+        if (selIndex == NSNotFound || index < selIndex) {
             if (([nextButton state] == NSOnState && [tabBarView isSliding]) ||
                 [nextButton animatedSlide])
                 right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
@@ -284,15 +284,18 @@ StaticImage(SafariIWITRightCap)
         // draw last button
     } else if (nextButton == nil) {
 
-        if (index > selIndex) {
-            if (([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
+        if (selIndex == NSNotFound || index > selIndex) {
+            if (selIndex == NSNotFound || ([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
                 left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
         }
+        
+        if ([tabBarView showAddTabButton])
+            right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
     
         // draw mid button
     } else {
     
-        if (index < selIndex) {
+        if (selIndex == NSNotFound || index < selIndex) {
             left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
             if (([nextButton state] == NSOnState && [tabBarView isSliding]) || [nextButton animatedSlide])
                 right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
