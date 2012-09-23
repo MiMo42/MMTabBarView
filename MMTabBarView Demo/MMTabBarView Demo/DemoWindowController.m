@@ -43,7 +43,7 @@
 
 	[[NSUserDefaults standardUserDefaults] registerDefaults:
 	 [NSDictionary dictionaryWithObjectsAndKeys:
-		  @"Metal", @"Style",
+		  @"Card", @"Style",
 		  @"Horizontal", @"Orientation",
 		  @"Alpha Window", @"Tear-Off",
 		  @"100", @"TabMinWidth",
