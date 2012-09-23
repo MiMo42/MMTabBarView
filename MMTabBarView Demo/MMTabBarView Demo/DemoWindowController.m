@@ -45,7 +45,7 @@
 	 [NSDictionary dictionaryWithObjectsAndKeys:
 		  @"Card", @"Style",
 		  @"Horizontal", @"Orientation",
-		  @"Alpha Window", @"Tear-Off",
+		  @"Miniwindow", @"Tear-Off",
 		  @"100", @"TabMinWidth",
 		  @"280", @"TabMaxWidth",
 		  @"130", @"TabOptimalWidth",
