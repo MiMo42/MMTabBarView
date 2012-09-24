@@ -898,7 +898,6 @@ static inline NSSize scaleProportionally(NSSize imageSize, NSSize canvasSize, BO
 #pragma mark > Drawing
 
 - (void)_drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-
     [self drawBezelWithFrame:cellFrame inView:controlView];
     [self drawInteriorWithFrame:cellFrame inView:controlView];
 }

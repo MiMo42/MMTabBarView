@@ -464,6 +464,11 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 			}
 
 			[aButton setTabState:tabState];
+            
+            if (i+1 == [widths count] && [widths count] < buttonCount)
+                [aButton setIsOverflowButton:YES];
+            else
+                [aButton setIsOverflowButton:NO];
 
 			// next...
             if ([_control orientation] == MMTabBarHorizontalOrientation)
@@ -475,7 +480,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
                 [[_control delegate] tabView:[_control tabView] tabViewItem:[aButton tabViewItem] isInOverflowMenu:NO];
             }
 		} else {
-        
+                
             [_control removeAttachedButton:aButton synchronizeTabViewItems:NO];
                     
 			if (_overflowMenu == nil) {
