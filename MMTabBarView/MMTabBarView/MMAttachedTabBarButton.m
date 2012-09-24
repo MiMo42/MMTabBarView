@@ -25,6 +25,7 @@
 @synthesize tabViewItem = _tabViewItem;
 @dynamic slidingFrame;
 @synthesize animatedSlide = _animatedSlide;
+@synthesize isOverflowButton = _isOverflowButton;
 
 + (void)initialize {
     [super initialize];    
@@ -39,6 +40,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         _tabViewItem = [anItem retain];
+        _animatedSlide = NO;
+        _isOverflowButton = NO;
     }
 
     return self;

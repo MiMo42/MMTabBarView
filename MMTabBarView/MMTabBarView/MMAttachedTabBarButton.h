@@ -20,11 +20,13 @@
 @private
     NSTabViewItem *_tabViewItem;
     BOOL _animatedSlide;
+    BOOL _isOverflowButton;
 }
 
 @property (readonly) NSTabViewItem *tabViewItem;
 @property (assign) NSRect slidingFrame;
 @property (readonly) BOOL animatedSlide;
+@property (assign) BOOL isOverflowButton;
 
 // designated initializer
 - (id)initWithFrame:(NSRect)frame tabViewItem:(NSTabViewItem *)anItem;
