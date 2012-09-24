@@ -12,9 +12,11 @@
 
 @implementation MMAttachedTabBarButtonCell
 
+@synthesize isOverflowButton = _isOverflowButton;
+
 - (id)init {
 	if ((self = [super init])) {
-		
+        _isOverflowButton = NO;		
 	}
 	return self;
 }

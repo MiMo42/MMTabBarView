@@ -25,7 +25,7 @@
 @synthesize tabViewItem = _tabViewItem;
 @dynamic slidingFrame;
 @synthesize animatedSlide = _animatedSlide;
-@synthesize isOverflowButton = _isOverflowButton;
+@dynamic isOverflowButton;
 
 + (void)initialize {
     [super initialize];    
@@ -41,7 +41,6 @@
     if (self) {
         _tabViewItem = [anItem retain];
         _animatedSlide = NO;
-        _isOverflowButton = NO;
     }
 
     return self;
@@ -95,6 +94,17 @@
         aRect.origin.y = [self frame].origin.y;
         [self setFrame:aRect];
     }
+}
+
+#pragma mark -
+#pragma mark Interfacing Cell
+
+- (BOOL)isOverflowButton {
+    return [[self cell] isOverflowButton];
+}
+
+- (void)setIsOverflowButton:(BOOL)value {
+    [[self cell] setIsOverflowButton:value];
 }
 
 #pragma mark -

@@ -13,7 +13,10 @@
 
 @interface MMAttachedTabBarButtonCell : MMTabBarButtonCell {
 
+    BOOL _isOverflowButton;
 }
+
+@property (assign) BOOL isOverflowButton;
 
 - (MMAttachedTabBarButton *)controlView;
 - (void)setControlView:(MMAttachedTabBarButton *)aView;

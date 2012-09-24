@@ -20,7 +20,6 @@
 @private
     NSTabViewItem *_tabViewItem;
     BOOL _animatedSlide;
-    BOOL _isOverflowButton;
 }
 
 @property (readonly) NSTabViewItem *tabViewItem;
