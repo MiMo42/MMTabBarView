@@ -36,6 +36,8 @@
 
 - (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)sourceObject;
 
+- (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView;
+
 - (void)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex;
 
 - (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
@@ -742,7 +744,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
                 // slide Back:
             } else if (destinationIndex != NSNotFound && sourceIndex == destinationIndex) {
                 if ([tabBarView automaticallyAnimates]) {
-                    [[aButton animator] setFrame:[aButton stackingFrame]];
+                    [self _slideBackTabBarButton:aButton inTabBarView:tabBarView];
                 } else {
                     [aButton setFrame:[aButton stackingFrame]];
                 }
@@ -790,6 +792,21 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSPoint location = [aButton frame].origin;
         
     [tabBarView dragImage:[[[NSImage alloc] initWithSize:NSMakeSize(1, 1)] autorelease] at:location offset:NSZeroSize event:theEvent pasteboard:pboard source:source slideBack:NO];
+}
+
+- (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView {
+
+    if (_slideButtonsAnimation != nil) {
+        [_slideButtonsAnimation stopAnimation];
+        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+    }
+
+    [aButton slideAnimationWillStart];
+
+    _slideButtonsAnimation = [[MMSlideButtonsAnimation alloc] initWithTabBarButtons:[NSSet setWithObject:aButton]];
+    [_slideButtonsAnimation setDuration:0.05];
+    [_slideButtonsAnimation setDelegate:self];
+    [_slideButtonsAnimation startAnimation];    
 }
 
 - (void)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex {
