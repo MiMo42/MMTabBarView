@@ -22,7 +22,7 @@
     BOOL _animatedSlide;
 }
 
-@property (readonly) NSTabViewItem *tabViewItem;
+@property (retain) NSTabViewItem *tabViewItem;
 @property (assign) NSRect slidingFrame;
 @property (readonly) BOOL animatedSlide;
 @property (assign) BOOL isOverflowButton;
