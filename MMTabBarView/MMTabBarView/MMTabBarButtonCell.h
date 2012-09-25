@@ -108,10 +108,6 @@ typedef enum MMTabStateMask : NSUInteger {
 - (CGFloat)minimumWidthOfCell;
 - (CGFloat)desiredWidthOfCell;
 
-#pragma mark Image Scaling
-
-- (NSSize)scaleImageWithSize:(NSSize)imageSize toFitInSize:(NSSize)canvasSize scalingType:(NSImageScaling)scalingType;
-
 #pragma mark Drawing
 
 - (void)drawWithFrame:(NSRect) cellFrame inView:(NSView *)controlView;

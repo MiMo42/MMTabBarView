@@ -12,6 +12,7 @@
 #import "MMTabBarView.h"
 #import "MMTabStyle.h"
 #import "NSView+MMTabBarViewExtensions.h"
+#import "NSCell+MMTabBarViewExtensions.h"
 
 @interface MMTabBarButtonCell (/*Private*/)
 
@@ -382,54 +383,6 @@
 }
 
 #pragma mark -
-#pragma mark Image Scaling
-
-static inline NSSize scaleProportionally(NSSize imageSize, NSSize canvasSize, BOOL scaleUpOrDown) {
-
-    CGFloat ratio;
-
-    if (imageSize.width <= 0 || imageSize.height <= 0) {
-      return NSMakeSize(0, 0);
-    }
-
-    // get the smaller ratio and scale the image size with it
-    ratio = MIN(canvasSize.width / imageSize.width,
-	      canvasSize.height / imageSize.height);
-  
-    // Only scale down, unless scaleUpOrDown is YES
-    if (ratio < 1.0 || scaleUpOrDown)
-        {
-        imageSize.width *= ratio;
-        imageSize.height *= ratio;
-        }
-    
-    return imageSize;
-} 
-
-- (NSSize)scaleImageWithSize:(NSSize)imageSize toFitInSize:(NSSize)canvasSize scalingType:(NSImageScaling)scalingType {
-
-    NSSize result;
-  
-    switch (scalingType)  {
-        case NSImageScaleProportionallyDown:
-            result = scaleProportionally (imageSize, canvasSize, NO);
-            break;
-        case NSImageScaleAxesIndependently:
-            result = canvasSize;
-            break;
-        default:
-        case NSImageScaleNone:
-            result = imageSize;
-            break;
-        case NSImageScaleProportionallyUpOrDown:
-            result = scaleProportionally (imageSize, canvasSize, YES);
-            break;
-    }
-    
-    return result;
-}
-
-#pragma mark -
 #pragma mark Drawing
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
@@ -682,7 +635,7 @@ static inline NSSize scaleProportionally(NSSize imageSize, NSSize canvasSize, BO
                 
     NSSize iconSize = [icon size];
     
-    NSSize scaledIconSize = [self scaleImageWithSize:iconSize toFitInSize:NSMakeSize(iconSize.width, constrainedDrawingRect.size.height) scalingType:NSImageScaleProportionallyDown];
+    NSSize scaledIconSize = [self mm_scaleImageWithSize:iconSize toFitInSize:NSMakeSize(iconSize.width, constrainedDrawingRect.size.height) scalingType:NSImageScaleProportionallyDown];
 
     NSRect result;
         
@@ -727,7 +680,7 @@ static inline NSSize scaleProportionally(NSSize imageSize, NSSize canvasSize, BO
         constrainedDrawingRect.origin.x += NSWidth(closeButtonRect) + kMMTabBarCellPadding;
         }
                 
-    NSSize scaledImageSize = [self scaleImageWithSize:[image size] toFitInSize:NSMakeSize(constrainedDrawingRect.size.width, constrainedDrawingRect.size.height) scalingType:NSImageScaleProportionallyUpOrDown];
+    NSSize scaledImageSize = [self mm_scaleImageWithSize:[image size] toFitInSize:NSMakeSize(constrainedDrawingRect.size.width, constrainedDrawingRect.size.height) scalingType:NSImageScaleProportionallyUpOrDown];
     
     NSRect result = NSMakeRect(constrainedDrawingRect.origin.x,
                                          constrainedDrawingRect.origin.y - ((constrainedDrawingRect.size.height - scaledImageSize.height) / 2),
