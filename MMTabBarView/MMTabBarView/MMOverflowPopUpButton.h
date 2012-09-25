@@ -7,22 +7,29 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <QuartzCore/QuartzCore.h>
 
+typedef int (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
 
 @interface MMOverflowPopUpButton : NSPopUpButton {
-	NSImage									*_MMTabBarOverflowPopUpImage;
-	NSImage									*_MMTabBarOverflowDownPopUpImage;
-	BOOL									_down;
-	BOOL									_animatingAlternateImage;
-	NSTimer									*_animationTimer;
-	CGFloat									_animationValue;
+
+    BOOL _isAnimating;                      // pulsating animation of image and second image
 }
 
 //alternate image display
-- (BOOL)animatingAlternateImage;
-- (void)setAnimatingAlternateImage:(BOOL)flag;
+//- (BOOL)animatingAlternateImage;
+//- (void)setAnimatingAlternateImage:(BOOL)flag;
+
+// accessors
+- (NSImage *)secondImage;
+- (void)setSecondImage:(NSImage *)anImage;
 
 // archiving
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 - (id)initWithCoder:(NSCoder *)aDecoder;
+
+// bezel drawing
+- (MMCellBezelDrawingBlock)bezelDrawingBlock;
+- (void)setBezelDrawingBlock:(MMCellBezelDrawingBlock)aBlock;
+
 @end

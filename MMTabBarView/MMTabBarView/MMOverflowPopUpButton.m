@@ -7,116 +7,184 @@
 //
 
 #import "MMOverflowPopUpButton.h"
-#import "MMTabBarView.h"
+
+#import "MMOverflowPopUpButtonCell.h"
+// #import "MMTabBarView.h"
 
 #define TIMER_INTERVAL 1.0 / 15.0
 #define ANIMATION_STEP 0.033f
 
+#define StaticImage(name) \
+static NSImage* _static##name##Image() \
+{ \
+    static NSImage* image = nil; \
+    if (!image) \
+        image = [[NSImage alloc] initByReferencingFile:[[NSBundle bundleForClass:[MMOverflowPopUpButtonCell class]] pathForImageResource:@#name]]; \
+    return image; \
+}
+
+@interface MMOverflowPopUpButton (/*Private*/)
+
+@property (assign) CGFloat secondImageAlpha;
+
+- (BOOL)isAnimating;
+- (void)setIsAnimating:(BOOL)newState;
+
+- (void)_startCellAnimationIfNeeded;
+- (void)_startCellAnimation;
+- (void)_stopCellAnimationIfNeeded;
+- (void)_stopCellAnimation;
+
+@end
+
 @implementation MMOverflowPopUpButton
+
+StaticImage(overflowImage)
+StaticImage(overflowImagePressed)
+
+@dynamic secondImageAlpha;
+
++ (Class)cellClass {
+    return [MMOverflowPopUpButtonCell class];
+}
 
 - (id)initWithFrame:(NSRect)frameRect pullsDown:(BOOL)flag {
 	if (self = [super initWithFrame:frameRect pullsDown:YES]) {
+    
+        _isAnimating = NO;
+    
 		[self setBezelStyle:NSRegularSquareBezelStyle];
 		[self setBordered:NO];
 		[self setTitle:@""];
-		[self setPreferredEdge:NSMaxXEdge];
-		_MMTabBarOverflowPopUpImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"overflowImage"]];
-		_MMTabBarOverflowDownPopUpImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"overflowImagePressed"]];
-		_animatingAlternateImage = NO;
+		[self setPreferredEdge:NSMaxYEdge];
+        
+        [self setImage:_staticoverflowImageImage()];
+//        [self setSecondImage:_staticoverflowImagePressedImage()];
+        [self setAlternateImage:_staticoverflowImagePressedImage()];
+        
+        [self _startCellAnimationIfNeeded];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[_MMTabBarOverflowPopUpImage release];
-	[_MMTabBarOverflowDownPopUpImage release];
 	[super dealloc];
 }
 
-- (void)drawRect:(NSRect)rect {
-	if (_MMTabBarOverflowPopUpImage == nil) {
-		[super drawRect:rect];
-		return;
-	}
-
-	NSImage *image = (_down) ? _MMTabBarOverflowDownPopUpImage : _MMTabBarOverflowPopUpImage;
-	NSSize imageSize = [image size];
-	NSRect bounds = [self bounds];
-
-    NSRect drawRect = NSMakeRect(NSMidX(bounds) - (imageSize.width * 0.5f), NSMidY(bounds) - (imageSize.height * 0.5f), imageSize.width, imageSize.height);
-
-    [image drawInRect:drawRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:(_animatingAlternateImage ? 0.7f : 1.0f) respectFlipped:YES hints:nil];
-
-	if (_animatingAlternateImage) {
-		NSImage *alternateImage = [self alternateImage];
-		NSSize altImageSize = [alternateImage size];
-        
-        NSRect drawRect = NSMakeRect(NSMidX(bounds) - (altImageSize.width * 0.5f), NSMidY(bounds) - (altImageSize.height * 0.5f), altImageSize.width, altImageSize.height);
-        
-        [[self alternateImage] drawInRect:drawRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:sin(_animationValue * M_PI) respectFlipped:YES hints:nil];
-	}
+- (void)viewWillMoveToSuperview:(NSView *)newSuperview {
+    [super viewWillMoveToSuperview:newSuperview];
+    
+    [self _stopCellAnimationIfNeeded];
 }
 
+- (void)viewDidMoveToSuperview {
+
+    [super viewDidMoveToSuperview];
+    
+    [self _startCellAnimationIfNeeded];
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+
+    [super viewWillMoveToWindow:newWindow];
+    
+    [self _stopCellAnimationIfNeeded];
+}
+
+- (void)viewDidMoveToWindow {
+    [super viewDidMoveToWindow];
+    
+    [self _startCellAnimationIfNeeded];
+}
+
+#pragma mark -
+#pragma mark Accessors 
+
+- (void)setHidden:(BOOL)flag {
+
+    [super setHidden:flag];
+
+    @synchronized (self) {
+        if (flag)
+            [self _stopCellAnimationIfNeeded];
+        else
+            [self _startCellAnimationIfNeeded];
+    }
+}
+
+- (void)setFrame:(NSRect)frameRect {
+
+    [super setFrame:frameRect];
+
+    @synchronized (self) {
+        if (NSEqualRects(NSZeroRect, frameRect))
+            [self _stopCellAnimationIfNeeded];
+        else
+            [self _startCellAnimationIfNeeded];
+    }
+}
+
+#pragma mark -
+#pragma mark Interfacing Cell
+
+- (NSImage *)secondImage {
+    return [[self cell] secondImage];
+}
+
+- (void)setSecondImage:(NSImage *)anImage {
+
+    [[self cell] setSecondImage:anImage];
+    
+    if (!anImage) {
+        [self _stopCellAnimationIfNeeded];
+    } else {
+        [self _startCellAnimationIfNeeded];
+    }
+}
+
+#pragma mark -
+#pragma mark Animation
+
++ (id)defaultAnimationForKey:(NSString *)key {
+
+    if ([key isEqualToString:@"isAnimating"]) {
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"secondImageAlpha"];
+        animation.fromValue = [NSNumber numberWithFloat:0.0f];
+        animation.toValue = [NSNumber numberWithFloat:1.0];
+        animation.duration = 1.0f;
+        animation.autoreverses = YES;    
+        animation.repeatCount = CGFLOAT_MAX;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        return animation;
+    } else {
+        return [super defaultAnimationForKey:key];
+    }
+}
+
+/* currently unused
 - (void)mouseDown:(NSEvent *)event {
-	_down = YES;
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationReceived:) name:NSMenuDidEndTrackingNotification object:[self menu]];
 	[self setNeedsDisplay:YES];
 	[super mouseDown:event];
 }
 
-- (void)setHidden:(BOOL)value {
-	if ([self isHidden] != value) {
-		if (value) {
-			// Stop any animating alternate image if we hide
-			[_animationTimer invalidate], _animationTimer = nil;
-		} else if (_animatingAlternateImage) {
-			// Restart any animating alternate image if we unhide
-			_animationValue = ANIMATION_STEP;
-			_animationTimer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(animateStep:) userInfo:nil repeats:YES];
-			[[NSRunLoop currentRunLoop] addTimer:_animationTimer forMode:NSEventTrackingRunLoopMode];
-		}
-	}
-
-	[super setHidden:value];
-}
-
 - (void)notificationReceived:(NSNotification *)notification {
-	_down = NO;
+
 	[self setNeedsDisplay:YES];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+*/
 
-- (void)setAnimatingAlternateImage:(BOOL)flag {
-	if (_animatingAlternateImage != flag) {
-		_animatingAlternateImage = flag;
+#pragma mark -
+#pragma mark Bezel Drawing
 
-		if (![self isHidden]) {
-			if (flag) {
-				_animationValue = ANIMATION_STEP;
-				_animationTimer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(animateStep:) userInfo:nil repeats:YES];
-				[[NSRunLoop currentRunLoop] addTimer:_animationTimer forMode:NSEventTrackingRunLoopMode];
-			} else {
-				[_animationTimer invalidate], _animationTimer = nil;
-			}
-
-			[self setNeedsDisplay:YES];
-		}
-	}
+- (MMCellBezelDrawingBlock)bezelDrawingBlock {
+    return [[self cell] bezelDrawingBlock];
 }
 
-- (BOOL)animatingAlternateImage;
-{
-	return _animatingAlternateImage;
-}
-
-- (void)animateStep:(NSTimer *)timer {
-	_animationValue += ANIMATION_STEP;
-
-	if (_animationValue >= 1) {
-		_animationValue = ANIMATION_STEP;
-	}
-
-	[self setNeedsDisplay:YES];
+- (void)setBezelDrawingBlock:(MMCellBezelDrawingBlock)aBlock {
+    [[self cell] setBezelDrawingBlock:aBlock];
 }
 
 #pragma mark -
@@ -124,22 +192,58 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[super encodeWithCoder:aCoder];
-	if ([aCoder allowsKeyedCoding]) {
-		[aCoder encodeObject:_MMTabBarOverflowPopUpImage forKey:@"MMTabBarOverflowPopUpImage"];
-		[aCoder encodeObject:_MMTabBarOverflowDownPopUpImage forKey:@"MMTabBarOverflowDownPopUpImage"];
-		[aCoder encodeBool:_animatingAlternateImage forKey:@"MMTabBarOverflowAnimatingAlternateImage"];
-	}
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
-		if ([aDecoder allowsKeyedCoding]) {
-			_MMTabBarOverflowPopUpImage = [[aDecoder decodeObjectForKey:@"MMTabBarOverflowPopUpImage"] retain];
-			_MMTabBarOverflowDownPopUpImage = [[aDecoder decodeObjectForKey:@"MMTabBarOverflowDownPopUpImage"] retain];
-			[self setAnimatingAlternateImage:[aDecoder decodeBoolForKey:@"MMTabBarOverflowAnimatingAlternateImage"]];
-		}
 	}
 	return self;
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (BOOL)isAnimating {
+    return _isAnimating;
+}
+
+- (void)setIsAnimating:(BOOL)newState {
+    _isAnimating = newState;
+}
+
+- (void)_startCellAnimationIfNeeded {
+
+    if ([self window] == nil || [self isHidden] || NSEqualRects(NSZeroRect, [self frame]))
+        return;
+
+    if ([[self cell] secondImage] == nil)
+        return;
+    
+    [self _startCellAnimation];
+}
+
+- (void)_startCellAnimation {
+    [[self animator] setIsAnimating:YES];
+}
+
+- (void)_stopCellAnimationIfNeeded {
+
+    if (_isAnimating)
+        [self _stopCellAnimation];
+}
+
+- (void)_stopCellAnimation {
+
+    [self setIsAnimating:NO];
+}
+
+- (CGFloat)secondImageAlpha {
+    return [[self cell] secondImageAlpha];
+}
+
+- (void)setSecondImageAlpha:(CGFloat)value {
+    [[self cell] setSecondImageAlpha:value];
+    [self updateCell:[self cell]];
 }
 
 @end
