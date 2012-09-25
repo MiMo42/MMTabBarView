@@ -11,6 +11,7 @@
 #import "MMTabBarView.h"
 #import "MMAttachedTabBarButton.h"
 #import "NSView+MMTabBarViewExtensions.h"
+#import "NSCell+MMTabBarViewExtensions.h"
 
 // #define Adium_CellPadding 2
 #define Adium_MARGIN_X 4
@@ -204,7 +205,7 @@
         
     NSSize imageSize = [image size];
     
-    NSSize scaledImageSize = [cell scaleImageWithSize:imageSize toFitInSize:NSMakeSize(imageSize.width, drawingRect.size.height) scalingType:NSImageScaleProportionallyDown];
+    NSSize scaledImageSize = [cell mm_scaleImageWithSize:imageSize toFitInSize:NSMakeSize(imageSize.width, drawingRect.size.height) scalingType:NSImageScaleProportionallyDown];
 
     NSRect result;
     if (orientation == MMTabBarHorizontalOrientation) {
@@ -249,7 +250,7 @@
                 
     NSSize iconSize = [icon size];
     
-    NSSize scaledIconSize = [cell scaleImageWithSize:iconSize toFitInSize:NSMakeSize(iconSize.width, drawingRect.size.height) scalingType:NSImageScaleProportionallyDown];
+    NSSize scaledIconSize = [cell mm_scaleImageWithSize:iconSize toFitInSize:NSMakeSize(iconSize.width, drawingRect.size.height) scalingType:NSImageScaleProportionallyDown];
 
     NSRect result;
     if (orientation == MMTabBarHorizontalOrientation) {
@@ -394,7 +395,7 @@
 
     NSRect constrainedDrawingRect = drawingRect;
                 
-    NSSize scaledImageSize = [cell scaleImageWithSize:[image size] toFitInSize:NSMakeSize(constrainedDrawingRect.size.width, constrainedDrawingRect.size.height) scalingType:NSImageScaleProportionallyUpOrDown];
+    NSSize scaledImageSize = [cell mm_scaleImageWithSize:[image size] toFitInSize:NSMakeSize(constrainedDrawingRect.size.width, constrainedDrawingRect.size.height) scalingType:NSImageScaleProportionallyUpOrDown];
     
     NSRect result = NSMakeRect(constrainedDrawingRect.origin.x,
                                          constrainedDrawingRect.origin.y - ((constrainedDrawingRect.size.height - scaledImageSize.height) / 2),
