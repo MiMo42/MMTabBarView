@@ -18,6 +18,7 @@
 - (NSArray *)_generateWidthsFromAttachedButtons:(NSArray *)buttons;
 - (void)_setupAttachedButtons:(NSArray *)buttons withWidths:(NSArray *)widths;
 - (NSInteger)_shrinkWidths:(NSMutableArray *)newWidths towardMinimum:(NSInteger)minimum withAvailableWidth:(CGFloat)availableWidth;
+- (void)_addItemToOverflowMenu:(NSTabViewItem *)anItem withTitle:(NSString *)title;
 @end
 
 @implementation MMTabBarController
@@ -402,7 +403,6 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 	NSRect buttonRect = [_control genericButtonRect];
 	MMAttachedTabBarButton *aButton;
 	NSTabViewItem *selectedTabViewItem = [[_control tabView] selectedTabViewItem];
-	NSMenuItem *menuItem = nil;
 
 	[_overflowMenu release], _overflowMenu = nil;
 
@@ -464,9 +464,12 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 			}
 
 			[aButton setTabState:tabState];
-            
+
             if (i+1 == [widths count] && [widths count] < buttonCount)
+                {
                 [aButton setIsOverflowButton:YES];
+                [self _addItemToOverflowMenu:[aButton tabViewItem] withTitle:[[aButton attributedStringValue] string]];
+                }
             else
                 [aButton setIsOverflowButton:NO];
 
@@ -482,31 +485,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 		} else {
                 
             [_control removeAttachedButton:aButton synchronizeTabViewItems:NO];
-                    
-			if (_overflowMenu == nil) {
-				_overflowMenu = [[NSMenu alloc] init];
-				[_overflowMenu insertItemWithTitle:@"" action:nil keyEquivalent:@"" atIndex:0]; // Because the overflowPupUpButton is a pull down menu
-				[_overflowMenu setDelegate:self];
-			}
 
-			// Each item's title is limited to 60 characters. If more than 60 characters, use an ellipsis to indicate that more exists.
-            NSString *truncatedString = [[aButton attributedStringValue] string];
-            truncatedString = [truncatedString stringByTruncatingToLength:MAX_OVERFLOW_MENUITEM_TITLE_LENGTH];
-            
-			menuItem = [_overflowMenu addItemWithTitle:truncatedString
-						action:@selector(_overflowMenuAction:)
-						keyEquivalent:@""];
-			[menuItem setTarget:_control];
-			[menuItem setRepresentedObject:[aButton tabViewItem]];
-/*
-			if ([aButton objectCount] > 0) {
-				[menuItem setTitle:[[menuItem title] stringByAppendingFormat:@" (%lu)", (unsigned long)[aButton objectCount]]];
-            }
-*/            
-                
-            if ([[_control delegate] respondsToSelector:@selector(tabView:tabViewItem:isInOverflowMenu:)]) {
-                [[_control delegate] tabView:[_control tabView] tabViewItem:[aButton tabViewItem] isInOverflowMenu:YES];
-			}
+            [self _addItemToOverflowMenu:[aButton tabViewItem] withTitle:[[aButton attributedStringValue] string]];
 		}
 	}
 }
@@ -545,4 +525,32 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 	return(originalTotalWidths - totalWidths);
 }
 
+- (void)_addItemToOverflowMenu:(NSTabViewItem *)anItem withTitle:(NSString *)title {
+
+    NSMenuItem *menuItem = nil;
+
+    if (_overflowMenu == nil) {
+        _overflowMenu = [[NSMenu alloc] init];
+        [_overflowMenu insertItemWithTitle:@"" action:nil keyEquivalent:@"" atIndex:0]; // Because the overflowPupUpButton is a pull down menu
+        [_overflowMenu setDelegate:self];
+    }
+
+    // Each item's title is limited to 60 characters. If more than 60 characters, use an ellipsis to indicate that more exists.
+    NSString *truncatedString = [title stringByTruncatingToLength:MAX_OVERFLOW_MENUITEM_TITLE_LENGTH];
+    
+    menuItem = [_overflowMenu addItemWithTitle:truncatedString
+                action:@selector(_overflowMenuAction:)
+                keyEquivalent:@""];
+    [menuItem setTarget:_control];
+    [menuItem setRepresentedObject:anItem];
+/*
+    if ([aButton objectCount] > 0) {
+        [menuItem setTitle:[[menuItem title] stringByAppendingFormat:@" (%lu)", (unsigned long)[aButton objectCount]]];
+    }
+*/            
+        
+    if ([[_control delegate] respondsToSelector:@selector(tabView:tabViewItem:isInOverflowMenu:)]) {
+        [[_control delegate] tabView:[_control tabView] tabViewItem:anItem isInOverflowMenu:YES];
+    }
+}
 @end
