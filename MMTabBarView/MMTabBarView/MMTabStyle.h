@@ -12,6 +12,7 @@
 
 #import "MMTabBarButtonCell.h"
 #import "MMAttachedTabBarButtonCell.h"
+#import "MMOverflowPopUpButtonCell.h"
 #import "MMTabBarView.h"
 
 @protocol MMTabStyle <NSObject>
@@ -63,6 +64,9 @@
 // Drawing
 - (void)drawTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
+- (void)drawButtonBezelsOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
+- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
+- (void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 - (void)drawInteriorOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect;
 
 - (void)drawTabBarCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView;
