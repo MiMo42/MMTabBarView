@@ -100,6 +100,10 @@
 		06789D661611EC180080FCFE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06789D651611EC180080FCFE /* QuartzCore.framework */; };
 		06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06789D741611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */; };
+		06789DB6161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06789DB4161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06789DB7161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789DB5161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.m */; };
+		06789DBE161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06789DBC161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06789DBF161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */; };
 		06978946160DBC36009BB894 /* SafariAWAddTabButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978942160DBC36009BB894 /* SafariAWAddTabButton.png */; };
 		06978947160DBC36009BB894 /* SafariAWAddTabButtonPushed.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978943160DBC36009BB894 /* SafariAWAddTabButtonPushed.png */; };
 		06978948160DBC36009BB894 /* SafariAWAddTabButtonRolloverPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978944160DBC36009BB894 /* SafariAWAddTabButtonRolloverPlus.png */; };
@@ -225,6 +229,10 @@
 		06789D651611EC180080FCFE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCell+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
 		06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCell+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
+		06789DB4161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAffineTransform+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
+		06789DB5161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAffineTransform+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
+		06789DBC161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
+		06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
 		06978942160DBC36009BB894 /* SafariAWAddTabButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWAddTabButton.png; path = Images/SafariAWAddTabButton.png; sourceTree = "<group>"; };
 		06978943160DBC36009BB894 /* SafariAWAddTabButtonPushed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWAddTabButtonPushed.png; path = Images/SafariAWAddTabButtonPushed.png; sourceTree = "<group>"; };
 		06978944160DBC36009BB894 /* SafariAWAddTabButtonRolloverPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SafariAWAddTabButtonRolloverPlus.png; path = Images/SafariAWAddTabButtonRolloverPlus.png; sourceTree = "<group>"; };
@@ -300,12 +308,16 @@
 		0634F0271609FD6000A6C86A /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				0634EFDF1609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.h */,
-				0634EFE01609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.m */,
-				0634F0B0160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h */,
-				0634F0B1160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m */,
+				06789DB4161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h */,
+				06789DB5161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.m */,
+				06789DBC161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h */,
+				06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */,
 				06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */,
 				06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */,
+				0634F0B0160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h */,
+				0634F0B1160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m */,
+				0634EFDF1609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.h */,
+				0634EFE01609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -579,6 +591,8 @@
 				06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */,
 				069789581610A9E8009BB894 /* MMOverflowPopUpButtonCell.h in Headers */,
 				06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */,
+				06789DB6161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h in Headers */,
+				06789DBE161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -731,6 +745,8 @@
 				06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */,
 				069789591610A9E8009BB894 /* MMOverflowPopUpButtonCell.m in Sources */,
 				06789D741611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m in Sources */,
+				06789DB7161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.m in Sources */,
+				06789DBF161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
