@@ -15,6 +15,7 @@
 
 - (void)_drawInteriorInRect:(NSRect)rect;
 - (NSRect)_addTabButtonRect;
+- (NSRect)_overflowButtonRect;
 
 @end
 
@@ -133,6 +134,19 @@
 }
 
 #pragma mark -
+#pragma mark Determining Cell Size
+
+- (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView {
+
+    NSRect rect = [tabBarView _overflowButtonRect];
+    
+    rect.origin.y += [tabBarView topMargin];
+    rect.size.height -= [tabBarView topMargin];
+    
+    return rect;
+}
+
+#pragma mark -
 #pragma mark Drawing
 
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
@@ -180,20 +194,33 @@
 - (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
     	
     NSColor * lineColor = nil;
-    NSBezierPath *bezier = [NSBezierPath bezierPath];
+    NSBezierPath *fillPath = [NSBezierPath bezierPath];
     lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
 
+    BOOL overflowMode = [button isOverflowButton];
+    if ([button isSliding] || [button animatedSlide])
+        overflowMode = NO;
+
     NSRect aRect = NSMakeRect(frame.origin.x+.5, frame.origin.y+0.5, frame.size.width-1.0, frame.size.height-1.0);
+    if (overflowMode)
+        aRect.size.width += 0.5;
     
     // frame
     CGFloat radius = MIN(6.0, 0.5f * MIN(NSWidth(aRect), NSHeight(aRect)))-0.5;
 
-    [bezier moveToPoint: NSMakePoint(NSMinX(aRect),NSMaxY(aRect)+1.0)];
-    [bezier appendBezierPathWithArcFromPoint:NSMakePoint(NSMinX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMidX(aRect),NSMinY(aRect)) radius:radius];
-    [bezier appendBezierPathWithArcFromPoint:NSMakePoint(NSMaxX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)) radius:radius];
-    [bezier lineToPoint: NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)+1.0)];
+    [fillPath moveToPoint: NSMakePoint(NSMinX(aRect),NSMaxY(aRect)+1.0)];
+    [fillPath appendBezierPathWithArcFromPoint:NSMakePoint(NSMinX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMidX(aRect),NSMinY(aRect)) radius:radius];
+    
+    if (overflowMode) {
+        [fillPath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMinY(aRect))];
+        [fillPath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)+1.0)];    
+    } else {
+        [fillPath appendBezierPathWithArcFromPoint:NSMakePoint(NSMaxX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)) radius:radius];
+        [fillPath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)+1.0)];
+    }
     
     NSGradient *gradient = nil;
 
@@ -213,16 +240,27 @@
         }
 
         if (gradient != nil) {
-            [gradient drawInBezierPath:bezier angle:90.0f];
+            [gradient drawInBezierPath:fillPath angle:90.0f];
             [gradient release], gradient = nil;
             }
     } else {
         [[NSColor windowBackgroundColor] set];
         NSRectFill(aRect);
     }
+
+    NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+    [outlinePath moveToPoint: NSMakePoint(NSMinX(aRect),NSMaxY(aRect)+1.0)];
+    [outlinePath appendBezierPathWithArcFromPoint:NSMakePoint(NSMinX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMidX(aRect),NSMinY(aRect)) radius:radius];
+    
+    if (overflowMode) {
+        [outlinePath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMinY(aRect))];
+    } else {
+        [outlinePath appendBezierPathWithArcFromPoint:NSMakePoint(NSMaxX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)) radius:radius];
+        [outlinePath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)+1.0)];
+    }    
     
     [lineColor set];
-    [bezier stroke];
+    [outlinePath stroke];
 
     if ([cell state] == NSOffState) {
     
@@ -232,6 +270,70 @@
         [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMinX(frame),NSMaxY(frame)-0.5)
                   toPoint:NSMakePoint(NSMaxX(frame),NSMaxY(frame)-0.5)];
     }    
+}
+
+-(void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+
+    MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
+    MMAttachedTabBarButtonCell *lastAttachedButtonCell = [lastAttachedButton cell];
+
+    if ([lastAttachedButton isSliding] || [lastAttachedButton animatedSlide])
+        return;
+
+    NSRect frame = [overflowButton frame];
+    frame.size.width += 5.0;
+    
+    NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
+
+    NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y+0.5, frame.size.width-0.5, frame.size.height-1.0);
+    
+    // frame
+    CGFloat radius = MIN(6.0, 0.5f * MIN(NSWidth(aRect), NSHeight(aRect)))-0.5;
+
+    NSBezierPath *fillPath = [NSBezierPath bezierPath];
+    [fillPath moveToPoint: NSMakePoint(NSMinX(aRect),NSMinY(aRect))];
+    [fillPath lineToPoint: NSMakePoint(NSMidX(aRect),NSMinY(aRect))];
+    [fillPath appendBezierPathWithArcFromPoint:NSMakePoint(NSMaxX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)) radius:radius];
+    [fillPath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)+1)];
+    [fillPath lineToPoint: NSMakePoint(NSMinX(aRect),NSMaxY(aRect)+1)];
+    
+    NSGradient *gradient = nil;
+
+    if ([tabBarView isWindowActive]) {
+        if ([lastAttachedButtonCell state] == NSOnState) {
+              gradient = [[NSGradient alloc] initWithStartingColor:[NSColor whiteColor] endingColor:[NSColor colorWithDeviceWhite:0.929 alpha:1.000]];
+        } else if ([lastAttachedButtonCell mouseHovered]) {
+        
+            gradient = [[NSGradient alloc] 
+                initWithStartingColor: [NSColor colorWithCalibratedWhite:0.80 alpha:1.0]
+                endingColor:[NSColor colorWithCalibratedWhite:0.80 alpha:1.0]];           
+        } else {
+
+            gradient = [[NSGradient alloc] 
+                initWithStartingColor:[NSColor colorWithCalibratedWhite:0.835 alpha:1.0] 
+                endingColor:[NSColor colorWithCalibratedWhite:0.843 alpha:1.0]];                                
+        }
+
+        if (gradient != nil) {
+            [gradient drawInBezierPath:fillPath angle:90.0f];
+            [gradient release], gradient = nil;
+            }
+    } else {
+        [[NSColor windowBackgroundColor] set];
+        NSRectFill(aRect);
+    }
+    
+    NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+    
+    [outlinePath moveToPoint: NSMakePoint(NSMinX(aRect),NSMinY(aRect))];
+    [outlinePath lineToPoint: NSMakePoint(NSMidX(aRect),NSMinY(aRect))];
+    [outlinePath appendBezierPathWithArcFromPoint:NSMakePoint(NSMaxX(aRect),NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect),NSMaxY(aRect)) radius:radius];
+    [outlinePath lineToPoint: NSMakePoint(NSMaxX(aRect),NSMaxY(aRect))];
+    if ([lastAttachedButtonCell state] == NSOffState)
+        [outlinePath lineToPoint: NSMakePoint(NSMinX(aRect),NSMaxY(aRect))];
+    
+    [lineColor set];
+    [outlinePath stroke];    
 }
 
 #pragma mark -
