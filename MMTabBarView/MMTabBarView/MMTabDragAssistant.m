@@ -697,7 +697,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSUInteger lastDestinationIndex = sourceIndex;
     
     [self setIsSliding:YES];
-    [aButton setIsSliding:YES];
+    [aButton setIsInDraggedSlide:YES];
 
     [aButton orderFront];
                 
@@ -749,7 +749,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             #pragma unused(mouseUp)
 
             [self setIsSliding:NO];
-            [aButton setIsSliding:NO];
+            [aButton setIsInDraggedSlide:NO];
                 
                 // move tab view item:
             if ([tabBarView indexOfTabViewItem:[aButton tabViewItem]] != lastDestinationIndex) {
@@ -778,7 +778,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     if (continueDetached) {
 
         [self setIsSliding:NO];
-        [aButton setIsSliding:NO];
+        [aButton setIsInDraggedSlide:NO];
         
         [aButton retain];
             

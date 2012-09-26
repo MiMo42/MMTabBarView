@@ -19,14 +19,15 @@
 
 @private
     NSTabViewItem *_tabViewItem;
-    BOOL _animatedSlide;
-    BOOL _isSliding;
+    BOOL _isInAnimatedSlide;
+    BOOL _isInDraggedSlide;
 }
 
 @property (retain) NSTabViewItem *tabViewItem;
 @property (assign) NSRect slidingFrame;
-@property (readonly) BOOL animatedSlide;
-@property (assign) BOOL isSliding;
+@property (readonly) BOOL isInAnimatedSlide;
+@property (assign) BOOL isInDraggedSlide;
+@property (readonly) BOOL isSliding;
 @property (assign) BOOL isOverflowButton;
 
 // designated initializer

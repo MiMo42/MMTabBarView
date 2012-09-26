@@ -201,7 +201,7 @@
     lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
 
     BOOL overflowMode = [button isOverflowButton];
-    if ([button isSliding] || [button animatedSlide])
+    if ([button isSliding])
         overflowMode = NO;
 
     NSRect aRect = NSMakeRect(frame.origin.x+.5, frame.origin.y+0.5, frame.size.width-1.0, frame.size.height-1.0);
@@ -277,7 +277,7 @@
     MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
     MMAttachedTabBarButtonCell *lastAttachedButtonCell = [lastAttachedButton cell];
 
-    if ([lastAttachedButton isSliding] || [lastAttachedButton animatedSlide])
+    if ([lastAttachedButton isSliding])
         return;
 
     NSRect frame = [overflowButton frame];

@@ -24,8 +24,9 @@
 
 @synthesize tabViewItem = _tabViewItem;
 @dynamic slidingFrame;
-@synthesize animatedSlide = _animatedSlide;
-@synthesize isSliding = _isSliding;
+@synthesize isInAnimatedSlide = _isInAnimatedSlide;
+@synthesize isInDraggedSlide = _isInDraggedSlide;
+@dynamic isSliding;
 @dynamic isOverflowButton;
 
 + (void)initialize {
@@ -41,7 +42,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         _tabViewItem = [anItem retain];
-        _animatedSlide = NO;
+        _isInAnimatedSlide = NO;
+        _isInDraggedSlide = NO;
     }
 
     return self;
@@ -95,6 +97,10 @@
         aRect.origin.y = [self frame].origin.y;
         [self setFrame:aRect];
     }
+}
+
+- (BOOL)isSliding {
+    return _isInDraggedSlide || _isInAnimatedSlide;
 }
 
 #pragma mark -
@@ -200,11 +206,11 @@
 #pragma mark Animation Support
 
 - (void)slideAnimationWillStart {
-    _animatedSlide = YES;
+    _isInAnimatedSlide = YES;
 }
 
 - (void)slideAnimationDidEnd {
-    _animatedSlide = NO;
+    _isInAnimatedSlide = NO;
 }
 
 #pragma mark -
