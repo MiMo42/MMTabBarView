@@ -9,16 +9,12 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
-typedef int (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
+typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
 
 @interface MMOverflowPopUpButton : NSPopUpButton {
 
     BOOL _isAnimating;                      // pulsating animation of image and second image
 }
-
-//alternate image display
-//- (BOOL)animatingAlternateImage;
-//- (void)setAnimatingAlternateImage:(BOOL)flag;
 
 // accessors
 - (NSImage *)secondImage;
