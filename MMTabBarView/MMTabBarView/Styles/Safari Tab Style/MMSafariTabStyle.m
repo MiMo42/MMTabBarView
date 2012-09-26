@@ -12,6 +12,19 @@
 #import "MMAttachedTabBarButton.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
+@interface MMTabBarView(SharedPrivates)
+
+- (NSRect)_addTabButtonRect;
+- (NSRect)_overflowButtonRect;
+
+@end
+
+@interface MMTabBarButtonCell(SharedPrivates)
+
+- (NSRect)_closeButtonRectForBounds:(NSRect)theRect;
+
+@end
+
 @implementation MMSafariTabStyle
 
 StaticImage(TabClose_Front)
@@ -85,6 +98,16 @@ StaticImage(SafariIWITRightCap)
     return NSMakeSize(22.0,[tabBarView frame].size.height);
 }
 
+- (NSRect)addTabButtonRectForTabBarView:(MMTabBarView *)tabBarView {
+
+    NSRect rect = [tabBarView _addTabButtonRect];
+    
+    rect.origin.y += 1.0f;
+    rect.size.height -= 1.0f;
+    
+    return rect;
+}
+
 #pragma mark -
 #pragma mark Add Tab Button
 
@@ -149,7 +172,29 @@ StaticImage(SafariIWITRightCap)
 
 - (NSRect)drawingRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell
 {
-    return NSInsetRect(theRect, 10.0, 0.0);
+    NSRect rect = NSInsetRect(theRect, 6.0, 0.0);
+    rect.origin.y += 1;
+    rect.size.height -= 1;
+    
+    return rect;
+}
+
+- (NSRect)closeButtonRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell {
+    
+    NSRect rect = [cell _closeButtonRectForBounds:theRect];
+    rect.origin.y += 1;
+    rect.size.height -= 1;
+    return rect;
+}
+
+- (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView {
+
+    NSRect rect = [tabBarView _overflowButtonRect];
+    
+    rect.origin.y += 1.0f;
+    rect.size.height -= 1.0f;
+    
+    return rect;
 }
 
 #pragma mark -
@@ -168,19 +213,124 @@ StaticImage(SafariIWITRightCap)
     } else {
         NSImage *bg = [tabBarView isWindowActive] ? _staticSafariAWBGImage() : _staticSafariIWBGImage();
         NSDrawThreePartImage(rect, nil, bg, nil, NO, NSCompositeCopy, 1, [tabBarView isFlipped]);
-        
-        [self _drawButtonBezelsOfTabBarView:tabBarView inRect:rect];
     }
     
 	[NSGraphicsContext restoreGraphicsState];
+}
+
+- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+
+    BOOL isWindowActive = [tabBarView isWindowActive];
+    NSUInteger numberOfButtons = [buttons count];
+
+    MMAttachedTabBarButton *prevButton = nil,
+                           *nextButton = nil;
+    
+    if (index > 0)
+        prevButton = [buttons objectAtIndex:index-1];
+    if (index+1 < numberOfButtons)
+        nextButton = [buttons objectAtIndex:index+1];
+
+    NSImage *left = nil,
+            *center = nil,
+            *right = nil;
+    NSRect buttonFrame = [button frame];
+
+    buttonFrame = NSInsetRect(buttonFrame,-5.0,0);
+        
+        // standard drawing while animated slide is going on
+    if ([button animatedSlide] == YES) {
+        
+        left = _staticSafariAWITLeftCapImage();
+        right = _staticSafariAWITRightCapImage();
+        
+        // draw selected button
+    } else if ([button state] == NSOnState) {
+    
+        if ([tabBarView isWindowActive]) {
+            left = _staticSafariAWATLeftCapImage();
+            center = _staticSafariAWATFillImage();
+            if (![button isOverflowButton] || [button isSliding])
+                right = _staticSafariAWATRightCapImage();
+        } else {
+            left = _staticSafariIWATLeftCapImage();
+            center = _staticSafariIWATFillImage();
+            if (![button isOverflowButton] || [button isSliding])
+                right = _staticSafariIWATRightCapImage();
+        }        
+    
+        // draw first button
+    } else if (prevButton == nil) {
+    
+        if (selIndex == NSNotFound || index < selIndex) {
+            if ([nextButton isSliding] ||
+                [nextButton animatedSlide] || [tabBarView destinationIndexForDraggedItem] == index+1)
+                right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
+        }
+        // draw last button
+    } else if (nextButton == nil) {
+
+        if (selIndex == NSNotFound || index > selIndex) {
+            if (selIndex == NSNotFound || [prevButton isSliding] || [prevButton animatedSlide]  || [tabBarView destinationIndexForDraggedItem]+1 == index)
+                left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
+        }
+        
+        if ([tabBarView showAddTabButton] && ![tabBarView isOverflowButtonVisible])
+            right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
+    
+        // draw mid button
+    } else {
+    
+        if (selIndex == NSNotFound || index < selIndex) {
+            left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
+            if ([nextButton isSliding] || [nextButton animatedSlide] || [tabBarView destinationIndexForDraggedItem] == index+1)
+                right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
+        } else if (index > selIndex) {
+            if ([prevButton isSliding] || [prevButton animatedSlide])
+                left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
+            right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
+        }
+    }
+
+    if (center != nil || left != nil || right != nil)
+        NSDrawThreePartImage(buttonFrame, left, center, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
+}
+
+-(void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+    BOOL isWindowActive = [tabBarView isWindowActive];
+
+    NSImage *left = nil,
+            *right = nil,
+            *center = nil;
+        
+    NSRect bezelRect = [overflowButton frame];
+    bezelRect.origin.y -= 1.0f;
+    bezelRect.size.height += 1.0f;
+    bezelRect.size.width += 11.0f;
+    
+    MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
+    
+    BOOL displaySelected = [lastAttachedButton state] == NSOnState;
+    if ([lastAttachedButton isSliding] || [lastAttachedButton animatedSlide])
+        displaySelected = NO;
+    
+    if (displaySelected) {
+        center = isWindowActive?_staticSafariAWATFillImage():_staticSafariIWATFillImage();
+        right = isWindowActive?_staticSafariAWATRightCapImage():_staticSafariIWATRightCapImage();
+        
+    } else {
+        right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
+    }
+    NSDrawThreePartImage(bezelRect, left, center, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
 }
 
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     if ([[cell controlView] frame].size.height < 2)
         return;
-    
+
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
         
     NSRect cellFrame = frame;
     
@@ -197,168 +347,21 @@ StaticImage(SafariIWITRightCap)
         if ([cell state] == NSOnState) {
             left = _staticSafariAWATLeftCapImage();
             center = _staticSafariAWATFillImage();
-            right = _staticSafariAWATRightCapImage();
+            if (![(MMAttachedTabBarButtonCell *)cell isOverflowButton] || [button animatedSlide] || [button isSliding])
+                right = _staticSafariAWATRightCapImage();
         }
     } else {
     
         if ([cell state] == NSOnState) {
             left = _staticSafariIWATLeftCapImage();
             center = _staticSafariIWATFillImage();
-            right = _staticSafariIWATRightCapImage();
+            if (![(MMAttachedTabBarButtonCell *)cell isOverflowButton] || [button animatedSlide] || [button isSliding])
+                right = _staticSafariIWATRightCapImage();
         }
     }
 
     if (center != nil || left != nil || right != nil)
-        NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);    
-}
-
-#pragma mark -
-#pragma Private Methods
-
-- (void)_drawSelectedBezelForButton:(MMAttachedTabBarButton *)button inTabBarView:(MMTabBarView *)tabBarView atIndex:(NSUInteger)index inRect:(NSRect)rect {
-
-    NSImage *left = nil;
-    NSImage *center = nil;
-    NSImage *right = nil;
-
-    NSRect buttonFrame = [button frame];
-    buttonFrame.origin.x -= 5.0f;
-    buttonFrame.size.width += 5.0f;
-    buttonFrame.size.width += 5.0f;
-    
-    if ([tabBarView isWindowActive]) {
-        left = _staticSafariAWATLeftCapImage();
-        center = _staticSafariAWATFillImage();
-        right = _staticSafariAWATRightCapImage();
-    } else {
-        left = _staticSafariIWATLeftCapImage();
-        center = _staticSafariIWATFillImage();
-        right = _staticSafariIWATRightCapImage();
-    }
-
-    if (center != nil || left != nil || right != nil)
-        NSDrawThreePartImage(buttonFrame, left, center, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
-}
-
-- (void)_drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)sortedButtons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-
-    BOOL isWindowActive = [tabBarView isWindowActive];
-    NSUInteger numberOfButtons = [sortedButtons count];
-
-    MMAttachedTabBarButton *prevButton = nil,
-                           *nextButton = nil;
-    
-    if (index > 0)
-        prevButton = [sortedButtons objectAtIndex:index-1];
-    if (index+1 < numberOfButtons)
-        nextButton = [sortedButtons objectAtIndex:index+1];
-
-    NSImage *left = nil,
-            *right = nil;
-    NSRect buttonFrame = [button frame];
-    
-    if ([button state] == NSOnState) {
-    
-        [self _drawSelectedBezelForButton:button inTabBarView:tabBarView atIndex:index inRect:rect];
-        return;
-    
-    }
-
-    buttonFrame = NSInsetRect(buttonFrame,-5.0,0);
-    
-        // standard drawing while animated slide is going on
-    if ([button animatedSlide] == YES) {
-        
-        left = _staticSafariAWITLeftCapImage();
-        right = _staticSafariAWITRightCapImage();
-        
-        NSDrawThreePartImage(buttonFrame, left, nil, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
-        
-        return;
-        }
-    
-        // draw first button
-    if (prevButton == nil) {
-    
-        if (selIndex == NSNotFound || index < selIndex) {
-            if (([nextButton state] == NSOnState && [tabBarView isSliding]) ||
-                [nextButton animatedSlide]  || [tabBarView destinationIndexForDraggedItem] == index+1)
-                right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
-        }
-        // draw last button
-    } else if (nextButton == nil) {
-
-        if (selIndex == NSNotFound || index > selIndex) {
-            if (selIndex == NSNotFound || ([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide]  || [tabBarView destinationIndexForDraggedItem]+1 == index)
-                left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
-        }
-        
-        if ([tabBarView showAddTabButton])
-            right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
-    
-        // draw mid button
-    } else {
-    
-        if (selIndex == NSNotFound || index < selIndex) {
-            left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
-            if (([nextButton state] == NSOnState && [tabBarView isSliding]) || [nextButton animatedSlide] || [tabBarView destinationIndexForDraggedItem] == index+1)
-                right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
-        } else if (index > selIndex) {
-            if (([prevButton state] == NSOnState && [tabBarView isSliding]) || [prevButton animatedSlide])
-                left = isWindowActive?_staticSafariAWITLeftCapImage():_staticSafariIWITLeftCapImage();
-            right = isWindowActive?_staticSafariAWITRightCapImage():_staticSafariIWITRightCapImage();
-        }
-    }
-
-    NSDrawThreePartImage(buttonFrame, left, nil, right, NO, NSCompositeSourceOver, 1.0, [tabBarView isFlipped]);
-}
-
-- (void)_drawButtonBezelsOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-
-    NSArray *sortedButtons = [tabBarView sortedAttachedButtonsUsingComparator:
-        ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
-        
-            NSRect stackingFrame1 = [but1 stackingFrame];
-            NSRect stackingFrame2 = [but2 stackingFrame];
-                        
-            if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-                
-                if (stackingFrame1.origin.x > stackingFrame2.origin.x)
-                    return NSOrderedDescending;
-                else if (stackingFrame1.origin.x < stackingFrame2.origin.x)
-                    return NSOrderedAscending;
-                else
-                    return NSOrderedSame;
-            } else {
-                if (stackingFrame1.origin.y > stackingFrame2.origin.y)
-                    return NSOrderedDescending;
-                else if (stackingFrame1.origin.y < stackingFrame2.origin.y)
-                    return NSOrderedAscending;
-                else
-                    return NSOrderedSame;
-            }
-        }];
-        
-        // find selected button
-    NSUInteger selIndex = NSNotFound;
-    NSUInteger i = 0;
-    for (MMAttachedTabBarButton *aButton in sortedButtons) {
-        if ([aButton state] == NSOnState) {
-            selIndex = i;
-            break;
-        }
-        
-        i++;
-    }
-    
-        // draw a bezel for each button
-    i = 0;
-    for (MMAttachedTabBarButton *aButton in sortedButtons) {
-        
-        [self _drawBezelOfButton:aButton atIndex:i inButtons:sortedButtons indexOfSelectedButton:selIndex tabBarView:tabBarView inRect:rect];
-        
-        i++;
-    }
+        NSDrawThreePartImage(cellFrame, left, center, right, NO, NSCompositeSourceOver, 1, [controlView isFlipped]);            
 }
 
 @end
