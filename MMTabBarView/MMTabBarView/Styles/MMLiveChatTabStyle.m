@@ -352,9 +352,87 @@
 #pragma mark -
 #pragma mark Drawing
 
+- (void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+
+    MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
+    MMAttachedTabBarButtonCell *lastAttachedButtonCell = [lastAttachedButton cell];
+
+    if ([lastAttachedButton isSliding])
+        return;
+    
+    NSRect frame = [overflowButton frame];
+
+	NSToolbar *toolbar = [[tabBarView window] toolbar];
+	BOOL showsBaselineSeparator = (toolbar && [toolbar respondsToSelector:@selector(showsBaselineSeparator)] && [toolbar showsBaselineSeparator]);
+	if (!showsBaselineSeparator) {
+		frame.origin.y += 1.0;
+		frame.size.height -= 1.0;
+	}
+
+	NSColor * lineColor = nil;
+	lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
+
+	BOOL drawSelected = [lastAttachedButtonCell state] == NSOnState;
+    
+	if (!showsBaselineSeparator || drawSelected) {
+		// selected tab
+		NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y - 0.5, frame.size.width-0.5, frame.size.height);
+		if (drawSelected) {
+			aRect.origin.y -= 1.0;
+			aRect.size.height += 1.0;
+		}
+        aRect.size.width += 5;
+
+            // draw fill
+		CGFloat radius = MIN(6.0, 0.5f * MIN(NSWidth(aRect), NSHeight(aRect)));
+		NSRect rect = NSInsetRect(aRect, radius, radius);
+
+		NSBezierPath *fillPath = [NSBezierPath bezierPath];
+        [fillPath moveToPoint:NSMakePoint(NSMinX(aRect), NSMinY(aRect))];
+        [fillPath lineToPoint:NSMakePoint(NSMinX(aRect), NSMaxY(aRect))];
+        [fillPath appendBezierPathWithArcWithCenter:NSMakePoint(NSMaxX(rect), NSMaxY(rect)) radius:radius startAngle:90.0 endAngle:360.0 clockwise:YES];
+        [fillPath lineToPoint:NSMakePoint(NSMaxX(aRect), NSMinY(aRect))];
+            
+        NSColor *startColor = nil;
+        NSColor *endColor = nil;
+
+		if ([tabBarView isWindowActive]) {
+			if (drawSelected) {
+                startColor = [NSColor colorWithCalibratedWhite:1.0 alpha:1.0];
+                endColor = [NSColor colorWithCalibratedWhite:0.95 alpha:1.0];
+			} else if ([lastAttachedButtonCell mouseHovered]) {
+  
+                startColor = [NSColor colorWithCalibratedWhite:0.80 alpha:1.0];
+                endColor = [NSColor colorWithCalibratedWhite:0.80 alpha:1.0];
+			}
+		} else if ([lastAttachedButtonCell state] == NSOnState) {
+            startColor = [NSColor colorWithCalibratedWhite:1.0 alpha:1.0];
+            endColor = [NSColor colorWithCalibratedWhite:0.95 alpha:1.0];
+		}
+        
+        NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
+        [gradient drawInBezierPath:fillPath angle:90.0];
+        [gradient release];
+
+            // draw outline
+        NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+        [outlinePath moveToPoint:NSMakePoint(NSMinX(aRect), NSMaxY(aRect))];
+        [outlinePath appendBezierPathWithArcWithCenter:NSMakePoint(NSMaxX(rect), NSMaxY(rect)) radius:radius startAngle:90.0 endAngle:360.0 clockwise:YES];
+        [outlinePath lineToPoint:NSMakePoint(NSMaxX(aRect), NSMinY(aRect))];        
+        
+		[lineColor set];
+		[outlinePath stroke];
+	} else {
+    
+    // not implemented yet
+
+	}
+}
+
 - (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
     
     NSRect cellFrame = frame;
 
@@ -368,35 +446,48 @@
 	NSColor * lineColor = nil;
 	lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
 
-	BOOL selected = [cell state] == NSOnState;
-	if (!showsBaselineSeparator || selected) {
+	BOOL drawSelected = [cell state] == NSOnState;
+
+    BOOL overflowMode = [button isOverflowButton];
+    if ([button isSliding])
+        overflowMode = NO;
+    
+	if (!showsBaselineSeparator || drawSelected) {
 		// selected tab
 		NSRect aRect = NSMakeRect(cellFrame.origin.x + 0.5, cellFrame.origin.y - 0.5, cellFrame.size.width-1.0, cellFrame.size.height);
-		if (selected) {
+		if (drawSelected) {
 			aRect.origin.y -= 1.0;
 			aRect.size.height += 1.0;
 		}
 
+        if (overflowMode)
+            aRect.size.width += 0.5;
+        
 		// frame
 		CGFloat radius = MIN(6.0, 0.5f * MIN(NSWidth(aRect), NSHeight(aRect)));
 		NSRect rect = NSInsetRect(aRect, radius, radius);
 
+		NSBezierPath* fillPath = [NSBezierPath bezierPath];
+        
 		NSPoint cornerPoint = NSMakePoint(NSMinX(aRect), NSMinY(aRect));
-		NSBezierPath* bezier = [NSBezierPath bezierPath];
-		[bezier appendBezierPathWithPoints:&cornerPoint count:1];
+		[fillPath appendBezierPathWithPoints:&cornerPoint count:1];
 
-		[bezier appendBezierPathWithArcWithCenter:NSMakePoint(NSMinX(rect), NSMaxY(rect)) radius:radius startAngle:180.0 endAngle:90.0 clockwise:YES];
+		[fillPath appendBezierPathWithArcWithCenter:NSMakePoint(NSMinX(rect), NSMaxY(rect)) radius:radius startAngle:180.0 endAngle:90.0 clockwise:YES];
+        if (!overflowMode) {
+            [fillPath appendBezierPathWithArcWithCenter:NSMakePoint(NSMaxX(rect), NSMaxY(rect)) radius:radius startAngle:90.0 endAngle:360.0 clockwise:YES];
 
-		[bezier appendBezierPathWithArcWithCenter:NSMakePoint(NSMaxX(rect), NSMaxY(rect)) radius:radius startAngle:90.0 endAngle:360.0 clockwise:YES];
-
-		cornerPoint = NSMakePoint(NSMaxX(aRect), NSMinY(aRect));
-		[bezier appendBezierPathWithPoints:&cornerPoint count:1];
-
+            cornerPoint = NSMakePoint(NSMaxX(aRect), NSMinY(aRect));
+            [fillPath appendBezierPathWithPoints:&cornerPoint count:1];
+        } else {
+            [fillPath lineToPoint:NSMakePoint(NSMaxX(aRect), NSMaxY(aRect))];
+            [fillPath lineToPoint:NSMakePoint(NSMaxX(aRect), NSMinY(aRect))];
+        }
+        
         NSColor *startColor = nil;
         NSColor *endColor = nil;
 
 		if ([tabBarView isWindowActive]) {
-			if ([cell state] == NSOnState) {
+			if (drawSelected) {
                 startColor = [NSColor colorWithCalibratedWhite:1.0 alpha:1.0];
                 endColor = [NSColor colorWithCalibratedWhite:0.95 alpha:1.0];
 			} else if ([cell mouseHovered]) {
@@ -410,12 +501,27 @@
 		}
         
         NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
-        [gradient drawInBezierPath:bezier angle:90.0];
+        [gradient drawInBezierPath:fillPath angle:90.0];
         [gradient release];
 
+        NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+        cornerPoint = NSMakePoint(NSMinX(aRect), NSMinY(aRect));
+		[outlinePath moveToPoint:cornerPoint];
+
+		[outlinePath appendBezierPathWithArcWithCenter:NSMakePoint(NSMinX(rect), NSMaxY(rect)) radius:radius startAngle:180.0 endAngle:90.0 clockwise:YES];
+        if (!overflowMode) {
+            [outlinePath appendBezierPathWithArcWithCenter:NSMakePoint(NSMaxX(rect), NSMaxY(rect)) radius:radius startAngle:90.0 endAngle:360.0 clockwise:YES];
+
+            cornerPoint = NSMakePoint(NSMaxX(aRect), NSMinY(aRect));
+            [outlinePath appendBezierPathWithPoints:&cornerPoint count:1];
+        } else {
+            [outlinePath lineToPoint:NSMakePoint(NSMaxX(aRect), NSMaxY(aRect))];
+        }
+        
 		[lineColor set];
-		[bezier stroke];
+		[outlinePath stroke];
 	} else {
+    
 		// unselected tab
 		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
 		aRect.origin.y += 0.5;
