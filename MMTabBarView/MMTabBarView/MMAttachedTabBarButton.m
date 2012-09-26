@@ -25,6 +25,7 @@
 @synthesize tabViewItem = _tabViewItem;
 @dynamic slidingFrame;
 @synthesize animatedSlide = _animatedSlide;
+@synthesize isSliding = _isSliding;
 @dynamic isOverflowButton;
 
 + (void)initialize {
