@@ -113,23 +113,39 @@
         default:
             break;
     }
-    
 }
 
 #pragma mark -
 #pragma mark Drawing
 
+- (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+	if (rect.size.height <= 22.0) {
+		//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
+		rect = [tabBarView bounds];
+
+		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
+	}
+}
+
 - (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
+    
 	NSRect cellFrame = frame;
+    
+    BOOL overflowMode = [button isOverflowButton];
+    if ([button isSliding])
+        overflowMode = NO;
 
+    NSImage *left = nil;
+    NSImage *right = nil;
+    NSImage *center = nil;
+    
 	// Selected Tab
 	if ([cell state] == NSOnState) {
-		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height - 2.5);
-		aRect.size.height -= 0.5;
-
+		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+        
 		// proper tint
 		NSControlTint currentTint;
 		if ([cell controlTint] == NSDefaultControlTint) {
@@ -142,49 +158,106 @@
 			currentTint = NSClearControlTint;
 		}
 
-		NSImage *bgImage;
 		switch(currentTint) {
-		case NSGraphiteControlTint:
-			bgImage = aquaTabBgDownGraphite;
-			break;
-		case NSClearControlTint:
-			bgImage = aquaTabBgDownNonKey;
-			break;
-		case NSBlueControlTint:
-		default:
-			bgImage = aquaTabBgDown;
-			break;
-		}
+            case NSGraphiteControlTint:
+                center = aquaTabBgDownGraphite;
+                break;
+            case NSClearControlTint:
+                center = aquaTabBgDownNonKey;
+                break;
+            case NSBlueControlTint:
+            default:
+                center = aquaTabBgDown;
+                break;
+        }
 
-		[bgImage drawInRect:cellFrame fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
-        [aquaDivider drawAtPoint:NSMakePoint(cellFrame.origin.x + cellFrame.size.width - 1.0, cellFrame.origin.y) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        if (![button isOverflowButton]) {
+            right = aquaDivider;
+        }
 
-		aRect.size.height += 0.5;
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![controlView isFlipped]);
+
 	} else { // Unselected Tab
 		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
-		aRect.origin.y += 0.5;
-		aRect.origin.x += 1.5;
-		aRect.size.width -= 1;
-
-		aRect.origin.x -= 1;
-		aRect.size.width += 1;
-
+        
 		// Rollover
 		if ([cell mouseHovered]) {
 			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
 			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
 		}
-
-        [aquaDivider drawAtPoint:NSMakePoint(cellFrame.origin.x + cellFrame.size.width - 1.0, cellFrame.origin.y) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        
+        right = aquaDivider;
+        
+        if (![button isOverflowButton]) {
+            NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![controlView isFlipped]);
+        }
 	}
 }
 
-- (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-	if (rect.size.height <= 22.0) {
-		//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
-		rect = [tabBarView bounds];
+- (void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
-		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
+    MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
+    MMAttachedTabBarButtonCell *lastAttachedButtonCell = [lastAttachedButton cell];
+
+    if ([lastAttachedButton isSliding])
+        return;
+    
+	NSRect cellFrame = [overflowButton frame];
+        
+    NSImage *left = nil;
+    NSImage *right = nil;
+    NSImage *center = nil;
+    
+	// Selected Tab
+	if ([lastAttachedButtonCell state] == NSOnState) {
+		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+        aRect.size.width += 5.0f;
+        
+		// proper tint
+		NSControlTint currentTint;
+		if ([lastAttachedButtonCell controlTint] == NSDefaultControlTint) {
+			currentTint = [NSColor currentControlTint];
+		} else{
+			currentTint = [lastAttachedButtonCell controlTint];
+		}
+
+		if (![tabBarView isWindowActive]) {
+			currentTint = NSClearControlTint;
+		}
+
+		switch(currentTint) {
+            case NSGraphiteControlTint:
+                center = aquaTabBgDownGraphite;
+                break;
+            case NSClearControlTint:
+                center = aquaTabBgDownNonKey;
+                break;
+            case NSBlueControlTint:
+            default:
+                center = aquaTabBgDown;
+                break;
+        }
+
+        if ([tabBarView showAddTabButton]) {
+            right = aquaDivider;
+        }
+        
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![tabBarView isFlipped]);
+
+	} else { // Unselected Tab
+		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+        aRect.size.width += 5.0f;
+        
+		// Rollover
+		if ([lastAttachedButton mouseHovered]) {
+			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+		}
+        
+        if ([tabBarView showAddTabButton])
+            right = aquaDivider;
+        
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![tabBarView isFlipped]);
 	}
 }
 
