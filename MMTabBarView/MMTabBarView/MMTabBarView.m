@@ -11,6 +11,7 @@
 
 #import "MMAttachedTabBarButtonCell.h"
 #import "MMOverflowPopUpButton.h"
+#import "MMOverflowPopUpButtonCell.h"
 #import "MMRolloverButton.h"
 #import "MMTabStyle.h"
 #import "MMMetalTabStyle.h"
@@ -48,6 +49,9 @@
 - (NSRect)_overflowButtonRect;
 - (void)_drawTabBarViewInRect:(NSRect)aRect;
 - (void)_drawBezelInRect:(NSRect)rect;
+- (void)_drawButtonBezelsInRect:(NSRect)rect;
+- (void)_drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex inRect:(NSRect)rect;
+- (void)_drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton inRect:(NSRect)rect;
 - (void)_drawInteriorInRect:(NSRect)rect;
 
 // determine positions
@@ -356,6 +360,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Tab View Item Management
 
+- (NSUInteger)numberOfTabViewItems {
+    return [_tabView numberOfTabViewItems];
+}
+
 - (NSUInteger)numberOfVisibleTabViewItems {
     return [[self viewIndexesOfAttachedButtons] count];
 }
@@ -408,6 +416,29 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [_tabView removeTabViewItem:anItem];
 }
 
+- (NSTabViewItem *)tabViewItemPinnedToOverflowButton {
+    
+    MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
+    if (!lastButton)
+        return nil;
+    
+    if ([lastButton isOverflowButton])
+        return [lastButton tabViewItem];
+    
+    return nil;
+}
+
+- (void)setTabViewItemPinnedToOverflowButton:(NSTabViewItem *)item {
+
+    MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
+    if (!lastButton)
+        return;
+
+    [self unbindPropertiesOfAttachedButton:lastButton];
+    [lastButton setTabViewItem:item];
+    [self bindPropertiesOfAttachedButton:lastButton andTabViewItem:item];
+}
+
 #pragma mark -
 #pragma mark Attached Buttons Management
 
@@ -427,22 +458,49 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSArray *)orderedAttachedButtons {
 
-    return [self sortedAttachedButtonsUsingComparator:
-        ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
-    
-        NSUInteger index1 = [self indexOfTabViewItem:[but1 tabViewItem]],
-                   index2 = [self indexOfTabViewItem:[but2 tabViewItem]];
-    
-        if (index1 == NSNotFound || index2 == NSNotFound)
-            return NSOrderedSame;
+    if ([self isSliding]) {
+        NSArray *sortedButtons = [self sortedAttachedButtonsUsingComparator:
+            ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
+            
+                NSRect stackingFrame1 = [but1 stackingFrame];
+                NSRect stackingFrame2 = [but2 stackingFrame];
+                            
+                if ([self orientation] == MMTabBarHorizontalOrientation) {
+                    
+                    if (stackingFrame1.origin.x > stackingFrame2.origin.x)
+                        return NSOrderedDescending;
+                    else if (stackingFrame1.origin.x < stackingFrame2.origin.x)
+                        return NSOrderedAscending;
+                    else
+                        return NSOrderedSame;
+                } else {
+                    if (stackingFrame1.origin.y > stackingFrame2.origin.y)
+                        return NSOrderedDescending;
+                    else if (stackingFrame1.origin.y < stackingFrame2.origin.y)
+                        return NSOrderedAscending;
+                    else
+                        return NSOrderedSame;
+                }
+            }];
+        return sortedButtons;
+    } else {
+        return [self sortedAttachedButtonsUsingComparator:
+            ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
         
-        if (index1 < index2)
-            return NSOrderedAscending;
-        else if (index1 > index2)
-            return NSOrderedDescending;
-        else
-            return NSOrderedSame;
-        }];
+            NSUInteger index1 = [self indexOfTabViewItem:[but1 tabViewItem]],
+                       index2 = [self indexOfTabViewItem:[but2 tabViewItem]];
+        
+            if (index1 == NSNotFound || index2 == NSNotFound)
+                return NSOrderedSame;
+            
+            if (index1 < index2)
+                return NSOrderedAscending;
+            else if (index1 > index2)
+                return NSOrderedDescending;
+            else
+                return NSOrderedSame;
+            }];
+    }
 }
 
 - (NSArray *)sortedAttachedButtonsUsingComparator:(NSComparator)cmptr {
@@ -522,10 +580,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)removeAttachedButton:(MMAttachedTabBarButton *)aButton {
 
-    [self unbindPropertiesOfAttachedButton:aButton];
+        // only try to unbind if button is attached
+    if ([[self attachedButtons] containsObject:aButton])
+        [self unbindPropertiesOfAttachedButton:aButton];
 
-        // pull button
-    [aButton removeFromSuperview];
+        // pull button (if it is attached)
+    if ([aButton superview])
+        [aButton removeFromSuperview];
 }
 
 -(void)insertAttachedButton:(MMAttachedTabBarButton *)aButton atTabItemIndex:(NSUInteger)anIndex {
@@ -578,6 +639,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (MMAttachedTabBarButton *)lastAttachedButton {
+
     return [[self orderedAttachedButtons] lastObject];
 }
 
@@ -599,6 +661,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
     
     return nil;
+}
+
+- (NSUInteger)indexOfAttachedButton:(MMAttachedTabBarButton *)aButton {
+
+    return [[self orderedAttachedButtons] indexOfObjectIdenticalTo:aButton];
 }
 
 #pragma mark -
@@ -905,6 +972,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         return [_style supportsOrientation:orientation forTabBarView:self];
     
     return [self _supportsOrientation:orientation];
+}
+
+#pragma mark -
+#pragma mark Visibility
+
+- (BOOL)isOverflowButtonVisible {
+    if ([_overflowPopUpButton frame].size.width != 0.0f && [_overflowPopUpButton frame].size.height != 0.0f && ![_overflowPopUpButton isHidden])
+        return YES;
+
+    return NO;
 }
 
 #pragma mark -
@@ -1628,6 +1705,32 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }    
 }
 
+- (void)drawButtonBezelsInRect:(NSRect)rect {
+
+    if ([_style respondsToSelector:@selector(drawButtonBezelsOfTabBarView:inRect:)]) {
+        [_style drawButtonBezelsOfTabBarView:self inRect:rect];
+    } else {
+        [self _drawButtonBezelsInRect:rect];
+    }    
+}
+
+- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex inRect:(NSRect)rect {
+
+    if ([_style respondsToSelector:@selector(drawBezelOfButton:atIndex:inButtons:indexOfSelectedButton:tabBarView:inRect:)]) {
+        [_style drawBezelOfButton:button atIndex:index inButtons:buttons indexOfSelectedButton:selIndex tabBarView:self inRect:rect];
+    } else {
+        [self _drawBezelOfButton:button atIndex:index inButtons:buttons indexOfSelectedButton:selIndex inRect:rect];
+    }
+}
+
+- (void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton inRect:(NSRect)rect {
+    if ([_style respondsToSelector:@selector(drawBezelOfOverflowButton:ofTabBarView:inRect:)]) {
+        [_style drawBezelOfOverflowButton:overflowButton ofTabBarView:self inRect:rect];
+    } else {
+        [self _drawBezelOfOverflowButton:overflowButton inRect:rect];
+    }  
+}
+
 - (void)drawInteriorInRect:(NSRect)rect {
     if ([_style respondsToSelector:@selector(drawInteriorOfTabBarView:inRect:)]) {
         [_style drawInteriorOfTabBarView:self inRect:rect];
@@ -2140,6 +2243,35 @@ NSLog(@"did select:%@",tabViewItem);
 
     NSRect theRect;
     NSSize buttonSize = [self addTabButtonSize];
+    NSSize overflowButtonSize = [self overflowButtonSize];
+    
+    if ([self orientation] == MMTabBarHorizontalOrientation) {
+        CGFloat xOffset = kMMTabBarCellPadding;
+        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        if (lastAttachedButton) {
+            xOffset += NSMaxX([lastAttachedButton stackingFrame]);
+            
+            if ([lastAttachedButton isOverflowButton]) {
+                xOffset += kMMTabBarCellPadding;
+                xOffset += overflowButtonSize.width;
+            }
+        }
+                
+        theRect = NSMakeRect(xOffset, NSMinY([self bounds]), buttonSize.width, buttonSize.height);
+    } else {
+        CGFloat yOffset = 0;
+        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        if (lastAttachedButton)
+            yOffset += NSMaxY([lastAttachedButton stackingFrame]);
+        
+        theRect = NSMakeRect(NSMinX([self bounds]), yOffset, buttonSize.width, buttonSize.height);
+    }
+            
+    return theRect;
+    
+/*
+    NSRect theRect;
+    NSSize buttonSize = [self addTabButtonSize];
     
     if ([self orientation] == MMTabBarHorizontalOrientation) {
         CGFloat xOffset = kMMTabBarCellPadding;
@@ -2158,6 +2290,7 @@ NSLog(@"did select:%@",tabViewItem);
     }
             
     return theRect;
+*/    
 }
 	
 - (NSSize)_overflowButtonSize {
@@ -2177,21 +2310,88 @@ NSLog(@"did select:%@",tabViewItem);
     NSSize buttonSize = [self overflowButtonSize];
     
     if ([self orientation] == MMTabBarHorizontalOrientation) {
+        CGFloat xOffset = 0.0f; //kMMTabBarCellPadding;
+        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        if (lastAttachedButton)
+            xOffset += NSMaxX([lastAttachedButton stackingFrame]);
+                
+        theRect = NSMakeRect(xOffset, NSMinY([self bounds]), buttonSize.width, buttonSize.height);
+    } else {
+        CGFloat yOffset = 0;
+        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        if (lastAttachedButton)
+            yOffset += NSMaxY([lastAttachedButton stackingFrame]);
+        
+        theRect = NSMakeRect(NSMinX([self bounds]), yOffset, buttonSize.width, buttonSize.height);
+    }
+            
+    return theRect;
+    
+/*
+    NSRect theRect;
+    NSSize buttonSize = [self overflowButtonSize];
+    
+    if ([self orientation] == MMTabBarHorizontalOrientation) {
         theRect = NSMakeRect(NSMaxX([self bounds]) - [self rightMargin] - buttonSize.width -kMMTabBarCellPadding, 0.0, buttonSize.width, buttonSize.height);
     } else {
         theRect = NSMakeRect(NSMinX([self bounds]), NSMaxY([self bounds]) - [self bottomMargin] - buttonSize.height, buttonSize.width, buttonSize.height);
     }
 
     return theRect;
+*/    
 }
 
 - (void)_drawTabBarViewInRect:(NSRect)aRect {
-
+    
     [self drawBezelInRect:aRect];
+    
+    if ([self frame].size.height < 2)
+        return;
+    
+    [self drawButtonBezelsInRect:aRect];
     [self drawInteriorInRect:aRect];
 }
 
 - (void)_drawBezelInRect:(NSRect)rect {
+    // default implementation draws nothing
+}
+
+- (void)_drawButtonBezelsInRect:(NSRect)rect {
+
+    NSArray *buttons = [self orderedAttachedButtons];
+
+        // find selected button
+    NSUInteger selIndex = NSNotFound;
+    NSUInteger i = 0;
+    for (MMAttachedTabBarButton *aButton in buttons) {
+        if ([aButton state] == NSOnState) {
+            selIndex = i;
+            break;
+        }
+        
+        i++;
+    }
+    
+        // draw a bezel for each button
+    i = 0;
+    for (MMAttachedTabBarButton *aButton in buttons) {
+        
+        [NSGraphicsContext saveGraphicsState];
+        [self drawBezelOfButton:aButton atIndex:i inButtons:buttons indexOfSelectedButton:selIndex inRect:rect];
+        [NSGraphicsContext restoreGraphicsState];
+        i++;
+    }
+
+    if ([self isOverflowButtonVisible]) {
+        [self drawBezelOfOverflowButton:_overflowPopUpButton inRect:rect];
+    }
+}
+
+- (void)_drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)sortedButtons indexOfSelectedButton:(NSUInteger)selIndex inRect:(NSRect)rect {
+    // default implementation draws nothing
+}
+
+- (void)_drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton inRect:(NSRect)rect {
     // default implementation draws nothing
 }
 
@@ -2335,7 +2535,15 @@ NSLog(@"did select:%@",tabViewItem);
     NSTabViewItem *selectedTabViewItem = [_tabView selectedTabViewItem];
     
     MMAttachedTabBarButton *buttonToSelect = [self attachedButtonForTabViewItem:selectedTabViewItem];
-            
+
+    if (!buttonToSelect) {
+        MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
+        if ([lastButton isOverflowButton]) {
+            [self setTabViewItemPinnedToOverflowButton:selectedTabViewItem];
+            buttonToSelect = lastButton;
+        }
+    }
+    
         // reset state masks
     for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
         [aButton setTabState:[aButton tabState] & ~(MMTab_RightIsSelectedMask|MMTab_LeftIsSelectedMask)];
@@ -2504,13 +2712,21 @@ StaticImage(AquaTabNewRollover)
 	_overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
 	[_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
 	[_overflowPopUpButton setHidden:YES];
-
+/*
+    [[_overflowPopUpButton cell] setBezelDrawingBlock:^(NSCell *cell, NSRect frame, NSView *controlView) {
+    
+        id <MMTabStyle> style = [self style];
+        
+        if ([style respondsToSelector:@selector(drawBezelOfOverflowButtonCell:withFrame:inView:)])
+            [style drawBezelOfOverflowButtonCell:(MMOverflowPopUpButtonCell *)cell withFrame:frame inView:controlView];
+        }];
+*/
     if (_style && [_style respondsToSelector:@selector(updateOverflowPopUpButton:ofTabBarView:)])
         [_style updateOverflowPopUpButton:_overflowPopUpButton ofTabBarView:self];
     
 	[self addSubview:_overflowPopUpButton];
     
-    if (_useOverflowMenu) {
+    if (_useOverflowMenu && _tabView && [self numberOfAttachedButtons] != [_tabView numberOfTabViewItems]) {
        [_overflowPopUpButton setHidden:NO];    
     } else {
        [_overflowPopUpButton setHidden:YES];

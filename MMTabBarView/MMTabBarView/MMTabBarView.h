@@ -143,6 +143,7 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
 #pragma mark Tab View Item Management
 
+- (NSUInteger)numberOfTabViewItems;
 - (NSUInteger)numberOfVisibleTabViewItems;
 - (NSArray *)visibleTabViewItems;
 - (NSUInteger)indexOfTabViewItem:(NSTabViewItem *)anItem;
@@ -150,6 +151,9 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (void)selectTabViewItem:(NSTabViewItem *)anItem;
 - (void)moveTabViewItem:(NSTabViewItem *)anItem toIndex:(NSUInteger)index;
 - (void)removeTabViewItem:(NSTabViewItem *)anItem;
+
+- (NSTabViewItem *)tabViewItemPinnedToOverflowButton;
+- (void)setTabViewItemPinnedToOverflowButton:(NSTabViewItem *)item;
 
 #pragma mark Attached Buttons Management
 
@@ -175,6 +179,8 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (MMAttachedTabBarButton *)attachedButtonAtPoint:(NSPoint)aPoint;
 
 - (MMAttachedTabBarButton *)attachedButtonForTabViewItem:(NSTabViewItem *)anItem;
+
+- (NSUInteger)indexOfAttachedButton:(MMAttachedTabBarButton *)aButton;
 
 #pragma mark Find Tab Bar Buttons
 
@@ -234,6 +240,11 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (BOOL)supportsOrientation:(MMTabBarOrientation)orientation;
 
 #pragma mark -
+#pragma mark Visibility
+
+- (BOOL)isOverflowButtonVisible;
+
+#pragma mark -
 #pragma mark Resizing
 
 - (NSRect)dividerRect;
@@ -291,6 +302,7 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 
 - (void)drawRect:(NSRect)rect;
 - (void)drawBezelInRect:(NSRect)rect;
+- (void)drawButtonBezelsInRect:(NSRect)rect;
 - (void)drawInteriorInRect:(NSRect)rect;
 
 @end
