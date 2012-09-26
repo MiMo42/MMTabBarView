@@ -25,7 +25,7 @@ If you make any improvements, please submit them as pull requests.
 
 ## State
 
-The included 'Adium' style needs to be adjusted.
+The included 'Adium' and 'Metal' styles still need to be adjusted.
 There are still some old lines of code that should be replaced.
 
 ## Building
