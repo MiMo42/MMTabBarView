@@ -427,7 +427,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 - (void)_finalizeAnimation:(NSAnimation *)animation {
     if (animation == _slideButtonsAnimation) {
-    
+        
         NSArray *viewAnimations = [_slideButtonsAnimation viewAnimations];
         
         MMAttachedTabBarButton *aButton = nil;
@@ -436,6 +436,21 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             if ([aButton isKindOfClass:[MMAttachedTabBarButton class]]) {
                 [aButton slideAnimationDidEnd];
             }
+        }
+        
+        MMTabBarView *tabBarView = [aButton enclosingTabBarView];
+        
+        NSArray *attachedButtons = [tabBarView orderedAttachedButtons];
+        NSUInteger numberOfAttachedButtons = [attachedButtons count];
+        NSUInteger numberOfTabViewItems = [tabBarView numberOfTabViewItems];
+        
+            // update overflow state of attached buttons
+        NSUInteger i = 0;
+        for (MMAttachedTabBarButton *aButton in attachedButtons) {
+        
+            [aButton setIsOverflowButton:(numberOfTabViewItems > numberOfAttachedButtons) && (i+1 == numberOfAttachedButtons)];
+            
+        i++;
         }
     
         [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
@@ -677,11 +692,12 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSPoint mouseLocation = [tabBarView convertPoint:[theEvent locationInWindow] fromView:nil];
     NSSize mouseOffset = NSMakeSize(mouseLocation.x-buttonLocation.x, mouseLocation.y-buttonLocation.y);
 
-    NSUInteger sourceIndex = [tabBarView indexOfTabViewItem:[aButton tabViewItem]];
+    NSUInteger sourceIndex = [tabBarView indexOfAttachedButton:aButton];
     NSUInteger destinationIndex = NSNotFound;
     NSUInteger lastDestinationIndex = sourceIndex;
     
     [self setIsSliding:YES];
+    [aButton setIsSliding:YES];
 
     [aButton orderFront];
                 
@@ -733,6 +749,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             #pragma unused(mouseUp)
 
             [self setIsSliding:NO];
+            [aButton setIsSliding:NO];
                 
                 // move tab view item:
             if ([tabBarView indexOfTabViewItem:[aButton tabViewItem]] != lastDestinationIndex) {
@@ -761,7 +778,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     if (continueDetached) {
 
         [self setIsSliding:NO];
-                            
+        [aButton setIsSliding:NO];
+        
         [aButton retain];
             
         [self _dragDetachedButton:aButton ofTabBarView:tabBarView withEvent:firstEvent pasteboard:pboard source:sourceObject];
@@ -830,30 +848,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         slidingDirection = 1.0;
     }
 
-    NSArray *sortedButtons = [tabBarView sortedAttachedButtonsUsingComparator:
-        ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
-        
-            NSRect stackingFrame1 = [but1 stackingFrame];
-            NSRect stackingFrame2 = [but2 stackingFrame];
-                        
-            if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-                
-                if (stackingFrame1.origin.x > stackingFrame2.origin.x)
-                    return NSOrderedDescending;
-                else if (stackingFrame1.origin.x < stackingFrame2.origin.x)
-                    return NSOrderedAscending;
-                else
-                    return NSOrderedSame;
-            } else {
-                if (stackingFrame1.origin.y > stackingFrame2.origin.y)
-                    return NSOrderedDescending;
-                else if (stackingFrame1.origin.y < stackingFrame2.origin.y)
-                    return NSOrderedAscending;
-                else
-                    return NSOrderedSame;
-            }
-        }];
-                        
+    NSArray *sortedButtons = [tabBarView orderedAttachedButtons];
+    
     NSArray *slidingButtons = [sortedButtons objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:slidingRange]];
 
     CGFloat slidingAmount = 0;
