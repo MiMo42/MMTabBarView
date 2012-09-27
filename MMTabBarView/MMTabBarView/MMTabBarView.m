@@ -1458,7 +1458,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)layoutButtons {
     [_controller layoutButtons];
     
-    [self _synchronizeSelection];
+    if (![self isDragging])
+        [self _synchronizeSelection];
 }
 
 - (void)update {
