@@ -72,6 +72,11 @@
 
 - (void)updateCell;
 
+#pragma mark Dividers
+
+- (BOOL)shouldDisplayLeftDivider;
+- (BOOL)shouldDisplayRightDivider;
+
 #pragma mark Determine Sizes
 
 - (CGFloat)minimumWidth;

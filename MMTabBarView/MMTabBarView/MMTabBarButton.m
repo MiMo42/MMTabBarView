@@ -131,6 +131,31 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 }
 
 #pragma mark -
+#pragma mark Dividers
+
+- (BOOL)shouldDisplayLeftDivider {
+
+    MMTabStateMask tabStateMask = [self tabState];
+    
+    BOOL retVal = NO;
+    if (tabStateMask & MMTab_LeftIsSliding)
+        retVal = YES;
+
+    return retVal;
+}
+
+- (BOOL)shouldDisplayRightDivider {
+
+    MMTabStateMask tabStateMask = [self tabState];
+    
+    BOOL retVal = NO;
+    if (tabStateMask & MMTab_RightIsSliding)
+        retVal = YES;
+
+    return retVal;
+}
+
+#pragma mark -
 #pragma mark Determine Sizes
 
 - (CGFloat)minimumWidth {
@@ -158,6 +183,7 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 }
 
 - (void)setTabState:(MMTabStateMask)newState {
+
     [[self cell] setTabState:newState];
     [self updateCell];
 }
