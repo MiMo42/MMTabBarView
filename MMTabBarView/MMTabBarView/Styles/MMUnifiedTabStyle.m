@@ -10,6 +10,7 @@
 #import "MMAttachedTabBarButton.h"
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
+#import "NSBezierPath+MMTabBarViewExtensions.h"
 
 @implementation MMUnifiedTabStyle
 
@@ -124,14 +125,38 @@
 #pragma mark -
 #pragma mark Drawing
 
+- (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+	//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
+	rect = [tabBarView bounds];
+
+	NSRect gradientRect = rect;
+	gradientRect.size.height -= 1.0;
+
+	if (![tabBarView isWindowActive]) {
+		[[NSColor windowBackgroundColor] set];
+		NSRectFill(gradientRect);
+	} else {
+        NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.835 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.843 alpha:1.0]];
+        [gradient drawInRect:gradientRect angle:90.0];
+        [gradient release];
+    }
+
+	[[NSColor colorWithCalibratedWhite:0.576 alpha:1.0] set];
+	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, NSMinY(rect) + 0.5)
+	 toPoint:NSMakePoint(NSMaxX(rect), NSMinY(rect) + 0.5)];
+}
+
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView
 {
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-    
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
     NSWindow *window = [controlView window];
     NSToolbar *toolbar = [window toolbar];
     
-	NSBezierPath *bezier = [NSBezierPath bezierPath];
+    BOOL overflowMode = [button isOverflowButton];
+    if ([button isSliding])
+        overflowMode = NO;
+    
 	NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
     
     if (toolbar && [toolbar isVisible]) {
@@ -145,30 +170,26 @@
             }
         
         CGFloat radius = MIN(6.0, 0.5f * MIN(NSWidth(aRect), NSHeight(aRect)));
-        NSRect rect = NSInsetRect(aRect, radius, radius);
         
-        NSPoint cornerPoint = NSMakePoint(NSMaxX(aRect), NSMinY(aRect));
-        [bezier appendBezierPathWithPoints:&cornerPoint count:1];
-
-        [bezier appendBezierPathWithArcWithCenter:NSMakePoint(NSMaxX(rect), NSMaxY(rect)) radius:radius startAngle:0.0 endAngle:90.0];
-
-        [bezier appendBezierPathWithArcWithCenter:NSMakePoint(NSMinX(rect), NSMaxY(rect)) radius:radius startAngle:90.0 endAngle:180.0];
-
-        cornerPoint = NSMakePoint(NSMinX(aRect), NSMinY(aRect));
-        [bezier appendBezierPathWithPoints:&cornerPoint count:1];    
+        NSBezierPath *fillPath = nil;
+        if (overflowMode) {
+            fillPath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:MMBezierShapeLeftCap|MMBezierShapeFillPath|MMBezierShapeFlippedVertically];
+        } else {
+            fillPath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:MMBezierShapeAllCaps|MMBezierShapeFillPath|MMBezierShapeFlippedVertically];
+        }
 
         if ([tabBarView isWindowActive]) {
             if ([cell state] == NSOnState) {
                 NSColor *startColor = [NSColor colorWithDeviceWhite:0.698 alpha:1.000];
                 NSColor *endColor = [NSColor colorWithDeviceWhite:0.663 alpha:1.000];
                 NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
-                [gradient drawInBezierPath:bezier angle:80.0];
+                [gradient drawInBezierPath:fillPath angle:80.0];
                 [gradient release];
             } else if ([cell mouseHovered]) {
                 NSColor *startColor = [NSColor colorWithDeviceWhite:0.8 alpha:1.000];
                 NSColor *endColor = [NSColor colorWithDeviceWhite:0.8 alpha:1.000];
                 NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
-                [gradient drawInBezierPath:bezier angle:80.0];
+                [gradient drawInBezierPath:fillPath angle:80.0];
                 [gradient release];            
             }
             
@@ -178,16 +199,24 @@
                 NSColor *endColor = [NSColor colorWithDeviceWhite:0.902 alpha:1.000];
                 NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
                 [[NSGraphicsContext currentContext] setShouldAntialias:NO];
-                [gradient drawInBezierPath:bezier angle:90.0];
+                [gradient drawInBezierPath:fillPath angle:90.0];
                 [[NSGraphicsContext currentContext] setShouldAntialias:YES];
                 [gradient release];
             }
         }        
-            
+
+        NSBezierPath *strokePath = nil;
+        if (overflowMode) {
+            strokePath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:MMBezierShapeLeftCap|MMBezierShapeFlippedVertically];
+        } else {
+            strokePath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:MMBezierShapeAllCaps|MMBezierShapeFlippedVertically];
+        }
+        
         [lineColor set];
-        [bezier stroke];
+        [strokePath stroke];
     } else {
     
+        NSBezierPath *bezier = nil;
 		NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
 		aRect.origin.y += 0.5;
 		aRect.origin.x += 1.5;
@@ -233,25 +262,8 @@
     }
 }
 
-- (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-	//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
-	rect = [tabBarView bounds];
+-(void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
-	NSRect gradientRect = rect;
-	gradientRect.size.height -= 1.0;
-
-	if (![tabBarView isWindowActive]) {
-		[[NSColor windowBackgroundColor] set];
-		NSRectFill(gradientRect);
-	} else {
-        NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.835 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.843 alpha:1.0]];
-        [gradient drawInRect:gradientRect angle:90.0];
-        [gradient release];
-    }
-
-	[[NSColor colorWithCalibratedWhite:0.576 alpha:1.0] set];
-	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, NSMinY(rect) + 0.5)
-	 toPoint:NSMakePoint(NSMaxX(rect), NSMinY(rect) + 0.5)];
 }
 
 #pragma mark -
