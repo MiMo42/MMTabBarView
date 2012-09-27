@@ -30,10 +30,14 @@ typedef enum MMCloseButtonImageType : NSUInteger
 typedef enum MMTabStateMask : NSUInteger {
 	MMTab_LeftIsSelectedMask		= 1 << 2,
 	MMTab_RightIsSelectedMask		= 1 << 3,
-	MMTab_PositionLeftMask			= 1 << 4,
-	MMTab_PositionMiddleMask		= 1 << 5,
-	MMTab_PositionRightMask		= 1 << 6,
-	MMTab_PositionSingleMask		= 1 << 7,
+    
+    MMTab_LeftIsSliding             = 1 << 4,
+    MMTab_RightIsSliding            = 1 << 5,
+    
+	MMTab_PositionLeftMask			= 1 << 6,
+	MMTab_PositionMiddleMask		= 1 << 7,
+	MMTab_PositionRightMask         = 1 << 8,
+	MMTab_PositionSingleMask		= 1 << 9
 } MMTabStateMask;
 
 @interface MMTabBarButtonCell : MMRolloverButtonCell {
