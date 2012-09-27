@@ -7,7 +7,7 @@
 //
 
 #import "MMAquaTabStyle.h"
-#import "MMAttachedTabBarButtonCell.h"
+#import "MMAttachedTabBarButton.h"
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
@@ -171,8 +171,12 @@
                 break;
         }
 
-        if (![button isOverflowButton]) {
+        if ([button shouldDisplayRightDivider]) {
             right = aquaDivider;
+        }
+        
+        if ([button shouldDisplayLeftDivider]) {
+            left = aquaDivider;
         }
 
         NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![controlView isFlipped]);
@@ -186,7 +190,10 @@
 			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
 		}
         
-        right = aquaDivider;
+        if ([button shouldDisplayRightDivider])
+            right = aquaDivider;
+        if ([button shouldDisplayLeftDivider])
+            left = aquaDivider;
         
         if (![button isOverflowButton]) {
             NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![controlView isFlipped]);
@@ -208,12 +215,12 @@
     NSImage *right = nil;
     NSImage *center = nil;
     
-	// Selected Tab
+        // Draw selected
 	if ([lastAttachedButtonCell state] == NSOnState) {
 		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
         aRect.size.width += 5.0f;
         
-		// proper tint
+            // proper tint
 		NSControlTint currentTint;
 		if ([lastAttachedButtonCell controlTint] == NSDefaultControlTint) {
 			currentTint = [NSColor currentControlTint];
@@ -244,11 +251,12 @@
         
         NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![tabBarView isFlipped]);
 
-	} else { // Unselected Tab
+        // Draw unselected
+	} else {
 		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
         aRect.size.width += 5.0f;
         
-		// Rollover
+            // Rollover
 		if ([lastAttachedButton mouseHovered]) {
 			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
 			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
