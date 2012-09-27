@@ -1,4 +1,4 @@
-//
+ //
 //  MMTabBarView.m
 //  MMTabBarView
 //
@@ -671,11 +671,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Button State Management
 
-- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton {
+- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton {
 
-    MMTabStateMask tabStateMask = 0;
+    MMTabStateMask tabStateMask = [aButton tabState];
     
         // set position related state
+    tabStateMask &= ~(MMTab_PositionRightMask|MMTab_PositionLeftMask|MMTab_PositionMiddleMask|MMTab_PositionSingleMask);
     if (nextButton == nil)
         tabStateMask |= MMTab_PositionRightMask;
     if (prevButton == nil)
@@ -684,7 +685,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         tabStateMask |= MMTab_PositionMiddleMask;
     else if (prevButton == nil && nextButton == nil)
         tabStateMask |= MMTab_PositionSingleMask;
-    
+       
     [aButton setTabState:tabStateMask];
     
         // set selection state related state
@@ -694,24 +695,45 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([aButton state] == NSOnState) {
         prevButtonTabStateMask |= MMTab_RightIsSelectedMask;
         nextButtonTabStateMask |= MMTab_LeftIsSelectedMask;
-        [prevButton setTabState:prevButtonTabStateMask];
-        [nextButton setTabState:nextButtonTabStateMask];
     } else {
         prevButtonTabStateMask &= ~MMTab_RightIsSelectedMask;
         nextButtonTabStateMask &= ~MMTab_LeftIsSelectedMask;
-    
-        [prevButton setTabState:prevButtonTabStateMask];
-        [nextButton setTabState:nextButtonTabStateMask];
     }
     
         // set sliding state related state
     if ([aButton isSliding]) {
         prevButtonTabStateMask |= MMTab_RightIsSliding;
         nextButtonTabStateMask |= MMTab_LeftIsSliding;
-        
-        [prevButton setTabState:prevButtonTabStateMask];
-        [nextButton setTabState:nextButtonTabStateMask];
+    } else {
+        prevButtonTabStateMask &= ~MMTab_RightIsSliding;
+        nextButtonTabStateMask &= ~MMTab_LeftIsSliding;
     }
+
+    if (index == _destinationIndexForDraggedItem) {
+        prevButtonTabStateMask |= MMTab_PlaceholderOnRight;
+        nextButtonTabStateMask |= MMTab_PlaceholderOnLeft;
+    } else {
+        prevButtonTabStateMask &= ~MMTab_PlaceholderOnRight;
+        nextButtonTabStateMask &= ~MMTab_PlaceholderOnLeft;
+    }
+    
+    [prevButton setTabState:prevButtonTabStateMask];
+    [nextButton setTabState:nextButtonTabStateMask];
+}
+
+-(void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index {
+
+    NSArray *buttons = [self orderedAttachedButtons];
+
+    MMAttachedTabBarButton *prevButton = nil,
+                           *nextButton = nil;
+    
+    if (index+1 < [buttons count])
+        nextButton = [buttons objectAtIndex:index+1];
+    if (index > 0)
+        prevButton = [buttons objectAtIndex:index-1];
+
+    [self updateTabStateMaskOfAttachedButton:aButton atIndex:index withPrevious:prevButton next:nextButton];
 }
 
 - (void)updateTabStateMaskOfAttachedButtons {
@@ -761,10 +783,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             
         if (opts & MMAttachedButtonsEnumerationUpdateTabStateMask) {
         
-            [self updateTabStateMaskOfAttachedButton:aButton withPrevious:prevButton next:nextButton];
+            [self updateTabStateMaskOfAttachedButton:aButton atIndex:idx withPrevious:prevButton next:nextButton];
         }
         
-        block(aButton, idx, prevButton, nextButton, stop);
+        if (block)
+            block(aButton, idx, prevButton, nextButton, stop);
         
         prevButton = aButton;
     }];

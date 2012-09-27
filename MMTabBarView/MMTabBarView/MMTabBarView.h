@@ -191,7 +191,8 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
 
 #pragma mark Button State Management
 
-- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton;
+- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton;
+- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index;
 - (void)updateTabStateMaskOfAttachedButtons;
 
 #pragma mark Sending Messages to Attached Buttons
