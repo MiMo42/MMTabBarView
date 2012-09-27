@@ -420,6 +420,24 @@ StaticImage(TabNewMetalRollover)
             [strokePath setLineWidth:1.0];
             [lineColor set];
             [strokePath stroke];
+        } else {
+
+            NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+0.5, cellFrame.size.width-0.5f, cellFrame.size.height-1.0f);
+            aRect.size.width += 5.0f;
+
+            // rollover
+            if ([lastAttachedButtonCell mouseHovered]) {
+                [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+            }
+            
+            if ([tabBarView showAddTabButton]) {
+                NSBezierPath *bezier = [NSBezierPath bezierPath];
+                [bezier moveToPoint:NSMakePoint(NSMaxX(aRect), NSMinY(aRect))];
+				[bezier lineToPoint:NSMakePoint(NSMaxX(aRect), NSMaxY(aRect))];
+                [lineColor set];                
+                [bezier stroke];
+            }
         }
     }
 }
