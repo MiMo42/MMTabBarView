@@ -104,6 +104,25 @@
 }
 
 #pragma mark -
+#pragma mark Dividers
+
+- (BOOL)shouldDisplayLeftDivider {
+
+    if ([self isSliding] || ([self tabState] & MMTab_PlaceholderOnLeft))
+        return YES;
+    
+    return [super shouldDisplayLeftDivider];
+}
+
+- (BOOL)shouldDisplayRightDivider {
+    
+    if ([self isOverflowButton])
+        return NO;
+    
+    return YES;
+}
+
+#pragma mark -
 #pragma mark Interfacing Cell
 
 - (BOOL)isOverflowButton {
