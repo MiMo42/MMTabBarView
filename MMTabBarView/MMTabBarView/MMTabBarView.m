@@ -669,6 +669,108 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 #pragma mark -
+#pragma mark Button State Management
+
+- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton {
+
+    MMTabStateMask tabStateMask = 0;
+    
+        // set position related state
+    if (nextButton == nil)
+        tabStateMask |= MMTab_PositionRightMask;
+    if (prevButton == nil)
+        tabStateMask |= MMTab_PositionLeftMask;
+    if (prevButton != nil && nextButton != nil)
+        tabStateMask |= MMTab_PositionMiddleMask;
+    else if (prevButton == nil && nextButton == nil)
+        tabStateMask |= MMTab_PositionSingleMask;
+    
+    [aButton setTabState:tabStateMask];
+    
+        // set selection state related state
+    MMTabStateMask prevButtonTabStateMask = [prevButton tabState];
+    MMTabStateMask nextButtonTabStateMask = [nextButton tabState];
+    
+    if ([aButton state] == NSOnState) {
+        prevButtonTabStateMask |= MMTab_RightIsSelectedMask;
+        nextButtonTabStateMask |= MMTab_LeftIsSelectedMask;
+        [prevButton setTabState:prevButtonTabStateMask];
+        [nextButton setTabState:nextButtonTabStateMask];
+    } else {
+        prevButtonTabStateMask &= ~MMTab_RightIsSelectedMask;
+        nextButtonTabStateMask &= ~MMTab_LeftIsSelectedMask;
+    
+        [prevButton setTabState:prevButtonTabStateMask];
+        [nextButton setTabState:nextButtonTabStateMask];
+    }
+    
+        // set sliding state related state
+    if ([aButton isSliding]) {
+        prevButtonTabStateMask |= MMTab_RightIsSliding;
+        nextButtonTabStateMask |= MMTab_LeftIsSliding;
+        
+        [prevButton setTabState:prevButtonTabStateMask];
+        [nextButton setTabState:nextButtonTabStateMask];
+    }
+}
+
+- (void)updateTabStateMaskOfAttachedButtons {
+
+    [self enumerateAttachedButtonsWithOptions:MMAttachedButtonsEnumerationUpdateTabStateMask usingBlock:nil];
+}
+
+#pragma mark -
+#pragma mark Sending Messages to Attached Buttons
+
+- (void)enumerateAttachedButtonsUsingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, BOOL *stop))block {
+
+    [[self orderedAttachedButtons] enumerateObjectsUsingBlock:block];
+}
+
+- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block {
+
+    NSArray *buttons = [self orderedAttachedButtons];
+
+    [self enumerateAttachedButtons:buttons inRange:NSMakeRange(0, [buttons count]) withOptions:opts usingBlock:block];
+}
+
+- (void)enumerateAttachedButtons:(NSArray *)buttons inRange:(NSRange)range withOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block {
+
+    NSUInteger numberOfButtons = [buttons count];
+    
+        // range check
+    if (NSMaxRange(range) >= numberOfButtons)
+        range.length = numberOfButtons - range.location;
+
+	NSTabViewItem *selectedTabViewItem = [_tabView selectedTabViewItem];
+    
+    __block MMAttachedTabBarButton *prevButton = nil;
+    
+    [buttons enumerateObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range] options:0 usingBlock:^(MMAttachedTabBarButton *aButton, NSUInteger idx, BOOL *stop) {
+        
+        MMAttachedTabBarButton *nextButton = nil;
+        if (idx+1 < NSMaxRange(range))
+            nextButton = [buttons objectAtIndex:idx+1];
+
+        if (opts & MMAttachedButtonsEnumerationUpdateButtonState) {
+            if ([[aButton tabViewItem] isEqualTo:selectedTabViewItem])
+                [aButton setState:NSOnState];
+            else
+                [aButton setState:NSOffState];
+        }
+            
+        if (opts & MMAttachedButtonsEnumerationUpdateTabStateMask) {
+        
+            [self updateTabStateMaskOfAttachedButton:aButton withPrevious:prevButton next:nextButton];
+        }
+        
+        block(aButton, idx, prevButton, nextButton, stop);
+        
+        prevButton = aButton;
+    }];
+}
+
+#pragma mark -
 #pragma mark Find Tab Bar Buttons
 
 - (MMTabBarButton *)tabBarButtonAtPoint:(NSPoint)point
@@ -2546,6 +2648,7 @@ NSLog(@"did select:%@",tabViewItem);
     
         // reset state masks
     for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
+    
         [aButton setTabState:[aButton tabState] & ~(MMTab_RightIsSelectedMask|MMTab_LeftIsSelectedMask)];
         
         if (aButton == buttonToSelect) {

@@ -58,6 +58,13 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
     MMTabBarTearOffMiniwindow
 } MMTabBarTearOffStyle;
 
+typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
+
+    MMAttachedButtonsEnumerationNone               = 0,
+    MMAttachedButtonsEnumerationUpdateTabStateMask = 1 << 1,
+    MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
+} MMAttachedButtonsEnumerationOptions;
+
 @protocol MMTabBarViewDelegate;
 
 @interface MMTabBarView : NSView <NSDraggingSource, NSDraggingDestination, NSAnimationDelegate> {
@@ -181,6 +188,19 @@ typedef enum MMTabBarTearOffStyle : NSUInteger {
 - (MMAttachedTabBarButton *)attachedButtonForTabViewItem:(NSTabViewItem *)anItem;
 
 - (NSUInteger)indexOfAttachedButton:(MMAttachedTabBarButton *)aButton;
+
+#pragma mark Button State Management
+
+- (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton;
+- (void)updateTabStateMaskOfAttachedButtons;
+
+#pragma mark Sending Messages to Attached Buttons
+
+- (void)enumerateAttachedButtonsUsingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, BOOL *stop))block;
+
+- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block;
+
+- (void)enumerateAttachedButtons:(NSArray *)buttons inRange:(NSRange)range withOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block;
 
 #pragma mark Find Tab Bar Buttons
 
