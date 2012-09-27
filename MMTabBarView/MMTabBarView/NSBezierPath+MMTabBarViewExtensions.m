@@ -12,7 +12,7 @@
 
 @implementation NSBezierPath (MMTabBarViewExtensions)
 
-+ (NSBezierPath *)_bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius borderMask:(MMBezierShapeCapMask)mask {
++ (NSBezierPath *)_bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask {
 
     NSBezierPath *bezier = [NSBezierPath bezierPath];
 
@@ -41,9 +41,9 @@
     return bezier;
 }
 
-+ (NSBezierPath *)bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius borderMask:(MMBezierShapeCapMask)mask {
++ (NSBezierPath *)bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask {
 
-    NSBezierPath *bezier = [self _bezierPathWithCardInRect:aRect radius:radius borderMask:mask];
+    NSBezierPath *bezier = [self _bezierPathWithCardInRect:aRect radius:radius capMask:mask];
 
         // Flip the final NSBezierPath.
     if (mask & MMBezierShapeFlippedVertically)

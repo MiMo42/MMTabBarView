@@ -20,6 +20,6 @@ typedef enum MMBezierShapeCapMask : NSUInteger {
 
 @interface NSBezierPath (MMTabBarViewExtensions)
 
-+ (NSBezierPath *)bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius borderMask:(MMBezierShapeCapMask)mask;
++ (NSBezierPath *)bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask;
 
 @end
