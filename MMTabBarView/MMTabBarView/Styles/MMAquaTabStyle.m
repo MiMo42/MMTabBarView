@@ -134,10 +134,6 @@
     
 	NSRect cellFrame = frame;
     
-    BOOL overflowMode = [button isOverflowButton];
-    if ([button isSliding])
-        overflowMode = NO;
-
     NSImage *left = nil;
     NSImage *right = nil;
     NSImage *center = nil;
