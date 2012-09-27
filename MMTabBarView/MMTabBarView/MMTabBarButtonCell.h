@@ -34,10 +34,13 @@ typedef enum MMTabStateMask : NSUInteger {
     MMTab_LeftIsSliding             = 1 << 4,
     MMTab_RightIsSliding            = 1 << 5,
     
-	MMTab_PositionLeftMask			= 1 << 6,
-	MMTab_PositionMiddleMask		= 1 << 7,
-	MMTab_PositionRightMask         = 1 << 8,
-	MMTab_PositionSingleMask		= 1 << 9
+    MMTab_PlaceholderOnLeft         = 1 << 6,
+    MMTab_PlaceholderOnRight        = 1 << 7,
+    
+	MMTab_PositionLeftMask			= 1 << 8,
+	MMTab_PositionMiddleMask		= 1 << 9,
+	MMTab_PositionRightMask         = 1 << 10,
+	MMTab_PositionSingleMask		= 1 << 11
 } MMTabStateMask;
 
 @interface MMTabBarButtonCell : MMRolloverButtonCell {
