@@ -439,6 +439,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         }
         
         MMTabBarView *tabBarView = [aButton enclosingTabBarView];
+
+        [tabBarView updateTabStateMaskOfAttachedButtons];
         
         NSArray *attachedButtons = [tabBarView orderedAttachedButtons];
         NSUInteger numberOfAttachedButtons = [attachedButtons count];
@@ -699,6 +701,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     [self setIsSliding:YES];
     [aButton setIsInDraggedSlide:YES];
 
+    [tabBarView updateTabStateMaskOfAttachedButton:aButton atIndex:sourceIndex];
+
     [aButton orderFront];
                 
     while ((nextEvent = [[tabBarView window] nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
@@ -897,6 +901,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         stackingFrame.origin.y = positionOfMovedButton;
         
     [aButton setStackingFrame:stackingFrame];
+    
+    [tabBarView updateTabStateMaskOfAttachedButtons];
     
     _slideButtonsAnimation = [[MMSlideButtonsAnimation alloc] initWithTabBarButtons:[NSSet setWithArray:slidingButtons]];
     [_slideButtonsAnimation setDelegate:self];
