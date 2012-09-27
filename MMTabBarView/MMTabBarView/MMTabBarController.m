@@ -401,6 +401,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 - (void)_setupAttachedButtons:(NSArray *)buttons withWidths:(NSArray *)widths {
 
     NSUInteger buttonCount = [buttons count];
+
+	[_overflowMenu release], _overflowMenu = nil;
     
     __block NSRect buttonRect = [_tabBarView genericButtonRect];
 
