@@ -1457,6 +1457,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)layoutButtons {
     [_controller layoutButtons];
+    
+    [self _synchronizeSelection];
 }
 
 - (void)update {
@@ -1507,7 +1509,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             if (!(isDragging && item == [draggedButton tabViewItem]))
                 [self insertAttachedButtonForTabViewItem:item atIndex:i];
 		}
-    ++i;
+        ++i;
 	}
     
 	[self layoutButtons]; //eventually we should only have to call this when we know something has changed
@@ -2683,6 +2685,13 @@ NSLog(@"did select:%@",tabViewItem);
         }
     }
     
+    if (buttonToSelect) {
+        NSUInteger indexOfSelectedButton = [self indexOfAttachedButton:buttonToSelect];
+        if (indexOfSelectedButton != NSNotFound)
+            [self updateTabStateMaskOfAttachedButton:buttonToSelect atIndex:indexOfSelectedButton];
+    }
+    
+/*
     NSUInteger indexOfSelectedTabViewItem = [_tabView indexOfTabViewItem:selectedTabViewItem];
     if (indexOfSelectedTabViewItem == NSNotFound || [_tabView numberOfTabViewItems] <= 1)
         return;
@@ -2698,7 +2707,7 @@ NSLog(@"did select:%@",tabViewItem);
         MMAttachedTabBarButton *rightButton = [self attachedButtonForTabViewItem:rightItem];
         [rightButton setTabState:[rightButton tabState] | MMTab_LeftIsSelectedMask];
     }
-    
+*/    
     if (!_allowsBackgroundTabClosing && !_disableTabClose)
         [self update:NO];
 }
