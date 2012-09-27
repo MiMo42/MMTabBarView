@@ -10,6 +10,13 @@
 #import "MMAttachedTabBarButton.h"
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
+#import "NSBezierPath+MMTabBarViewExtensions.h"
+
+@interface MMMetalTabStyle (/*Private*/)
+
+- (BOOL)_shouldDrawHorizontalTopBorderLineInView:(id)controlView;
+
+@end
 
 @implementation MMMetalTabStyle
 
@@ -189,17 +196,7 @@ StaticImage(TabNewMetalRollover)
 }
 
 #pragma mark -
-#pragma mark Drawing
-
-- (BOOL)_shouldDrawHorizontalTopBorderLineInView:(id)controlView
-{
-    NSWindow *window = [controlView window];
-    NSToolbar *toolbar = [window toolbar];
-    if (!toolbar || ![toolbar isVisible] || ([toolbar isVisible] && [toolbar showsBaselineSeparator]))
-        return NO;
-    
-    return YES;
-}
+#pragma mark Determining Cell Size
 
 - (NSRect)drawingRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell
 {
@@ -219,124 +216,8 @@ StaticImage(TabNewMetalRollover)
     return resultRect;
 }
 
-- (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
-
-	NSRect cellFrame = frame;
-	NSColor *lineColor = nil;
-	NSBezierPath *bezier = [NSBezierPath bezierPath];
-	lineColor = [NSColor darkGrayColor];
-    
-    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-    MMTabBarOrientation orientation = [tabBarView orientation];
-
-	//disable antialiasing of bezier paths
-	[NSGraphicsContext saveGraphicsState];
-	[[NSGraphicsContext currentContext] setShouldAntialias:NO];
-
-	if ([cell state] == NSOnState) {
-		// selected tab
-		if (orientation == MMTabBarHorizontalOrientation) {
-			NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height - 2.5);
-
-			// background
-			aRect.origin.x += 1.0;
-			aRect.size.width--;
-			aRect.size.height -= 0.5;
-            
-            [[NSColor windowBackgroundColor] set];
-            NSRectFill(aRect);
-
-			aRect.size.width++;
-			aRect.size.height += 0.5;
-
-			// frame
-			aRect.origin.x -= 0.5;
-			[lineColor set];
-			[bezier setLineWidth:1.0];
-			[bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y + aRect.size.height - 1.5)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 1.5, aRect.origin.y + aRect.size.height)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width - 2.5, aRect.origin.y + aRect.size.height)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height - 1.5)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
-			if ([[cell controlView] frame].size.height < 2) {
-				// special case of hidden control; need line across top of cell
-				[bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y + 0.5)];
-				[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + 0.5)];
-			}
-		} else {
-			NSRect aRect = NSMakeRect(cellFrame.origin.x + 2, cellFrame.origin.y, cellFrame.size.width - 2, cellFrame.size.height);
-
-			// background
-			aRect.origin.x++;
-			aRect.size.height--;
-            
-            [[NSColor windowBackgroundColor] set];
-            NSRectFill(aRect);
-            
-			aRect.origin.x--;
-			aRect.size.height++;
-
-			// frame
-			[lineColor set];
-			[bezier setLineWidth:1.0];
-			[bezier moveToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 2, aRect.origin.y)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 0.5, aRect.origin.y + 2)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 0.5, aRect.origin.y + aRect.size.height - 3)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 3, aRect.origin.y + aRect.size.height)];
-			[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height)];
-		}
-
-		[bezier stroke];
-	} else {
-		// unselected tab
-		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
-		aRect.origin.y += 0.5;
-		aRect.origin.x += 1.5;
-		aRect.size.width -= 1;
-
-		// rollover
-		if ([cell mouseHovered]) {
-			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
-		}
-
-		[lineColor set];
-
-		if (orientation == MMTabBarHorizontalOrientation) {
-			aRect.origin.x -= 1;
-			aRect.size.width += 1;
-
-			// frame
-            if ([self _shouldDrawHorizontalTopBorderLineInView:controlView]) {
-                [bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y)];
-                [bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
-            } else {
-                [bezier moveToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
-            }
-            
-			if (!([cell tabState] & MMTab_RightIsSelectedMask)) {
-				[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height)];
-                
-			}
-		} else {
-			if (!([cell tabState] & MMTab_LeftIsSelectedMask)) {
-				[bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y)];
-				[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
-			}
-
-			if (!([cell tabState] & MMTab_RightIsSelectedMask)) {
-				[bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y + aRect.size.height)];
-				[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height)];
-			}
-		}
-        
-		[bezier stroke];        
-	}
-
-	[NSGraphicsContext restoreGraphicsState];
-}
+#pragma mark -
+#pragma mark Drawing
 
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
@@ -371,6 +252,178 @@ StaticImage(TabNewMetalRollover)
 	[NSGraphicsContext restoreGraphicsState];
 }
 
+- (void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
+
+    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
+    MMTabBarOrientation orientation = [tabBarView orientation];
+
+	NSBezierPath *bezier = nil; 
+	NSColor *lineColor = [NSColor darkGrayColor];
+    
+	NSRect cellFrame = frame;
+    
+    BOOL overflowMode = [button isOverflowButton];
+    if ([button isSliding])
+        overflowMode = NO;
+    
+	//disable antialiasing of bezier paths
+	[NSGraphicsContext saveGraphicsState];
+	[[NSGraphicsContext currentContext] setShouldAntialias:NO];
+
+	if ([cell state] == NSOnState) {
+		// selected tab
+		if (orientation == MMTabBarHorizontalOrientation) {
+			NSRect aRect = NSMakeRect(cellFrame.origin.x+0.5, cellFrame.origin.y, cellFrame.size.width-1.0, cellFrame.size.height - 2.5);
+
+            NSRect fillRect = NSInsetRect(aRect,0.5f,0.0f);
+            fillRect.size.height -= 0.5;
+
+            if (overflowMode) {
+                fillRect.size.width += 0.5;
+                bezier = [NSBezierPath bezierPathWithCardInRect:fillRect radius:3.0 capMask:MMBezierShapeLeftCap|MMBezierShapeFillPath|MMBezierShapeFlippedVertically];            
+            } else {
+                bezier = [NSBezierPath bezierPathWithCardInRect:fillRect radius:3.0 capMask:MMBezierShapeAllCaps|MMBezierShapeFillPath|MMBezierShapeFlippedVertically];
+            }
+            
+            [bezier setLineWidth:1.0];
+            
+            [[NSColor windowBackgroundColor] set];
+            [bezier fill];
+
+			[lineColor set];
+            
+            if (overflowMode) {
+                bezier = [NSBezierPath bezierPathWithCardInRect:aRect radius:3.0 capMask:MMBezierShapeLeftCap|MMBezierShapeFlippedVertically];
+            } else {
+                bezier = [NSBezierPath bezierPathWithCardInRect:aRect radius:3.0 capMask:MMBezierShapeAllCaps|MMBezierShapeFlippedVertically];            
+            }
+            
+            [bezier setLineWidth:1.0];
+            
+		} else {
+			NSRect aRect = NSMakeRect(cellFrame.origin.x + 2, cellFrame.origin.y, cellFrame.size.width - 2, cellFrame.size.height);
+
+			// background
+			aRect.origin.x++;
+			aRect.size.height--;
+            
+            [[NSColor windowBackgroundColor] set];
+            NSRectFill(aRect);
+            
+			aRect.origin.x--;
+			aRect.size.height++;
+
+			// frame
+			[lineColor set];
+            bezier = [NSBezierPath bezierPath];
+			[bezier setLineWidth:1.0];
+			[bezier moveToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
+			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 2, aRect.origin.y)];
+			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 0.5, aRect.origin.y + 2)];
+			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 0.5, aRect.origin.y + aRect.size.height - 3)];
+			[bezier lineToPoint:NSMakePoint(aRect.origin.x + 3, aRect.origin.y + aRect.size.height)];
+			[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height)];
+		}
+
+        [bezier stroke];
+        
+	} else {
+		// unselected tab
+		NSRect aRect = NSMakeRect(cellFrame.origin.x+0.5f, cellFrame.origin.y+0.5, cellFrame.size.width-1.0f, cellFrame.size.height-1.0f);
+/*
+		aRect.origin.y += 0.5;
+		aRect.origin.x += 1.5;
+		aRect.size.width -= 1;
+*/
+		// rollover
+		if ([cell mouseHovered]) {
+			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+		}
+
+		[lineColor set];
+
+        bezier = [NSBezierPath bezierPath];
+
+		if (orientation == MMTabBarHorizontalOrientation) {
+//			aRect.origin.x -= 1;
+//			aRect.size.width += 1;
+
+			// frame
+            if ([self _shouldDrawHorizontalTopBorderLineInView:controlView]) {
+                [bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y)];
+                [bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
+            }
+            
+            BOOL shouldDisplayRightDivider = [button shouldDisplayRightDivider];
+            if ([cell tabState] & MMTab_RightIsSelectedMask) {
+                if (([cell tabState] & (MMTab_PlaceholderOnRight | MMTab_RightIsSliding)) == 0)
+                    shouldDisplayRightDivider = NO;
+            }
+            
+            if (shouldDisplayRightDivider) {
+                [bezier moveToPoint:NSMakePoint(NSMaxX(aRect), NSMinY(aRect))];
+				[bezier lineToPoint:NSMakePoint(NSMaxX(aRect), NSMaxY(aRect))];
+            }
+            if ([button shouldDisplayLeftDivider]) {
+                [bezier moveToPoint:NSMakePoint(NSMinX(aRect), NSMinY(aRect))];
+                [bezier lineToPoint:NSMakePoint(NSMinX(aRect), NSMaxY(aRect))];
+			}
+		} else {
+			if (!([cell tabState] & MMTab_LeftIsSelectedMask)) {
+				[bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y)];
+				[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y)];
+			}
+
+			if (!([cell tabState] & MMTab_RightIsSelectedMask)) {
+				[bezier moveToPoint:NSMakePoint(aRect.origin.x, aRect.origin.y + aRect.size.height)];
+				[bezier lineToPoint:NSMakePoint(aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height)];
+			}
+		}
+        
+		[bezier stroke];        
+	}
+
+	[NSGraphicsContext restoreGraphicsState];
+}
+
+- (void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+
+    MMTabBarOrientation orientation = [tabBarView orientation];
+    MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
+    MMAttachedTabBarButtonCell *lastAttachedButtonCell = [lastAttachedButton cell];
+
+    if ([lastAttachedButton isSliding])
+        return;
+    
+	NSRect cellFrame = [overflowButton frame];
+
+	NSColor *lineColor = [NSColor darkGrayColor];
+    
+    if (orientation == MMTabBarHorizontalOrientation) {
+            // Draw selected
+        if ([lastAttachedButtonCell state] == NSOnState) {
+            NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height-2.5);
+            aRect.size.width += 5.0f;
+            
+            NSRect fillRect = aRect;
+            fillRect.size.width -= 0.5;
+            fillRect.size.height -= 0.5;
+        
+            NSBezierPath *fillPath = [NSBezierPath bezierPathWithCardInRect:fillRect radius:3.0 capMask:MMBezierShapeRightCap|MMBezierShapeFillPath|MMBezierShapeFlippedVertically];
+            [fillPath setLineWidth:1.0];
+            [[NSColor windowBackgroundColor] set];
+            [fillPath fill];
+            
+            NSBezierPath *strokePath = [NSBezierPath bezierPathWithCardInRect:aRect radius:3.0 capMask:MMBezierShapeRightCap|MMBezierShapeFlippedVertically];
+            [strokePath setLineWidth:1.0];
+            [lineColor set];
+            [strokePath stroke];
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Archiving
 
@@ -399,6 +452,19 @@ StaticImage(TabNewMetalRollover)
 	}
 	//}
 	return self;
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (BOOL)_shouldDrawHorizontalTopBorderLineInView:(id)controlView
+{
+    NSWindow *window = [controlView window];
+    NSToolbar *toolbar = [window toolbar];
+    if (!toolbar || ![toolbar isVisible] || ([toolbar isVisible] && [toolbar showsBaselineSeparator]))
+        return NO;
+    
+    return YES;
 }
 
 @end
