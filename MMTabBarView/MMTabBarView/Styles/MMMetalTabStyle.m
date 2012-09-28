@@ -398,7 +398,6 @@ StaticImage(TabNewMetalRollover)
     
     capMask &= ~MMBezierShapeFillPath;
 
-        //disable antialiasing of bezier paths
 	[NSGraphicsContext saveGraphicsState];
     
     if (orientation == MMTabBarHorizontalOrientation) {
