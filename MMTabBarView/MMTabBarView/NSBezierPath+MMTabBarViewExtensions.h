@@ -22,4 +22,6 @@ typedef enum MMBezierShapeCapMask : NSUInteger {
 
 + (NSBezierPath *)bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask;
 
++ (NSBezierPath *)bezierPathWithRoundedRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask;
+
 @end
