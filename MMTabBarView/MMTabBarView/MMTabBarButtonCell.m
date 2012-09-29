@@ -118,6 +118,10 @@
     [self _updateSubButtons];
 }
 
+- (void)updateImages {
+    [self _updateCloseButtonImages];
+}
+
 #pragma mark -
 #pragma mark Accessors
 
@@ -583,9 +587,9 @@
     if (shouldDisplayCloseButton) {
         NSRect newFrame = [self closeButtonRectForBounds:[button bounds]];
         BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
-        [[self closeButton] setHidden:shouldHide];
+        [closeButton setHidden:shouldHide];
         if (!shouldHide)
-            [[self closeButton] setFrame:newFrame];
+            [closeButton setFrame:newFrame];
     } else {
         [closeButton setHidden:YES];
     }

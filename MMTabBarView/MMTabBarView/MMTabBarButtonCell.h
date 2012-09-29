@@ -88,6 +88,8 @@ typedef enum MMTabStateMask : NSUInteger {
 
 - (MMTabBarView *)tabBarView;
 
+- (void)updateImages;
+
 #pragma Progress Indicator Support
 
 - (MMProgressIndicator *)indicator;
