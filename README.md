@@ -1,7 +1,7 @@
 MMTabBarView
 ============
 
-A Mac OS X tab bar view that works on 10.6-10.8 with Xcode 4.x.<br>
+A Mac OS X tab bar view that works on 10.6-10.8 with Xcode 4.4 or higher.<br>
 MMTabBarView is a modernized and view based re-write of PSMTabBarControl, <br>
 which can be found here: https://github.com/dorianj/PSMTabBarControl<br>
 Though MMTabBarView's API is quite similar, it is no drop-in replacement for PSMTabBarControl.
