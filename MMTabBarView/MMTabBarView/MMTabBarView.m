@@ -325,6 +325,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)windowStatusDidChange:(NSNotification *)notification {
+
+    [self _updateImages];
+
 	[self setNeedsDisplay:YES];
 }
 
@@ -2691,26 +2694,6 @@ NSLog(@"did select:%@",tabViewItem);
         if (indexOfSelectedButton != NSNotFound)
             [self updateTabStateMaskOfAttachedButton:buttonToSelect atIndex:indexOfSelectedButton];
     }
-    
-/*
-    NSUInteger indexOfSelectedTabViewItem = [_tabView indexOfTabViewItem:selectedTabViewItem];
-    if (indexOfSelectedTabViewItem == NSNotFound || [_tabView numberOfTabViewItems] <= 1)
-        return;
-        
-    if (indexOfSelectedTabViewItem != 0) {
-        NSTabViewItem *leftItem = [_tabView tabViewItemAtIndex:indexOfSelectedTabViewItem-1];
-        MMAttachedTabBarButton *leftButton = [self attachedButtonForTabViewItem:leftItem];
-        [leftButton setTabState:[leftButton tabState] | MMTab_RightIsSelectedMask];
-    }
-    
-    if (indexOfSelectedTabViewItem != [_tabView numberOfTabViewItems]-1) {
-        NSTabViewItem *rightItem = [_tabView tabViewItemAtIndex:indexOfSelectedTabViewItem+1];
-        MMAttachedTabBarButton *rightButton = [self attachedButtonForTabViewItem:rightItem];
-        [rightButton setTabState:[rightButton tabState] | MMTab_LeftIsSelectedMask];
-    }
-*/    
-    if (!_allowsBackgroundTabClosing && !_disableTabClose)
-        [self update:NO];
 }
 
 - (NSCursor *)_resizingMouseCursor {
@@ -2795,6 +2778,12 @@ NSLog(@"did select:%@",tabViewItem);
         return NO;
 
     return YES;
+}
+
+-(void)_updateImages {
+    [[self attachedButtons] makeObjectsPerformSelector:@selector(updateImages)];
+    [self _updateAddTabButton];
+    [self _updateOverflowPopUpButton];
 }
 
 StaticImage(AquaTabNew)
