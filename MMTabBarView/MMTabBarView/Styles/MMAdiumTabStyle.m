@@ -599,7 +599,7 @@
             [cell _drawIconWithFrame:frame inView:controlView];
     }
 }
-
+/*
 - (void)drawCloseButtonOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
@@ -617,7 +617,7 @@
             [cell _drawCloseButtonWithFrame:frame inView:controlView];
     }
 }
-
+*/
 - (void)drawObjectCounterOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
