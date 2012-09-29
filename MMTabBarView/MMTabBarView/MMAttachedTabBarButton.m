@@ -103,6 +103,17 @@
     return _isInDraggedSlide || _isInAnimatedSlide;
 }
 
+- (void)setTitle:(NSString *)aString {
+    [super setTitle:aString];
+    
+        // additionally synchronize label of tab view item if appropriate
+    if (_tabViewItem && [_tabViewItem respondsToSelector:@selector(label)]) {
+        if (![[_tabViewItem label] isEqualToString:aString]) {
+            [_tabViewItem setLabel:aString];
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Dividers
 
