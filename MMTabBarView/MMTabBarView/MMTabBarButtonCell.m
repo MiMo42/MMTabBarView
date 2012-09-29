@@ -564,9 +564,19 @@
     MMRolloverButton *closeButton = [button closeButton];
 
     [self _updateCloseButtonImages];
+
+    BOOL shouldDisplayCloseButton = ([self shouldDisplayCloseButton] && ![tabBarView isTabBarHidden]);
+
+    if (shouldDisplayCloseButton) {
+
+            // allow style to update close button
+        if (_style && [_style respondsToSelector:@selector(updateCloseButton:ofTabCell:)]) {
+            shouldDisplayCloseButton = [_style updateCloseButton:closeButton ofTabCell:self];
+        }
+    }
     
         // adjust visibility and position of close button
-    if ([self shouldDisplayCloseButton] && ![tabBarView isTabBarHidden]) {
+    if (shouldDisplayCloseButton) {
         NSRect newFrame = [self closeButtonRectForBounds:[button bounds]];
         BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
         [[self closeButton] setHidden:shouldHide];

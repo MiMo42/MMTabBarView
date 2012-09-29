@@ -192,7 +192,6 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     [self updateCell];
 }
 
-
 - (NSImage *)icon {
     return [[self cell] icon];
 }
