@@ -106,6 +106,9 @@
 		0663759E161616EF004A1128 /* SafariIWATRightCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06637595161616EF004A1128 /* SafariIWATRightCap@2x.png */; };
 		0663759F161616EF004A1128 /* SafariIWITLeftCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06637596161616EF004A1128 /* SafariIWITLeftCap@2x.png */; };
 		066375A0161616EF004A1128 /* SafariIWITRightCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06637597161616EF004A1128 /* SafariIWITRightCap@2x.png */; };
+		066375A216171EFC004A1128 /* MMTabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A116171EEF004A1128 /* MMTabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		066375A516172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		066375A616172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 066375A416172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m */; };
 		06789D661611EC180080FCFE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06789D651611EC180080FCFE /* QuartzCore.framework */; };
 		06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06789D741611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */; };
@@ -119,7 +122,7 @@
 		06978949160DBC36009BB894 /* SafariIWAddTabButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 06978945160DBC36009BB894 /* SafariIWAddTabButton.png */; };
 		069789581610A9E8009BB894 /* MMOverflowPopUpButtonCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 069789561610A9E8009BB894 /* MMOverflowPopUpButtonCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		069789591610A9E8009BB894 /* MMOverflowPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 069789571610A9E8009BB894 /* MMOverflowPopUpButtonCell.m */; };
-		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; };
+		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */; };
 		06B51CD8160B561900153FA2 /* SafariAWATFill.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CCC160B561900153FA2 /* SafariAWATFill.png */; };
 		06B51CD9160B561900153FA2 /* SafariAWATLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B51CCD160B561900153FA2 /* SafariAWATLeftCap.png */; };
@@ -243,6 +246,9 @@
 		06637595161616EF004A1128 /* SafariIWATRightCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SafariIWATRightCap@2x.png"; path = "Images/SafariIWATRightCap@2x.png"; sourceTree = "<group>"; };
 		06637596161616EF004A1128 /* SafariIWITLeftCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SafariIWITLeftCap@2x.png"; path = "Images/SafariIWITLeftCap@2x.png"; sourceTree = "<group>"; };
 		06637597161616EF004A1128 /* SafariIWITRightCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SafariIWITRightCap@2x.png"; path = "Images/SafariIWITRightCap@2x.png"; sourceTree = "<group>"; };
+		066375A116171EEF004A1128 /* MMTabBarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTabBarItem.h; sourceTree = "<group>"; };
+		066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTabViewItem+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
+		066375A416172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTabViewItem+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
 		06789D651611EC180080FCFE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCell+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
 		06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCell+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
@@ -332,6 +338,8 @@
 				06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */,
 				0634F0B0160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h */,
 				0634F0B1160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m */,
+				066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */,
+				066375A416172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m */,
 				0634EFDF1609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.h */,
 				0634EFE01609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.m */,
 			);
@@ -554,6 +562,7 @@
 		06DB23AF1609F5830071BDA0 /* MMTabBarView */ = {
 			isa = PBXGroup;
 			children = (
+				066375A116171EEF004A1128 /* MMTabBarItem.h */,
 				0634F0001609FC7F00A6C86A /* MMTabStyle.h */,
 				06DB23B61609F5830071BDA0 /* MMTabBarView.h */,
 				06DB23B71609F5830071BDA0 /* MMTabBarView.m */,
@@ -617,6 +626,8 @@
 				06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */,
 				06789DB6161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h in Headers */,
 				06789DBE161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h in Headers */,
+				066375A216171EFC004A1128 /* MMTabBarItem.h in Headers */,
+				066375A516172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,6 +790,7 @@
 				06789D741611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m in Sources */,
 				06789DB7161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.m in Sources */,
 				06789DBF161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m in Sources */,
+				066375A616172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
