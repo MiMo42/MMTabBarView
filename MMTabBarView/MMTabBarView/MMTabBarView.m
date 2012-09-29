@@ -2622,7 +2622,7 @@ NSLog(@"did select:%@",tabViewItem);
         [aButton bind:@"objectCount" toObject:dataSource withKeyPath:@"objectCount" options:nil];
     
         // object count color binding
-	[aButton setObjectCountColor:nil];
+	[aButton setObjectCountColor:[MMAttachedTabBarButtonCell defaultObjectCountColor]];
     dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
@@ -2644,89 +2644,6 @@ NSLog(@"did select:%@",tabViewItem);
     dataSource = [self _dataSourceForSelector:@selector(hasCloseButton) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"hasCloseButton" toObject:dataSource withKeyPath:@"hasCloseButton" options:nil];
-    
-/*
-    id <MMTabBarItem> dataSource = nil;
-    
-    if ([item identifier] && [[item identifier] conformsToProtocol:@protocol(MMTabBarItem)]) {
-        dataSource = [item identifier];
-    } else if ([item conformsToProtocol:@protocol(MMTabBarItem)]) {
-        dataSource = (id <MMTabBarItem>)item;
-    }
-    
-        // bind the title to the represented object's title (if it exists)
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(title)]) {
-            [aButton bind:@"title" toObject:dataSource withKeyPath:@"title" options:nil];
-		} else {
-                // bind my string value to the label on the represented tab
-            [aButton bind:@"title" toObject:item withKeyPath:@"label" options:nil];
-        }
-	} else {
-            // bind my string value to the label on the represented tab
-        [aButton bind:@"title" toObject:item withKeyPath:@"label" options:nil];
-    }
-    
-        // bind the indicator to the represented object's status (if it exists)
-	[[aButton indicator] setHidden:YES];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(isProcessing)]) {
-        
-            [aButton bind:@"isProcessing" toObject:dataSource withKeyPath:@"isProcessing" options:nil];           
-		}
-	}
-
-        // bind for the existence of an icon
-	[aButton setIcon:nil];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(icon)]) {
-            [aButton bind:@"icon" toObject:dataSource withKeyPath:@"icon" options:nil];
-		}
-	}
-
-        // bind for the existence of a counter
-	[aButton setObjectCount:0];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(objectCount)]) {
-        
-            NSDictionary *bindingObjects = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                [NSNumber numberWithBool:YES],NSConditionallySetsHiddenBindingOption,
-                nil];
-        
-			[aButton bind:@"objectCount" toObject:dataSource withKeyPath:@"objectCount" options:bindingObjects];
-		}
-	}
-
-        // bind for the color of a counter
-	[aButton setObjectCountColor:nil];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(objectCountColor)]) {
-			[aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
-		}
-	}
-
-        // bind for a large image
-	[aButton setLargeImage:nil];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(largeImage)]) {
-            [aButton bind:@"largeImage" toObject:dataSource withKeyPath:@"largeImage" options:nil];        
-		}
-	}
-
-	[aButton setIsEdited:NO];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(isEdited)]) {
-			[aButton bind:@"isEdited" toObject:dataSource withKeyPath:@"isEdited" options:nil];
-		}
-	}
-    
-	[aButton setHasCloseButton:NO];
-	if (dataSource != nil) {
-		if ([dataSource respondsToSelector:@selector(hasCloseButton)]) {
-			[aButton bind:@"hasCloseButton" toObject:dataSource withKeyPath:@"hasCloseButton" options:nil];
-		}
-	}    
-*/    
 }
 
 - (void)_unbindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton {
