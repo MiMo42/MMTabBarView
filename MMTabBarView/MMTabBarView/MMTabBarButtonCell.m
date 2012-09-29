@@ -1010,8 +1010,7 @@
 - (void)_drawCloseButtonWithFrame:(NSRect)frame inView:(NSView *)controlView {
 
     // we draw nothing by default
-    [[NSColor redColor] set];
-    NSRectFill([self closeButtonRectForBounds:frame]);
+    
         // update hidden state of close button
     if ([[self tabBarView] onlyShowCloseOnHover]) {
         [[self closeButton] setHidden:![self mouseHovered]];
