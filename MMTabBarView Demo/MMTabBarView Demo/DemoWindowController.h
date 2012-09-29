@@ -21,6 +21,7 @@
 	IBOutlet NSButton				*isEditedButton;
 	IBOutlet NSButton				*hasLargeImageButton;
 	IBOutlet NSTextField			*objectCounterField;
+    IBOutlet NSColorWell            *objectCounterColorWell;
 	IBOutlet NSPopUpButton			*iconButton;
     IBOutlet NSButton				*hasCloserButton;
 
@@ -51,6 +52,7 @@
 - (IBAction)closeTab:(id)sender;
 - (IBAction)setIconNamed:(id)sender;
 - (IBAction)setObjectCount:(id)sender;
+- (IBAction)setObjectCountColor:(id)sender;
 - (IBAction)setTabLabel:(id)sender;
 
 // Actions

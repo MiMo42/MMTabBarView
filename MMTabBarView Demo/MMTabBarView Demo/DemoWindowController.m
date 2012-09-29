@@ -90,27 +90,11 @@
 
     [self addNewTabWithTitle:@"Tab"];
     [self addNewTabWithTitle:@"Bar"];
-    [self addNewTabWithTitle:@"View"];        
-/*
-	[self addNewTab:self];
-	[self addNewTab:self];
-	[self addNewTab:self];
-	[[tabView tabViewItemAtIndex:0] setLabel:@"Tab"];
-	[[tabView tabViewItemAtIndex:1] setLabel:@"Bar"];
-	[[tabView tabViewItemAtIndex:2] setLabel:@"Control"];
-*/    
+    [self addNewTabWithTitle:@"View"];           
 }
 
 - (IBAction)addNewTab:(id)sender {
     [self addNewTabWithTitle:@"Untitled"];
-/*
-	DemoFakeModel *newModel = [[DemoFakeModel alloc] init];
-    [newModel setTitle:@"Untitled"];
-	NSTabViewItem *newItem = [[(NSTabViewItem*)[NSTabViewItem alloc] initWithIdentifier:newModel] autorelease];
-	[tabView addTabViewItem:newItem];
- 	[tabView selectTabViewItem:newItem]; // this is optional, but expected behavior
-	[newModel release];
-*/
 }
 
 - (IBAction)closeTab:(id)sender {
@@ -148,6 +132,10 @@
 
 - (void)setObjectCount:(id)sender {
 	[[[tabView selectedTabViewItem] identifier] setValue:[NSNumber numberWithInteger:[sender integerValue]] forKeyPath:@"objectCount"];
+}
+
+- (void)setObjectCountColor:(id)sender {
+	[[[tabView selectedTabViewItem] identifier] setValue:[sender color] forKeyPath:@"objectCountColor"];
 }
 
 - (IBAction)isProcessingAction:(id)sender {
@@ -409,6 +397,13 @@
 	if ([[tabViewItem identifier] respondsToSelector:@selector(objectCount)]) {
 		[objectCounterField setIntegerValue:[[tabViewItem identifier] objectCount]];
 	}
+    
+	if ([[tabViewItem identifier] respondsToSelector:@selector(objectCountColor)]) {
+        if ([[tabViewItem identifier] objectCountColor] != nil)
+            [objectCounterColorWell setColor:[[tabViewItem identifier] objectCountColor]];
+        else
+            [objectCounterColorWell setColor:[MMTabBarButtonCell defaultObjectCountColor]];
+	}    
 
 	if ([[tabViewItem identifier] respondsToSelector:@selector(isProcessing)]) {
 		[isProcessingButton setState:[[tabViewItem identifier] isProcessing]];
