@@ -100,6 +100,55 @@
 		066375A216171EFC004A1128 /* MMTabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A116171EEF004A1128 /* MMTabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		066375A516172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		066375A616172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 066375A416172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m */; };
+		066375F01617493D004A1128 /* SafariAWATClose.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375BF1617493D004A1128 /* SafariAWATClose.png */; };
+		066375F11617493D004A1128 /* SafariAWATClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C01617493D004A1128 /* SafariAWATClose@2x.png */; };
+		066375F21617493D004A1128 /* SafariAWATClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C11617493D004A1128 /* SafariAWATClosePressed.png */; };
+		066375F31617493D004A1128 /* SafariAWATClosePressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C21617493D004A1128 /* SafariAWATClosePressed@2x.png */; };
+		066375F41617493D004A1128 /* SafariAWATCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C31617493D004A1128 /* SafariAWATCloseRollover.png */; };
+		066375F51617493D004A1128 /* SafariAWATCloseRollover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C41617493D004A1128 /* SafariAWATCloseRollover@2x.png */; };
+		066375F61617493D004A1128 /* SafariAWITClose.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C51617493D004A1128 /* SafariAWITClose.png */; };
+		066375F71617493D004A1128 /* SafariAWITClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C61617493D004A1128 /* SafariAWITClose@2x.png */; };
+		066375F81617493D004A1128 /* SafariAWITClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C71617493D004A1128 /* SafariAWITClosePressed.png */; };
+		066375F91617493D004A1128 /* SafariAWITClosePressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C81617493D004A1128 /* SafariAWITClosePressed@2x.png */; };
+		066375FA1617493D004A1128 /* SafariAWITCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C91617493D004A1128 /* SafariAWITCloseRollover.png */; };
+		066375FB1617493D004A1128 /* SafarAWITCloseRollover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375CA1617493D004A1128 /* SafarAWITCloseRollover@2x.png */; };
+		066375FC1617493D004A1128 /* SafariIWATClose.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375CB1617493D004A1128 /* SafariIWATClose.png */; };
+		066375FD1617493D004A1128 /* SafariIWATClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375CC1617493D004A1128 /* SafariIWATClose@2x.png */; };
+		066375FE1617493D004A1128 /* SafariIWATClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375CD1617493D004A1128 /* SafariIWATClosePressed.png */; };
+		066375FF1617493D004A1128 /* SafariIWATClosePressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375CE1617493D004A1128 /* SafariIWATClosePressed@2x.png */; };
+		066376001617493D004A1128 /* SafariIWATCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375CF1617493D004A1128 /* SafariIWATCloseRollover.png */; };
+		066376011617493D004A1128 /* SafariIWATCloseRollover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D01617493D004A1128 /* SafariIWATCloseRollover@2x.png */; };
+		066376021617493D004A1128 /* SafariIWITClose.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D11617493D004A1128 /* SafariIWITClose.png */; };
+		066376031617493D004A1128 /* SafariIWITClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D21617493D004A1128 /* SafariIWITClose@2x.png */; };
+		066376041617493D004A1128 /* SafariIWITClosePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D31617493D004A1128 /* SafariIWITClosePressed.png */; };
+		066376051617493D004A1128 /* SafariIWITClosePressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D41617493D004A1128 /* SafariIWITClosePressed@2x.png */; };
+		066376061617493D004A1128 /* SafariIWITCloseRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D51617493D004A1128 /* SafariIWITCloseRollover.png */; };
+		066376071617493D004A1128 /* SafariIWITCloseRollover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D61617493D004A1128 /* SafariIWITCloseRollover@2x.png */; };
+		066376081617493D004A1128 /* SafariAWAddTabButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D71617493D004A1128 /* SafariAWAddTabButton.png */; };
+		066376091617493D004A1128 /* SafariAWAddTabButtonPushed.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D81617493D004A1128 /* SafariAWAddTabButtonPushed.png */; };
+		0663760A1617493D004A1128 /* SafariAWAddTabButtonRolloverPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375D91617493D004A1128 /* SafariAWAddTabButtonRolloverPlus.png */; };
+		0663760B1617493D004A1128 /* SafariAWATFill.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375DA1617493D004A1128 /* SafariAWATFill.png */; };
+		0663760C1617493D004A1128 /* SafariAWATFill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375DB1617493D004A1128 /* SafariAWATFill@2x.png */; };
+		0663760D1617493D004A1128 /* SafariAWATLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375DC1617493D004A1128 /* SafariAWATLeftCap.png */; };
+		0663760E1617493D004A1128 /* SafariAWATLeftCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375DD1617493D004A1128 /* SafariAWATLeftCap@2x.png */; };
+		0663760F1617493D004A1128 /* SafariAWATRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375DE1617493D004A1128 /* SafariAWATRightCap.png */; };
+		066376101617493D004A1128 /* SafariAWATRightCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375DF1617493D004A1128 /* SafariAWATRightCap@2x.png */; };
+		066376111617493D004A1128 /* SafariAWBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E01617493D004A1128 /* SafariAWBG.png */; };
+		066376121617493D004A1128 /* SafariAWITLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E11617493D004A1128 /* SafariAWITLeftCap.png */; };
+		066376131617493D004A1128 /* SafariAWITLeftCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E21617493D004A1128 /* SafariAWITLeftCap@2x.png */; };
+		066376141617493D004A1128 /* SafariAWITRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E31617493D004A1128 /* SafariAWITRightCap.png */; };
+		066376151617493D004A1128 /* SafariAWITRightCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E41617493D004A1128 /* SafariAWITRightCap@2x.png */; };
+		066376161617493D004A1128 /* SafariIWAddTabButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E51617493D004A1128 /* SafariIWAddTabButton.png */; };
+		066376171617493D004A1128 /* SafariIWATFill.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E61617493D004A1128 /* SafariIWATFill.png */; };
+		066376181617493D004A1128 /* SafariIWATLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E71617493D004A1128 /* SafariIWATLeftCap.png */; };
+		066376191617493D004A1128 /* SafariIWATLeftCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E81617493D004A1128 /* SafariIWATLeftCap@2x.png */; };
+		0663761A1617493D004A1128 /* SafariIWATRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375E91617493D004A1128 /* SafariIWATRightCap.png */; };
+		0663761B1617493D004A1128 /* SafariIWATRightCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375EA1617493D004A1128 /* SafariIWATRightCap@2x.png */; };
+		0663761C1617493D004A1128 /* SafariIWBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375EB1617493D004A1128 /* SafariIWBG.png */; };
+		0663761D1617493D004A1128 /* SafariIWITLeftCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375EC1617493D004A1128 /* SafariIWITLeftCap.png */; };
+		0663761E1617493D004A1128 /* SafariIWITLeftCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375ED1617493D004A1128 /* SafariIWITLeftCap@2x.png */; };
+		0663761F1617493D004A1128 /* SafariIWITRightCap.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375EE1617493D004A1128 /* SafariIWITRightCap.png */; };
+		066376201617493D004A1128 /* SafariIWITRightCap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375EF1617493D004A1128 /* SafariIWITRightCap@2x.png */; };
 		06789D661611EC180080FCFE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06789D651611EC180080FCFE /* QuartzCore.framework */; };
 		06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06789D741611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */; };
@@ -215,6 +264,55 @@
 		066375A116171EEF004A1128 /* MMTabBarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTabBarItem.h; sourceTree = "<group>"; };
 		066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTabViewItem+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
 		066375A416172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTabViewItem+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
+		066375BF1617493D004A1128 /* SafariAWATClose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWATClose.png; sourceTree = "<group>"; };
+		066375C01617493D004A1128 /* SafariAWATClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWATClose@2x.png"; sourceTree = "<group>"; };
+		066375C11617493D004A1128 /* SafariAWATClosePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWATClosePressed.png; sourceTree = "<group>"; };
+		066375C21617493D004A1128 /* SafariAWATClosePressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWATClosePressed@2x.png"; sourceTree = "<group>"; };
+		066375C31617493D004A1128 /* SafariAWATCloseRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWATCloseRollover.png; sourceTree = "<group>"; };
+		066375C41617493D004A1128 /* SafariAWATCloseRollover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWATCloseRollover@2x.png"; sourceTree = "<group>"; };
+		066375C51617493D004A1128 /* SafariAWITClose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWITClose.png; sourceTree = "<group>"; };
+		066375C61617493D004A1128 /* SafariAWITClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWITClose@2x.png"; sourceTree = "<group>"; };
+		066375C71617493D004A1128 /* SafariAWITClosePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWITClosePressed.png; sourceTree = "<group>"; };
+		066375C81617493D004A1128 /* SafariAWITClosePressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWITClosePressed@2x.png"; sourceTree = "<group>"; };
+		066375C91617493D004A1128 /* SafariAWITCloseRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWITCloseRollover.png; sourceTree = "<group>"; };
+		066375CA1617493D004A1128 /* SafarAWITCloseRollover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafarAWITCloseRollover@2x.png"; sourceTree = "<group>"; };
+		066375CB1617493D004A1128 /* SafariIWATClose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWATClose.png; sourceTree = "<group>"; };
+		066375CC1617493D004A1128 /* SafariIWATClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWATClose@2x.png"; sourceTree = "<group>"; };
+		066375CD1617493D004A1128 /* SafariIWATClosePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWATClosePressed.png; sourceTree = "<group>"; };
+		066375CE1617493D004A1128 /* SafariIWATClosePressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWATClosePressed@2x.png"; sourceTree = "<group>"; };
+		066375CF1617493D004A1128 /* SafariIWATCloseRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWATCloseRollover.png; sourceTree = "<group>"; };
+		066375D01617493D004A1128 /* SafariIWATCloseRollover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWATCloseRollover@2x.png"; sourceTree = "<group>"; };
+		066375D11617493D004A1128 /* SafariIWITClose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWITClose.png; sourceTree = "<group>"; };
+		066375D21617493D004A1128 /* SafariIWITClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWITClose@2x.png"; sourceTree = "<group>"; };
+		066375D31617493D004A1128 /* SafariIWITClosePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWITClosePressed.png; sourceTree = "<group>"; };
+		066375D41617493D004A1128 /* SafariIWITClosePressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWITClosePressed@2x.png"; sourceTree = "<group>"; };
+		066375D51617493D004A1128 /* SafariIWITCloseRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWITCloseRollover.png; sourceTree = "<group>"; };
+		066375D61617493D004A1128 /* SafariIWITCloseRollover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWITCloseRollover@2x.png"; sourceTree = "<group>"; };
+		066375D71617493D004A1128 /* SafariAWAddTabButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWAddTabButton.png; sourceTree = "<group>"; };
+		066375D81617493D004A1128 /* SafariAWAddTabButtonPushed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWAddTabButtonPushed.png; sourceTree = "<group>"; };
+		066375D91617493D004A1128 /* SafariAWAddTabButtonRolloverPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWAddTabButtonRolloverPlus.png; sourceTree = "<group>"; };
+		066375DA1617493D004A1128 /* SafariAWATFill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWATFill.png; sourceTree = "<group>"; };
+		066375DB1617493D004A1128 /* SafariAWATFill@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWATFill@2x.png"; sourceTree = "<group>"; };
+		066375DC1617493D004A1128 /* SafariAWATLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWATLeftCap.png; sourceTree = "<group>"; };
+		066375DD1617493D004A1128 /* SafariAWATLeftCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWATLeftCap@2x.png"; sourceTree = "<group>"; };
+		066375DE1617493D004A1128 /* SafariAWATRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWATRightCap.png; sourceTree = "<group>"; };
+		066375DF1617493D004A1128 /* SafariAWATRightCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWATRightCap@2x.png"; sourceTree = "<group>"; };
+		066375E01617493D004A1128 /* SafariAWBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWBG.png; sourceTree = "<group>"; };
+		066375E11617493D004A1128 /* SafariAWITLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWITLeftCap.png; sourceTree = "<group>"; };
+		066375E21617493D004A1128 /* SafariAWITLeftCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWITLeftCap@2x.png"; sourceTree = "<group>"; };
+		066375E31617493D004A1128 /* SafariAWITRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariAWITRightCap.png; sourceTree = "<group>"; };
+		066375E41617493D004A1128 /* SafariAWITRightCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariAWITRightCap@2x.png"; sourceTree = "<group>"; };
+		066375E51617493D004A1128 /* SafariIWAddTabButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWAddTabButton.png; sourceTree = "<group>"; };
+		066375E61617493D004A1128 /* SafariIWATFill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWATFill.png; sourceTree = "<group>"; };
+		066375E71617493D004A1128 /* SafariIWATLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWATLeftCap.png; sourceTree = "<group>"; };
+		066375E81617493D004A1128 /* SafariIWATLeftCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWATLeftCap@2x.png"; sourceTree = "<group>"; };
+		066375E91617493D004A1128 /* SafariIWATRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWATRightCap.png; sourceTree = "<group>"; };
+		066375EA1617493D004A1128 /* SafariIWATRightCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWATRightCap@2x.png"; sourceTree = "<group>"; };
+		066375EB1617493D004A1128 /* SafariIWBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWBG.png; sourceTree = "<group>"; };
+		066375EC1617493D004A1128 /* SafariIWITLeftCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWITLeftCap.png; sourceTree = "<group>"; };
+		066375ED1617493D004A1128 /* SafariIWITLeftCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWITLeftCap@2x.png"; sourceTree = "<group>"; };
+		066375EE1617493D004A1128 /* SafariIWITRightCap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SafariIWITRightCap.png; sourceTree = "<group>"; };
+		066375EF1617493D004A1128 /* SafariIWITRightCap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SafariIWITRightCap@2x.png"; sourceTree = "<group>"; };
 		06789D651611EC180080FCFE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		06789D711611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCell+MMTabBarViewExtensions.h"; sourceTree = "<group>"; };
 		06789D721611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCell+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
@@ -442,6 +540,55 @@
 		06B51CB3160B55C500153FA2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				066375BF1617493D004A1128 /* SafariAWATClose.png */,
+				066375C01617493D004A1128 /* SafariAWATClose@2x.png */,
+				066375C11617493D004A1128 /* SafariAWATClosePressed.png */,
+				066375C21617493D004A1128 /* SafariAWATClosePressed@2x.png */,
+				066375C31617493D004A1128 /* SafariAWATCloseRollover.png */,
+				066375C41617493D004A1128 /* SafariAWATCloseRollover@2x.png */,
+				066375C51617493D004A1128 /* SafariAWITClose.png */,
+				066375C61617493D004A1128 /* SafariAWITClose@2x.png */,
+				066375C71617493D004A1128 /* SafariAWITClosePressed.png */,
+				066375C81617493D004A1128 /* SafariAWITClosePressed@2x.png */,
+				066375C91617493D004A1128 /* SafariAWITCloseRollover.png */,
+				066375CA1617493D004A1128 /* SafarAWITCloseRollover@2x.png */,
+				066375CB1617493D004A1128 /* SafariIWATClose.png */,
+				066375CC1617493D004A1128 /* SafariIWATClose@2x.png */,
+				066375CD1617493D004A1128 /* SafariIWATClosePressed.png */,
+				066375CE1617493D004A1128 /* SafariIWATClosePressed@2x.png */,
+				066375CF1617493D004A1128 /* SafariIWATCloseRollover.png */,
+				066375D01617493D004A1128 /* SafariIWATCloseRollover@2x.png */,
+				066375D11617493D004A1128 /* SafariIWITClose.png */,
+				066375D21617493D004A1128 /* SafariIWITClose@2x.png */,
+				066375D31617493D004A1128 /* SafariIWITClosePressed.png */,
+				066375D41617493D004A1128 /* SafariIWITClosePressed@2x.png */,
+				066375D51617493D004A1128 /* SafariIWITCloseRollover.png */,
+				066375D61617493D004A1128 /* SafariIWITCloseRollover@2x.png */,
+				066375D71617493D004A1128 /* SafariAWAddTabButton.png */,
+				066375D81617493D004A1128 /* SafariAWAddTabButtonPushed.png */,
+				066375D91617493D004A1128 /* SafariAWAddTabButtonRolloverPlus.png */,
+				066375DA1617493D004A1128 /* SafariAWATFill.png */,
+				066375DB1617493D004A1128 /* SafariAWATFill@2x.png */,
+				066375DC1617493D004A1128 /* SafariAWATLeftCap.png */,
+				066375DD1617493D004A1128 /* SafariAWATLeftCap@2x.png */,
+				066375DE1617493D004A1128 /* SafariAWATRightCap.png */,
+				066375DF1617493D004A1128 /* SafariAWATRightCap@2x.png */,
+				066375E01617493D004A1128 /* SafariAWBG.png */,
+				066375E11617493D004A1128 /* SafariAWITLeftCap.png */,
+				066375E21617493D004A1128 /* SafariAWITLeftCap@2x.png */,
+				066375E31617493D004A1128 /* SafariAWITRightCap.png */,
+				066375E41617493D004A1128 /* SafariAWITRightCap@2x.png */,
+				066375E51617493D004A1128 /* SafariIWAddTabButton.png */,
+				066375E61617493D004A1128 /* SafariIWATFill.png */,
+				066375E71617493D004A1128 /* SafariIWATLeftCap.png */,
+				066375E81617493D004A1128 /* SafariIWATLeftCap@2x.png */,
+				066375E91617493D004A1128 /* SafariIWATRightCap.png */,
+				066375EA1617493D004A1128 /* SafariIWATRightCap@2x.png */,
+				066375EB1617493D004A1128 /* SafariIWBG.png */,
+				066375EC1617493D004A1128 /* SafariIWITLeftCap.png */,
+				066375ED1617493D004A1128 /* SafariIWITLeftCap@2x.png */,
+				066375EE1617493D004A1128 /* SafariIWITRightCap.png */,
+				066375EF1617493D004A1128 /* SafariIWITRightCap@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -651,6 +798,55 @@
 				0634F097160A0C8A00A6C86A /* TabNewMetal.png in Resources */,
 				0634F098160A0C8A00A6C86A /* TabNewMetalPressed.png in Resources */,
 				0634F099160A0C8A00A6C86A /* TabNewMetalRollover.png in Resources */,
+				066375F01617493D004A1128 /* SafariAWATClose.png in Resources */,
+				066375F11617493D004A1128 /* SafariAWATClose@2x.png in Resources */,
+				066375F21617493D004A1128 /* SafariAWATClosePressed.png in Resources */,
+				066375F31617493D004A1128 /* SafariAWATClosePressed@2x.png in Resources */,
+				066375F41617493D004A1128 /* SafariAWATCloseRollover.png in Resources */,
+				066375F51617493D004A1128 /* SafariAWATCloseRollover@2x.png in Resources */,
+				066375F61617493D004A1128 /* SafariAWITClose.png in Resources */,
+				066375F71617493D004A1128 /* SafariAWITClose@2x.png in Resources */,
+				066375F81617493D004A1128 /* SafariAWITClosePressed.png in Resources */,
+				066375F91617493D004A1128 /* SafariAWITClosePressed@2x.png in Resources */,
+				066375FA1617493D004A1128 /* SafariAWITCloseRollover.png in Resources */,
+				066375FB1617493D004A1128 /* SafarAWITCloseRollover@2x.png in Resources */,
+				066375FC1617493D004A1128 /* SafariIWATClose.png in Resources */,
+				066375FD1617493D004A1128 /* SafariIWATClose@2x.png in Resources */,
+				066375FE1617493D004A1128 /* SafariIWATClosePressed.png in Resources */,
+				066375FF1617493D004A1128 /* SafariIWATClosePressed@2x.png in Resources */,
+				066376001617493D004A1128 /* SafariIWATCloseRollover.png in Resources */,
+				066376011617493D004A1128 /* SafariIWATCloseRollover@2x.png in Resources */,
+				066376021617493D004A1128 /* SafariIWITClose.png in Resources */,
+				066376031617493D004A1128 /* SafariIWITClose@2x.png in Resources */,
+				066376041617493D004A1128 /* SafariIWITClosePressed.png in Resources */,
+				066376051617493D004A1128 /* SafariIWITClosePressed@2x.png in Resources */,
+				066376061617493D004A1128 /* SafariIWITCloseRollover.png in Resources */,
+				066376071617493D004A1128 /* SafariIWITCloseRollover@2x.png in Resources */,
+				066376081617493D004A1128 /* SafariAWAddTabButton.png in Resources */,
+				066376091617493D004A1128 /* SafariAWAddTabButtonPushed.png in Resources */,
+				0663760A1617493D004A1128 /* SafariAWAddTabButtonRolloverPlus.png in Resources */,
+				0663760B1617493D004A1128 /* SafariAWATFill.png in Resources */,
+				0663760C1617493D004A1128 /* SafariAWATFill@2x.png in Resources */,
+				0663760D1617493D004A1128 /* SafariAWATLeftCap.png in Resources */,
+				0663760E1617493D004A1128 /* SafariAWATLeftCap@2x.png in Resources */,
+				0663760F1617493D004A1128 /* SafariAWATRightCap.png in Resources */,
+				066376101617493D004A1128 /* SafariAWATRightCap@2x.png in Resources */,
+				066376111617493D004A1128 /* SafariAWBG.png in Resources */,
+				066376121617493D004A1128 /* SafariAWITLeftCap.png in Resources */,
+				066376131617493D004A1128 /* SafariAWITLeftCap@2x.png in Resources */,
+				066376141617493D004A1128 /* SafariAWITRightCap.png in Resources */,
+				066376151617493D004A1128 /* SafariAWITRightCap@2x.png in Resources */,
+				066376161617493D004A1128 /* SafariIWAddTabButton.png in Resources */,
+				066376171617493D004A1128 /* SafariIWATFill.png in Resources */,
+				066376181617493D004A1128 /* SafariIWATLeftCap.png in Resources */,
+				066376191617493D004A1128 /* SafariIWATLeftCap@2x.png in Resources */,
+				0663761A1617493D004A1128 /* SafariIWATRightCap.png in Resources */,
+				0663761B1617493D004A1128 /* SafariIWATRightCap@2x.png in Resources */,
+				0663761C1617493D004A1128 /* SafariIWBG.png in Resources */,
+				0663761D1617493D004A1128 /* SafariIWITLeftCap.png in Resources */,
+				0663761E1617493D004A1128 /* SafariIWITLeftCap@2x.png in Resources */,
+				0663761F1617493D004A1128 /* SafariIWITRightCap.png in Resources */,
+				066376201617493D004A1128 /* SafariIWITRightCap@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,9 +27,18 @@
 
 @implementation MMSafariTabStyle
 
-StaticImage(TabClose_Front)
-StaticImage(TabClose_Front_Pressed)
-StaticImage(TabClose_Front_Rollover)
+StaticImage(SafariAWATClose)
+StaticImage(SafariAWATClosePressed)
+StaticImage(SafariAWATCloseRollover)
+StaticImage(SafariAWITClose)
+StaticImage(SafariAWITClosePressed)
+StaticImage(SafariAWITCloseRollover)
+StaticImage(SafariIWATClose)
+StaticImage(SafariIWATClosePressed)
+StaticImage(SafariIWATCloseRollover)
+StaticImage(SafariIWITClose)
+StaticImage(SafariIWITClosePressed)
+StaticImage(SafariIWITCloseRollover)
 StaticImage(TabClose_Dirty)
 StaticImage(TabClose_Dirty_Pressed)
 StaticImage(TabClose_Dirty_Rollover)
@@ -147,23 +156,47 @@ StaticImage(SafariIWITRightCap)
 
 - (NSImage *)closeButtonImageOfType:(MMCloseButtonImageType)type forTabCell:(MMTabBarButtonCell *)cell
 {
-    switch (type) {
-        case MMCloseButtonImageTypeStandard:
-            return _staticTabClose_FrontImage();
-        case MMCloseButtonImageTypeRollover:
-            return _staticTabClose_Front_RolloverImage();
-        case MMCloseButtonImageTypePressed:
-            return _staticTabClose_Front_PressedImage();
-            
-        case MMCloseButtonImageTypeDirty:
-            return _staticTabClose_DirtyImage();
-        case MMCloseButtonImageTypeDirtyRollover:
-            return _staticTabClose_Dirty_RolloverImage();
-        case MMCloseButtonImageTypeDirtyPressed:
-            return _staticTabClose_Dirty_PressedImage();
-            
-        default:
-            break;
+    BOOL activeWindow = [[[cell controlView] enclosingTabBarView] isWindowActive];
+    BOOL activeTab = ([cell state] == NSOnState);
+
+    if (activeWindow) {
+        switch (type) {
+            case MMCloseButtonImageTypeStandard:
+                return activeTab?_staticSafariAWATCloseImage():_staticSafariAWITCloseImage();
+            case MMCloseButtonImageTypeRollover:
+                return activeTab?_staticSafariAWATCloseRolloverImage():_staticSafariAWITCloseRolloverImage();
+            case MMCloseButtonImageTypePressed:
+                return activeTab?_staticSafariAWATClosePressedImage():_staticSafariAWITClosePressedImage();
+                
+            case MMCloseButtonImageTypeDirty:
+                return _staticTabClose_DirtyImage();
+            case MMCloseButtonImageTypeDirtyRollover:
+                return _staticTabClose_Dirty_RolloverImage();
+            case MMCloseButtonImageTypeDirtyPressed:
+                return _staticTabClose_Dirty_PressedImage();
+                
+            default:
+                break;
+        }
+    } else {
+        switch (type) {
+            case MMCloseButtonImageTypeStandard:
+                return activeTab?_staticSafariIWATCloseImage():_staticSafariIWITCloseImage();
+            case MMCloseButtonImageTypeRollover:
+                return activeTab?_staticSafariIWATCloseRolloverImage():_staticSafariIWITCloseRolloverImage();
+            case MMCloseButtonImageTypePressed:
+                return activeTab?_staticSafariIWATClosePressedImage():_staticSafariIWITClosePressedImage();
+                
+            case MMCloseButtonImageTypeDirty:
+                return _staticTabClose_DirtyImage();
+            case MMCloseButtonImageTypeDirtyRollover:
+                return _staticTabClose_Dirty_RolloverImage();
+            case MMCloseButtonImageTypeDirtyPressed:
+                return _staticTabClose_Dirty_PressedImage();
+                
+            default:
+                break;
+        }        
     }
 }
 
@@ -182,6 +215,9 @@ StaticImage(SafariIWITRightCap)
 - (NSRect)closeButtonRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell {
     
     NSRect rect = [cell _closeButtonRectForBounds:theRect];
+    if (NSEqualRects(rect,NSZeroRect))
+        return rect;
+    
     rect.origin.y += 1;
     rect.size.height -= 1;
     return rect;
@@ -190,6 +226,8 @@ StaticImage(SafariIWITRightCap)
 - (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView {
 
     NSRect rect = [tabBarView _overflowButtonRect];
+    if (NSEqualRects(rect,NSZeroRect))
+        return rect;
     
     rect.origin.y += 1.0f;
     rect.size.height -= 1.0f;
