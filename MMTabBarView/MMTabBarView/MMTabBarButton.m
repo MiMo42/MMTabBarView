@@ -255,6 +255,10 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     [self updateCell];
 }
 
+- (void)updateImages {
+    [[self cell] updateImages];
+}
+
 #pragma mark -
 #pragma mark Bindings
 

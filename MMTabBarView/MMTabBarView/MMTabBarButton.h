@@ -105,6 +105,8 @@
 - (BOOL)isProcessing;
 - (void)setIsProcessing:(BOOL)newState;
 
+- (void)updateImages;
+
 #pragma Close Button Support
 
 - (BOOL)shouldDisplayCloseButton;
