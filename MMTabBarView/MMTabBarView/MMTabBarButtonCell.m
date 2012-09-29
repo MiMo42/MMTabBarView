@@ -106,6 +106,14 @@
     return [[self controlView] tabBarView];
 }
 
+- (void)calcDrawInfo:(NSRect)aRect {
+
+    [super calcDrawInfo:aRect];
+    
+        // update contro's sub buttons (position and images)
+    [self _updateSubButtons];
+}
+
 #pragma mark -
 #pragma mark Accessors
 
@@ -197,9 +205,16 @@
     
         if (newState != _isEdited) {
             _isEdited = newState;
-            [self _updateCloseButtonImages];
+            [self _updateCloseButton];
         }
     }
+}
+
+- (void)setState:(NSInteger)value {
+
+    [super setState:value];
+    
+    [self _updateSubButtons];
 }
 
 #pragma mark -
@@ -523,7 +538,6 @@
 #pragma mark > Sub Buttons
 
 - (void)_updateSubButtons {
-    [self _updateCloseButtonImages];
     [self _updateCloseButton];
     [self _updateIndicator];
 }
@@ -544,22 +558,44 @@
 }
 
 - (void)_updateCloseButton {
+
+    MMTabBarView *tabBarView = [self tabBarView];
     MMTabBarButton *button = [self controlView];
     MMRolloverButton *closeButton = [button closeButton];
 
-    [closeButton setHidden:!_hasCloseButton];
-    [closeButton setFrame:[self closeButtonRectForBounds:[button bounds]]];
+    [self _updateCloseButtonImages];
+    
+        // adjust visibility and position of close button
+    if ([self shouldDisplayCloseButton] && ![tabBarView isTabBarHidden]) {
+        NSRect newFrame = [self closeButtonRectForBounds:[button bounds]];
+        BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
+        [[self closeButton] setHidden:shouldHide];
+        if (!shouldHide)
+            [[self closeButton] setFrame:newFrame];
+    } else {
+        [closeButton setHidden:YES];
+    }
 }
 
 - (void)_updateIndicator {
 
+    MMTabBarView *tabBarView = [self tabBarView];
     MMTabBarButton *button = [self controlView];
     MMProgressIndicator *indicator = [button indicator];
+
+        // adjust visibility and position of process indicator
+    if ([self isProcessing] && ![tabBarView isTabBarHidden]) {
+        NSRect newFrame = [self indicatorRectForBounds:[button bounds]];
+        BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
+        [[self indicator] setHidden:shouldHide];
+        if (!shouldHide)
+            [[self indicator] setFrame:newFrame];
     
-    [indicator setHidden:!_isProcessing];
-    [indicator setFrame:[self indicatorRectForBounds:[button bounds]]];
+    } else {
+        [indicator setHidden:YES];
+    }
     
-    if (_isProcessing)
+    if (_isProcessing && ![indicator isHidden])
         [indicator startAnimation:nil];
     else
         [indicator stopAnimation:nil];
@@ -974,7 +1010,8 @@
 - (void)_drawCloseButtonWithFrame:(NSRect)frame inView:(NSView *)controlView {
 
     // we draw nothing by default
-    
+    [[NSColor redColor] set];
+    NSRectFill([self closeButtonRectForBounds:frame]);
         // update hidden state of close button
     if ([[self tabBarView] onlyShowCloseOnHover]) {
         [[self closeButton] setHidden:![self mouseHovered]];

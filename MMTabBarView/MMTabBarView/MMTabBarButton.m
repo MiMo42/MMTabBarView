@@ -77,29 +77,11 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
 
-    MMTabBarView *tabBarView = [self tabBarView];
-
-	// adjust position of close button
-    if ([[self cell] shouldDisplayCloseButton] && ![tabBarView isTabBarHidden]) {
-    
-        NSRect newFrame = [self _closeButtonRectForBounds:[self bounds]];
-        BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
-        [[self closeButton] setHidden:shouldHide];
-        if (!shouldHide)
-            [[self closeButton] setFrame:newFrame];
-    }
-        
-	// adjust position of process indicator
-    if ([[self cell] isProcessing] && ![tabBarView isTabBarHidden]) {
-    
-        NSRect newFrame = [self _indicatorRectForBounds:[self bounds]];
-        BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
-        [[self indicator] setHidden:shouldHide];
-        if (!shouldHide)
-            [[self indicator] setFrame:newFrame];
-    }
-
     [super resizeSubviewsWithOldSize:oldSize];
+    
+        // Let cell update (invokes -calcDrawInfo:)
+        // Cell will update control's sub buttons too.
+    [self calcSize];
 }
 
 - (NSMenu *)menuForEvent:(NSEvent *)event {
