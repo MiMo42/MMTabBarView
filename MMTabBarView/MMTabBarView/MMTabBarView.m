@@ -27,6 +27,7 @@
 #import "MMTabPasteboardItem.h"
 #import "MMSlideButtonsAnimation.h"
 #import "NSView+MMTabBarViewExtensions.h"
+#import "MMTabBarItem.h"
 
 #define DIVIDER_WIDTH 3
 
@@ -1131,20 +1132,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([keyPath isEqualToString:@"identifier"]) {
 //        id oldIdentifier = [change objectForKey: NSKeyValueChangeOldKey];
         
-        for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
-            if ([aButton tabViewItem] == object) {
-/*
-                // unbind the old value first
-                NSArray *selectors = [NSArray arrayWithObjects: @"isProcessing", @"icon", @"objectCount", @"countColor", @"largeImage", @"isEdited", nil];
-                for (NSString *selector in selectors) {
-                    if ([oldIdentifier respondsToSelector: NSSelectorFromString(selector)]) {
-                        [oldIdentifier unbind: selector];
-                        [oldIdentifier removeObserver:aButton forKeyPath:selector];
-                    }
-                }
-*/                
-                [self _bindPropertiesOfAttachedButton:aButton andTabViewItem:object];
-            }
+            // update binding
+        MMAttachedTabBarButton *aButton = [self attachedButtonForTabViewItem:object];
+        if (aButton) {
+            [self _unbindPropertiesOfAttachedButton:aButton];
+            [self _bindPropertiesOfAttachedButton:aButton andTabViewItem:object];
         }
     } else if (object == [self window] && [keyPath isEqualToString:@"toolbar.visible"]) {
     
@@ -2581,69 +2573,160 @@ NSLog(@"did select:%@",tabViewItem);
 	}
 }
 
+- (id <MMTabBarItem>)_dataSourceForSelector:(SEL)sel withTabViewItem:(NSTabViewItem *)item {
+
+    id <MMTabBarItem> dataSource = nil;
+    
+    if ([item identifier] &&
+        [[item identifier] conformsToProtocol:@protocol(MMTabBarItem)] &&
+        [[item identifier] respondsToSelector:sel]) {
+        dataSource = [item identifier];
+    } else if ([item conformsToProtocol:@protocol(MMTabBarItem)] &&
+               [item respondsToSelector:sel]) {
+        dataSource = (id <MMTabBarItem>)item;
+    }
+    
+    return dataSource;
+}
+
 - (void)_bindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton andTabViewItem:(NSTabViewItem *)item {
+
+    id <MMTabBarItem> dataSource = nil;
+    
+        // title binding
+    dataSource = [self _dataSourceForSelector:@selector(title) withTabViewItem:item];
+    if (!dataSource) {
+        dataSource = [self _dataSourceForSelector:@selector(label) withTabViewItem:item];
+        if (dataSource)
+            [aButton bind:@"title" toObject:dataSource withKeyPath:@"label" options:nil];
+    } else {
+        [aButton bind:@"title" toObject:dataSource withKeyPath:@"title" options:nil];
+    }
+    
+        // progress indicator binding
+    [[aButton indicator] setHidden:YES];
+    dataSource = [self _dataSourceForSelector:@selector(isProcessing) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"isProcessing" toObject:dataSource withKeyPath:@"isProcessing" options:nil];
+
+        // icon indicator binding
+	[aButton setIcon:nil];
+    dataSource = [self _dataSourceForSelector:@selector(icon) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"icon" toObject:dataSource withKeyPath:@"icon" options:nil];
+    
+        // object count binding
+	[aButton setObjectCount:0];
+    dataSource = [self _dataSourceForSelector:@selector(objectCount) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"objectCount" toObject:dataSource withKeyPath:@"objectCount" options:nil];
+    
+        // object count color binding
+	[aButton setObjectCountColor:nil];
+    dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
+    
+        // large image binding
+   	[aButton setLargeImage:nil];
+    dataSource = [self _dataSourceForSelector:@selector(largeImage) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"largeImage" toObject:dataSource withKeyPath:@"largeImage" options:nil];
+
+        // edited state binding
+	[aButton setIsEdited:NO];
+    dataSource = [self _dataSourceForSelector:@selector(isEdited) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"isEdited" toObject:dataSource withKeyPath:@"isEdited" options:nil];
+
+        // has close button binding
+	[aButton setHasCloseButton:NO];
+    dataSource = [self _dataSourceForSelector:@selector(hasCloseButton) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"hasCloseButton" toObject:dataSource withKeyPath:@"hasCloseButton" options:nil];
+    
+/*
+    id <MMTabBarItem> dataSource = nil;
+    
+    if ([item identifier] && [[item identifier] conformsToProtocol:@protocol(MMTabBarItem)]) {
+        dataSource = [item identifier];
+    } else if ([item conformsToProtocol:@protocol(MMTabBarItem)]) {
+        dataSource = (id <MMTabBarItem>)item;
+    }
+    
+        // bind the title to the represented object's title (if it exists)
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(title)]) {
+            [aButton bind:@"title" toObject:dataSource withKeyPath:@"title" options:nil];
+		} else {
+                // bind my string value to the label on the represented tab
+            [aButton bind:@"title" toObject:item withKeyPath:@"label" options:nil];
+        }
+	} else {
+            // bind my string value to the label on the represented tab
+        [aButton bind:@"title" toObject:item withKeyPath:@"label" options:nil];
+    }
+    
         // bind the indicator to the represented object's status (if it exists)
 	[[aButton indicator] setHidden:YES];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(isProcessing)]) {
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(isProcessing)]) {
         
-            [aButton bind:@"isProcessing" toObject:[item identifier] withKeyPath:@"isProcessing" options:nil];           
+            [aButton bind:@"isProcessing" toObject:dataSource withKeyPath:@"isProcessing" options:nil];           
 		}
 	}
 
         // bind for the existence of an icon
 	[aButton setIcon:nil];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(icon)]) {
-            [aButton bind:@"icon" toObject:[item identifier] withKeyPath:@"icon" options:nil];
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(icon)]) {
+            [aButton bind:@"icon" toObject:dataSource withKeyPath:@"icon" options:nil];
 		}
 	}
 
         // bind for the existence of a counter
 	[aButton setObjectCount:0];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(objectCount)]) {
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(objectCount)]) {
         
             NSDictionary *bindingObjects = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                 [NSNumber numberWithBool:YES],NSConditionallySetsHiddenBindingOption,
                 nil];
         
-			[aButton bind:@"objectCount" toObject:[item identifier] withKeyPath:@"objectCount" options:bindingObjects];
+			[aButton bind:@"objectCount" toObject:dataSource withKeyPath:@"objectCount" options:bindingObjects];
 		}
 	}
 
         // bind for the color of a counter
 	[aButton setObjectCountColor:nil];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(objectCountColor)]) {
-			[aButton bind:@"objectCountColor" toObject:[item identifier] withKeyPath:@"objectCountColor" options:nil];
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(objectCountColor)]) {
+			[aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
 		}
 	}
 
         // bind for a large image
 	[aButton setLargeImage:nil];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(largeImage)]) {
-            [aButton bind:@"largeImage" toObject:[item identifier] withKeyPath:@"largeImage" options:nil];        
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(largeImage)]) {
+            [aButton bind:@"largeImage" toObject:dataSource withKeyPath:@"largeImage" options:nil];        
 		}
 	}
 
 	[aButton setIsEdited:NO];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(isEdited)]) {
-			[aButton bind:@"isEdited" toObject:[item identifier] withKeyPath:@"isEdited" options:nil];
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(isEdited)]) {
+			[aButton bind:@"isEdited" toObject:dataSource withKeyPath:@"isEdited" options:nil];
 		}
 	}
     
 	[aButton setHasCloseButton:NO];
-	if ([item identifier] != nil) {
-		if ([[[aButton tabViewItem] identifier] respondsToSelector:@selector(hasCloseButton)]) {
-			[aButton bind:@"hasCloseButton" toObject:[item identifier] withKeyPath:@"hasCloseButton" options:nil];
+	if (dataSource != nil) {
+		if ([dataSource respondsToSelector:@selector(hasCloseButton)]) {
+			[aButton bind:@"hasCloseButton" toObject:dataSource withKeyPath:@"hasCloseButton" options:nil];
 		}
 	}    
-
-        // bind my string value to the label on the represented tab
-	[aButton bind:@"title" toObject:item withKeyPath:@"label" options:nil];
+*/    
 }
 
 - (void)_unbindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton {
