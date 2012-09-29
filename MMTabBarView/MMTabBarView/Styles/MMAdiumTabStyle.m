@@ -188,8 +188,7 @@
         resultRect.origin.y += 1;
         resultRect.size.height -= MARGIN_Y + 2;
     } else {
-        resultRect = NSInsetRect(theRect, Adium_MARGIN_X, MARGIN_Y);
-        resultRect.size.height -= 1;
+        resultRect = NSInsetRect(theRect, Adium_MARGIN_X, 2.0);
     }
     
     return resultRect;
@@ -347,10 +346,8 @@
 }
 
 - (NSRect)indicatorRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell {
-
-    MMTabBarButton *controlView = [cell controlView];
     
-    if ([[controlView indicator] isHidden]) {
+    if (![cell isProcessing]) {
         return NSZeroRect;
     }
     
@@ -586,50 +583,47 @@
 - (void)drawIconOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-    
-    MMRolloverButton *closeButton = [cell closeButton];
-    MMRolloverButtonCell *closeButtonCell = [closeButton cell];
-    
+        
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-        if (![cell shouldDisplayCloseButton] || ([cell shouldDisplayCloseButton] && ![closeButton mouseHovered] && ![closeButtonCell mouseHovered])) {
-            [cell _drawIconWithFrame:frame inView:controlView];
+  
+        if (![cell shouldDisplayCloseButton] || ![cell mouseHovered]) {
+            [cell _drawIconWithFrame:frame inView:controlView];        
         }
     } else {
         if (![cell largeImage])
             [cell _drawIconWithFrame:frame inView:controlView];
     }
 }
-/*
-- (void)drawCloseButtonOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
-    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-
-    MMRolloverButton *closeButton = [cell closeButton];
-    MMRolloverButtonCell *closeButtonCell = [closeButton cell];
-    
-    if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-    
-        if (![cell icon] || ([cell icon] && [cell shouldDisplayCloseButton] && ([closeButton mouseHovered] || [closeButtonCell mouseHovered])))
-            [cell _drawCloseButtonWithFrame:frame inView:controlView];
-    } else {
-    
-        if (![cell showObjectCount] || ([cell showObjectCount] && ([closeButton mouseHovered] || [closeButtonCell mouseHovered])))
-            [cell _drawCloseButtonWithFrame:frame inView:controlView];
-    }
-}
-*/
 - (void)drawObjectCounterOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
-
-    MMRolloverButton *closeButton = [cell closeButton];
-    MMRolloverButtonCell *closeButtonCell = [closeButton cell];
      
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
         [cell _drawObjectCounterWithFrame:frame inView:controlView];
     } else {
-        if (![cell shouldDisplayCloseButton] || ([cell shouldDisplayCloseButton] && ![closeButton mouseHovered] && ![closeButtonCell mouseHovered])) {
+        if (![cell shouldDisplayCloseButton] || ([cell shouldDisplayCloseButton] && ![cell mouseHovered])) {
             [cell _drawObjectCounterWithFrame:frame inView:controlView];
+        }
+    }
+}
+
+- (void)drawCloseButtonOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView {
+
+    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    MMRolloverButton *closeButton = [cell closeButton];
+
+    if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
+    
+        if ([cell icon]) {
+            // always act like if tab bar view's onlyShowCloseOnHover would be set to YES
+            [closeButton setHidden:![cell mouseHovered]];
+        }
+    } else {
+    
+        if ([cell showObjectCount]) {
+            // always act like if tab bar view's onlyShowCloseOnHover would be set to YES
+            [closeButton setHidden:![cell mouseHovered]];            
         }
     }
 }
