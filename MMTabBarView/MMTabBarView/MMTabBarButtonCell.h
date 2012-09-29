@@ -81,6 +81,8 @@ typedef enum MMTabStateMask : NSUInteger {
 
 @property (assign) MMTabStateMask tabState;
 
++ (NSColor *)defaultObjectCountColor;
+
 - (MMTabBarButton *)controlView;
 - (void)setControlView:(MMTabBarButton *)aView;
 

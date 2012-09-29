@@ -65,6 +65,10 @@
 @synthesize isProcessing = _isProcessing;
 @synthesize tabState = _tabState;
 
++ (NSColor *)defaultObjectCountColor {
+    return [NSColor colorWithCalibratedWhite:0.3 alpha:0.45];
+}
+
 - (id)init {
 	if ((self = [super init])) {
     
@@ -74,7 +78,7 @@
         _icon = nil;
         _largeImage = nil;
         _showObjectCount = NO;
-		_objectCountColor = nil;
+		_objectCountColor = [[NSColor colorWithCalibratedWhite:0.3 alpha:0.45] retain];
 		_isEdited = NO;
         _tabState = 0;
         
@@ -993,7 +997,7 @@
 - (void)_drawObjectCounterWithFrame:(NSRect)frame inView:(NSView *)controlView {
 
     // set color
-    [[self objectCountColor] ?: [NSColor colorWithCalibratedWhite:0.3 alpha:0.45] set];
+    [[self objectCountColor] ?: [[self class] defaultObjectCountColor] set];
     
     // get rect
     NSRect myRect = [self objectCounterRectForBounds:frame];
