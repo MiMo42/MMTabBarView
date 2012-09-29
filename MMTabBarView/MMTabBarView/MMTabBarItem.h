@@ -10,4 +10,16 @@
 
 @protocol MMTabBarItem <NSObject>
 
+@optional
+
+@property (copy)   NSString     *title;
+@property (retain) NSImage      *icon;
+@property (retain) NSImage      *largeImage;
+@property (assign) NSInteger    objectCount;
+@property (retain) NSColor      *objectCountColor;
+
+@property (assign) BOOL isProcessing;
+@property (assign) BOOL isEdited;
+@property (assign) BOOL hasCloseButton;
+
 @end
