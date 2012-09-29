@@ -8,9 +8,9 @@
 
 #import "DemoFakeModel.h"
 
-
 @implementation DemoFakeModel
 
+@synthesize title = _title;
 @synthesize largeImage = _largeImage;
 @synthesize icon = _icon;
 @synthesize iconName = _iconName;
@@ -21,7 +21,7 @@
 @synthesize hasCloseButton = _hasCloseButton;
 
 - (id)init {
-	if ((self = [super init])) {
+	if (self = [super init]) {
 		_isProcessing = NO;
 		_icon = nil;
 		_iconName = nil;
@@ -29,12 +29,14 @@
 		_objectCount = 2;
 		_isEdited = NO;
         _hasCloseButton = YES;
+        _title = [@"Untitled" retain];
 	}
 	return self;
 }
 
 -(void)dealloc {
     
+    [_title release], _title = nil;
     [_icon release], _icon = nil;
     [_iconName release], _iconName = nil;
     [_largeImage release], _largeImage = nil;

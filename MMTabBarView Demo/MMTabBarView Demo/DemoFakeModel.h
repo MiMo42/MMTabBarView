@@ -8,7 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface DemoFakeModel : NSObject {
+#import <MMTabBarView/MMTabBarItem.h>
+
+@interface DemoFakeModel : NSObject <MMTabBarItem> {
+    NSString    *_title;
 	BOOL        _isProcessing;
 	NSImage     *_icon;
     NSImage     *_largeImage;
@@ -18,14 +21,15 @@
     BOOL        _hasCloseButton;
 }
 
-@property (retain) NSImage *largeImage;
-@property (retain) NSImage *icon;
+@property (copy)   NSString *title;
+@property (retain) NSImage  *largeImage;
+@property (retain) NSImage  *icon;
 @property (retain) NSString *iconName;
 
-@property (assign) BOOL isProcessing;
+@property (assign) BOOL      isProcessing;
 @property (assign) NSInteger objectCount;
-@property (assign) BOOL isEdited;
-@property (assign) BOOL hasCloseButton;
+@property (assign) BOOL      isEdited;
+@property (assign) BOOL      hasCloseButton;
 
 // designated initializer
 - (id)init;
