@@ -44,6 +44,8 @@
 
 - (void)addDefaultTabs;
 
+- (void)addNewTabWithTitle:(NSString *)aTitle;
+
 // UI
 - (IBAction)addNewTab:(id)sender;
 - (IBAction)closeTab:(id)sender;

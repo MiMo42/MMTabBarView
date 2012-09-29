@@ -75,22 +75,42 @@
 	[drawer toggle:self];
 }
 
+- (void)addNewTabWithTitle:(NSString *)aTitle {
+
+	DemoFakeModel *newModel = [[DemoFakeModel alloc] init];
+    [newModel setTitle:aTitle];
+	NSTabViewItem *newItem = [[NSTabViewItem alloc] initWithIdentifier:newModel];
+	[tabView addTabViewItem:newItem];
+    [tabView selectTabViewItem:newItem];    
+    [newModel release];
+    [newItem release];
+}
+
 - (void)addDefaultTabs {
+
+    [self addNewTabWithTitle:@"Tab"];
+    [self addNewTabWithTitle:@"Bar"];
+    [self addNewTabWithTitle:@"View"];        
+/*
 	[self addNewTab:self];
 	[self addNewTab:self];
 	[self addNewTab:self];
 	[[tabView tabViewItemAtIndex:0] setLabel:@"Tab"];
 	[[tabView tabViewItemAtIndex:1] setLabel:@"Bar"];
 	[[tabView tabViewItemAtIndex:2] setLabel:@"Control"];
+*/    
 }
 
 - (IBAction)addNewTab:(id)sender {
+    [self addNewTabWithTitle:@"Untitled"];
+/*
 	DemoFakeModel *newModel = [[DemoFakeModel alloc] init];
+    [newModel setTitle:@"Untitled"];
 	NSTabViewItem *newItem = [[(NSTabViewItem*)[NSTabViewItem alloc] initWithIdentifier:newModel] autorelease];
-	[newItem setLabel:@"Untitled"];
 	[tabView addTabViewItem:newItem];
-	[tabView selectTabViewItem:newItem]; // this is optional, but expected behavior
+ 	[tabView selectTabViewItem:newItem]; // this is optional, but expected behavior
 	[newModel release];
+*/
 }
 
 - (IBAction)closeTab:(id)sender {
@@ -152,7 +172,8 @@
 }
 
 - (IBAction)setTabLabel:(id)sender {
-	[[tabView selectedTabViewItem] setLabel:[sender stringValue]];
+
+	[[[tabView selectedTabViewItem] identifier] setValue:[sender stringValue] forKeyPath:@"title"];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -413,6 +434,10 @@
 			[iconButton selectItem:[[iconButton menu] itemWithTitle:@"None"]];
 		}
 	}
+    
+    if ([[tabViewItem identifier] respondsToSelector:@selector(title)]) {
+        [tabField setStringValue:[[tabViewItem identifier] title]];
+    }
 }
 
 - (BOOL)tabView:(NSTabView *)aTabView shouldCloseTabViewItem:(NSTabViewItem *)tabViewItem {
