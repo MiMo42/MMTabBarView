@@ -46,6 +46,9 @@
 - (CGFloat)minimumWidthOfTabCell:(MMTabBarButtonCell *)cell;
 - (CGFloat)desiredWidthOfTabCell:(MMTabBarButtonCell *)cell;
 
+// Update Buttons
+- (BOOL)updateCloseButton:(MMRolloverButton *)closeButton ofTabCell:(MMTabBarButtonCell *)cell; // returning NO will hide the close button
+
 // Providing Images
 - (NSImage *)closeButtonImageOfType:(MMCloseButtonImageType)type forTabCell:(MMTabBarButtonCell *)cell;
 
