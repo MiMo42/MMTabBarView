@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MMTabStyle.h"
+#import "NSBezierPath+MMTabBarViewExtensions.h"
 
 @interface MMLiveChatTabStyle : NSObject <MMTabStyle> {
 	NSImage				*liveChatCloseButton;
@@ -23,5 +24,10 @@
 }
 
 @property (assign) CGFloat leftMarginForTabBarView;
+
+#pragma mark Live Chat Tab Style Drawings
+
+// the funnel point for modify tab button drawing in a subclass
+- (void)drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
 
 @end
