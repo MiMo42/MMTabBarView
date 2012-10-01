@@ -79,9 +79,16 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 
     [super resizeSubviewsWithOldSize:oldSize];
     
+        // We do not call -calcSize before drawing (as documented).
+        // We only need to calculate size when resizing.
+    [self calcSize];
+}
+
+- (void)calcSize {
+
         // Let cell update (invokes -calcDrawInfo:)
         // Cell will update control's sub buttons too.
-    [self calcSize];
+    [[self cell] calcDrawInfo:[self bounds]];
 }
 
 - (NSMenu *)menuForEvent:(NSEvent *)event {
