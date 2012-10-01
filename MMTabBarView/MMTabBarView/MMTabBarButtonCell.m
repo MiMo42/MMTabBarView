@@ -114,7 +114,7 @@
 
     [super calcDrawInfo:aRect];
     
-        // update contro's sub buttons (position and images)
+        // update control's sub buttons (position and images)
     [self _updateSubButtons];
 }
 
@@ -586,6 +586,7 @@
         // adjust visibility and position of close button
     if (shouldDisplayCloseButton) {
         NSRect newFrame = [self closeButtonRectForBounds:[button bounds]];
+
         BOOL shouldHide = NSEqualRects(newFrame,NSZeroRect);
         [closeButton setHidden:shouldHide];
         if (!shouldHide)
