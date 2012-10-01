@@ -26,7 +26,6 @@
 @property (assign) CGFloat horizontalInset;
 @property (assign) CGFloat topMargin;
 
-#pragma mark -
 #pragma mark Card Tab Style Drawings
 
 // the funnel point for modify tab button drawing in a subclass
