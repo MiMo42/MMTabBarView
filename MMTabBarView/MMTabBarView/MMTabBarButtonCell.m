@@ -695,7 +695,7 @@
     NSRect result;
         
     // icon only
-    if ([[self title] length] == 0 && ![self showObjectCount] && [self isProcessing]) {
+    if ([[self title] length] == 0 && ![self showObjectCount] && ![self isProcessing]) {
         result = NSMakeRect(constrainedDrawingRect.origin.x+(constrainedDrawingRect.size.width - scaledIconSize.width)/2,
             constrainedDrawingRect.origin.y + ((constrainedDrawingRect.size.height - scaledIconSize.height) / 2),
             scaledIconSize.width, scaledIconSize.height);
