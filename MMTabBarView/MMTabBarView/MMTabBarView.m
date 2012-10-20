@@ -2622,7 +2622,12 @@ NSLog(@"did select:%@",tabViewItem);
 	[aButton setObjectCount:0];
     dataSource = [self _dataSourceForSelector:@selector(objectCount) withTabViewItem:item];
     if (dataSource)
-        [aButton bind:@"objectCount" toObject:dataSource withKeyPath:@"objectCount" options:nil];
+        {
+        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                [NSNumber numberWithBool:YES], NSConditionallySetsHiddenBindingOption,
+                nil];
+        [aButton bind:@"objectCount" toObject:dataSource withKeyPath:@"objectCount" options:options];
+        }
     
         // object count color binding
 	[aButton setObjectCountColor:[MMAttachedTabBarButtonCell defaultObjectCountColor]];
