@@ -717,8 +717,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             
             mouseLocation = [tabBarView convertPoint:[dragEvent locationInWindow] fromView:nil];
             NSRect slidingFrame = [aButton slidingFrame];
-            slidingFrame.origin.x = [dragEvent locationInWindow].x - mouseOffset.width;
-            slidingFrame.origin.y = [dragEvent locationInWindow].y - mouseOffset.height;
+            slidingFrame.origin.x = mouseLocation.x - mouseOffset.width;
+            slidingFrame.origin.y = mouseLocation.y - mouseOffset.height;
             [aButton setSlidingFrame:slidingFrame];
             
             destinationIndex = [self _destinationIndexForButton:aButton atPoint:mouseLocation inTabBarView:tabBarView];
