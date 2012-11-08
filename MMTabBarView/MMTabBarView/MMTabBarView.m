@@ -2056,8 +2056,8 @@ NSLog(@"did select:%@",tabViewItem);
         // do nothing, if we are reordering the tab view items
     if ([self isReorderingTabViewItems])
         return;
-            
-    [self update];    
+    
+    [self setNeedsUpdate:YES];
 
         // pass along for other delegate responses
 	if ([[self delegate] respondsToSelector:@selector(tabViewDidChangeNumberOfTabViewItems:)]) {
