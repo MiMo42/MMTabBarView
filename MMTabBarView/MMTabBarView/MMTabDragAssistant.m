@@ -38,7 +38,7 @@
 
 - (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView;
 
-- (void)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex;
+- (NSUInteger)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex;
 
 - (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
 
@@ -678,7 +678,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             }
         }
     }
-
+    
     return resultingIndex;
 }
 
@@ -693,7 +693,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
                 
     NSPoint mouseLocation = [tabBarView convertPoint:[theEvent locationInWindow] fromView:nil];
     NSSize mouseOffset = NSMakeSize(mouseLocation.x-buttonLocation.x, mouseLocation.y-buttonLocation.y);
-
+    
     NSUInteger sourceIndex = [tabBarView indexOfAttachedButton:aButton];
     NSUInteger destinationIndex = NSNotFound;
     NSUInteger lastDestinationIndex = sourceIndex;
@@ -719,13 +719,14 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             NSRect slidingFrame = [aButton slidingFrame];
             slidingFrame.origin.x = mouseLocation.x - mouseOffset.width;
             slidingFrame.origin.y = mouseLocation.y - mouseOffset.height;
+
             [aButton setSlidingFrame:slidingFrame];
             
             destinationIndex = [self _destinationIndexForButton:aButton atPoint:mouseLocation inTabBarView:tabBarView];
 
             if (destinationIndex != NSNotFound && destinationIndex != lastDestinationIndex)
                 {
-                [self _moveAttachedTabBarButton:aButton inTabBarView:tabBarView fromIndex:sourceIndex toIndex:destinationIndex];
+                destinationIndex = [self _moveAttachedTabBarButton:aButton inTabBarView:tabBarView fromIndex:sourceIndex toIndex:destinationIndex];
                 sourceIndex = destinationIndex;
                 lastDestinationIndex = destinationIndex;
                 }
@@ -831,10 +832,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     [_slideButtonsAnimation startAnimation];    
 }
 
-- (void)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex {
+- (NSUInteger)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex {
 
     if (destinationIndex == sourceIndex)
-        return;
+        return destinationIndex;
 
     if (_slideButtonsAnimation != nil) {
         [_slideButtonsAnimation stopAnimation];
@@ -844,18 +845,23 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSRange slidingRange;
     CGFloat slidingDirection = 0.0;
 
+    NSArray *sortedButtons = [tabBarView orderedAttachedButtons];
+    NSUInteger numberOfButtons = [sortedButtons count];
+    
     if (destinationIndex > sourceIndex) {
+        
+            // assure that destination index is in range of ordered buttons
+        destinationIndex = MIN(destinationIndex,numberOfButtons-1);
+        
         slidingRange = NSMakeRange(sourceIndex+1,destinationIndex-sourceIndex);
         slidingDirection = -1.0;
     } else {
         slidingRange = NSMakeRange(destinationIndex,sourceIndex-destinationIndex);
         slidingDirection = 1.0;
     }
-
-    NSArray *sortedButtons = [tabBarView orderedAttachedButtons];
     
     NSArray *slidingButtons = [sortedButtons objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:slidingRange]];
-
+    
     CGFloat slidingAmount = 0;
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
         slidingAmount = [aButton frame].size.width;
@@ -907,6 +913,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     _slideButtonsAnimation = [[MMSlideButtonsAnimation alloc] initWithTabBarButtons:[NSSet setWithArray:slidingButtons]];
     [_slideButtonsAnimation setDelegate:self];
     [_slideButtonsAnimation startAnimation];
+    
+    return destinationIndex;
 }
 
 - (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem {
