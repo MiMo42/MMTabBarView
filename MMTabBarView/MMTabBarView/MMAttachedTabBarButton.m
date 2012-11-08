@@ -157,7 +157,7 @@
     if ([tabBarView selectsTabsOnMouseDown]) {
         if (self != previousSelectedButton) {
             [previousSelectedButton setState:NSOffState];
-            [self performClick:self];
+            [self setState:NSOnState];
         }
     }
 
@@ -178,7 +178,7 @@
         if (![tabBarView selectsTabsOnMouseDown]) {
             MMAttachedTabBarButton *previousSelectedButton = [self _selectedAttachedTabBarButton];
             [previousSelectedButton setState:NSOffState];
-            [self performClick:self];
+            [self setState:NSOnState];
         }
     }
 }
