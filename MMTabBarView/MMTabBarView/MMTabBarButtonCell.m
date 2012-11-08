@@ -18,6 +18,9 @@
 
 - (NSImage *)_closeButtonImageOfType:(MMCloseButtonImageType)type;
 
+- (CGFloat)_leftMargin;
+- (CGFloat)_rightMargin;
+
 - (NSRect)_drawingRectForBounds:(NSRect)theRect;
 - (NSRect)_titleRectForBounds:(NSRect)theRect;
 - (NSRect)_iconRectForBounds:(NSRect)theRect;
@@ -620,10 +623,36 @@
         [indicator stopAnimation:nil];
 }
 
+#pragma mark > Margins
+
+- (CGFloat)_leftMargin {
+
+    return MARGIN_X;
+}  // -_leftMargin
+
+- (CGFloat)_rightMargin {
+
+    // balancing right margin if cell displays close button on hover only
+    // (simply improves look)
+    if ([self shouldDisplayCloseButton] && [[self tabBarView] onlyShowCloseOnHover]) {
+        NSImage *image = [self closeButtonImageOfType:MMCloseButtonImageTypeStandard];
+        return MARGIN_X + [image size].width + kMMTabBarCellPadding;
+        }
+
+    return MARGIN_X;
+}  // -_rightMargin
+
 #pragma mark > Determining Cell Size
 
 - (NSRect)_drawingRectForBounds:(NSRect)theRect {
-    return NSInsetRect(theRect, MARGIN_X, MARGIN_Y);
+
+    theRect.origin.x += [self _leftMargin];
+    theRect.size.width -= [self _leftMargin] + [self _rightMargin];
+    
+    theRect.origin.y += MARGIN_Y;
+    theRect.size.height -= 2*MARGIN_Y;
+    
+    return theRect;
 }
 
 - (NSRect)_titleRectForBounds:(NSRect)theRect {
@@ -834,7 +863,7 @@
     CGFloat resultWidth = 0.0;
 
     // left margin
-    resultWidth = MARGIN_X;
+    resultWidth = [self _leftMargin];
 
     // close button?
     if ([self shouldDisplayCloseButton]) {
@@ -861,7 +890,7 @@
     }
 
     // right margin
-    resultWidth += MARGIN_X;
+    resultWidth += [self _rightMargin];
 
     return ceil(resultWidth);
 }
@@ -871,7 +900,7 @@
     CGFloat resultWidth = 0.0;
 
     // left margin
-    resultWidth = MARGIN_X;
+    resultWidth = [self _leftMargin];
 
     // close button?
     if ([self shouldDisplayCloseButton]) {
@@ -898,8 +927,8 @@
     }
 
     // right margin
-    resultWidth += MARGIN_X;
-
+    resultWidth += [self _rightMargin];
+    
     return ceil(resultWidth);
 }
 
