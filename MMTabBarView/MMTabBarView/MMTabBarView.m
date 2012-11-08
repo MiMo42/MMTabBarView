@@ -97,6 +97,7 @@
 @dynamic delegate;
 @synthesize destinationIndexForDraggedItem = _destinationIndexForDraggedItem;
 @synthesize isResizing = _isResizing;
+@dynamic needsUpdate;
 
 static NSMutableDictionary *registeredStyleClasses = nil;
 
@@ -891,7 +892,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setOnlyShowCloseOnHover:(BOOL)value {
 	_onlyShowCloseOnHover = value;
-    [self update];
+    
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)canCloseOnlyTab {
@@ -900,8 +902,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setCanCloseOnlyTab:(BOOL)value {
 	_canCloseOnlyTab = value;
+    
 	if ([self numberOfAttachedButtons] == 1) {
-		[self update];
+        [self setNeedsUpdate:YES];
 	}
 }
 
@@ -911,7 +914,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setDisableTabClose:(BOOL)value {
 	_disableTabClose = value;
-	[self update];
+    
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)hideForSingleTab {
@@ -920,7 +924,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setHideForSingleTab:(BOOL)value {
 	_hideForSingleTab = value;
-	[self update];
+    
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)showAddTabButton {
@@ -930,7 +935,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)setShowAddTabButton:(BOOL)value {
 	_showAddTabButton = value;
     
-	[self update];
+    [self setNeedsUpdate:YES];
 }
 
 - (NSInteger)buttonMinWidth {
@@ -939,7 +944,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setButtonMinWidth:(NSInteger)value {
 	_buttonMinWidth = value;
-	[self update];
+    [self setNeedsUpdate:YES];
 }
 
 - (NSInteger)buttonMaxWidth {
@@ -948,7 +953,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setButtonMaxWidth:(NSInteger)value {
 	_buttonMaxWidth = value;
-	[self update];
+    [self setNeedsUpdate:YES];
 }
 
 - (NSInteger)buttonOptimumWidth {
@@ -957,7 +962,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setButtonOptimumWidth:(NSInteger)value {
 	_buttonOptimumWidth = value;
-	[self update];
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)sizeButtonsToFit {
@@ -966,7 +971,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setSizeButtonsToFit:(BOOL)value {
 	_sizeButtonsToFit = value;
-	[self update];
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)useOverflowMenu {
@@ -975,7 +980,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setUseOverflowMenu:(BOOL)value {
 	_useOverflowMenu = value;
-	[self update];
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)allowsBackgroundTabClosing {
@@ -984,7 +989,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)setAllowsBackgroundTabClosing:(BOOL)value {
 	_allowsBackgroundTabClosing = value;
-	[self update];    
+    [self setNeedsUpdate:YES];
 }
 
 - (BOOL)allowsResizing {
@@ -1457,6 +1462,34 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         [self _synchronizeSelection];
 }
 
+- (BOOL)needsUpdate {
+
+    @synchronized(self) {
+        return _needsUpdate;
+    }
+}
+
+- (void)setNeedsUpdate:(BOOL)newState {
+
+    @synchronized(self) {
+    
+        if (!newState)
+            {
+            _needsUpdate = NO;
+            return;
+            }
+        
+            // update already scheduled? -> do not schedule again
+        if (newState && _needsUpdate)
+            return;
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:
+            ^{
+            [self update];
+            }];
+    }
+}
+
 - (void)update {
 
     if (![[self window] isVisible] || [self isHidden])
@@ -1466,15 +1499,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)update:(BOOL)animate {
-        
+    
         // not currently handle draggig?
     if ([[MMTabDragAssistant sharedDragAssistant] isDragging] == NO) {
 
             // hide/show? (these return if already in desired state)
         if (_isHidden && [self _shouldDisplayTabBar])
-            [self hideTabBar:NO animate:YES];
+            [self hideTabBar:NO animate:animate];
         else if (!_isHidden && ![self _shouldDisplayTabBar]) {
-            [self hideTabBar:YES animate:YES];
+            [self hideTabBar:YES animate:animate];
+            [self setNeedsUpdate:NO];
             return;
         }
     }
@@ -1550,7 +1584,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
         [self updateTrackingAreas];
 		[self setNeedsDisplay:YES];
-	}    
+	}
+    
+    [self setNeedsUpdate:NO];
 }
 
 #pragma mark -
@@ -2305,6 +2341,7 @@ NSLog(@"did select:%@",tabViewItem);
 	_style = [[MMMetalTabStyle alloc] init];
     _isReorderingTabViewItems = NO;
     _destinationIndexForDraggedItem = NSNotFound;
+    _needsUpdate = NO;
 
     [self _updateOverflowPopUpButton];
 

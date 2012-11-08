@@ -117,6 +117,7 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
         
     // states
     BOOL                            _isReorderingTabViewItems;
+    BOOL                            _needsUpdate;
 
     // drag and drop
     NSUInteger                      _destinationIndexForDraggedItem;  // NSNotFound = none
@@ -130,6 +131,7 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
 @property (assign) IBOutlet id <MMTabBarViewDelegate> delegate;
 @property (assign) NSUInteger destinationIndexForDraggedItem;
 @property (readonly) BOOL isResizing;
+@property (assign) BOOL needsUpdate;
 
 #pragma mark Control Characteristics
 
