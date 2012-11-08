@@ -158,6 +158,26 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 #pragma mark -
 #pragma mark Interfacing Cell
 
+    // Overidden method of superclass.
+    // Note: We use standard binding for title property.
+    // Standard binding uses a binding adaptor we cannot access.
+    // That means though title property is bound, our -observeValueForKeyPath:ofObject:change:context: will not called
+    // if title property changes.
+    // This is why we need to invoke update of layout manually.
+-(void)setTitle:(NSString *)aString
+{
+    [super setTitle:aString];
+
+    if ([[self tabBarView] sizeButtonsToFit])
+        {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:
+            ^{
+            [[self tabBarView] update];
+            }];
+        }
+    
+}  // -setTitle:
+
 - (id <MMTabStyle>)style {
     return [[self cell] style];
 }
@@ -690,6 +710,18 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+
+    if (context == kMMTabBarButtonOberserverContext)
+        {
+        if ([[self tabBarView] sizeButtonsToFit])
+            {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:
+                ^{
+                [[self tabBarView] update];
+                }];
+            }
+        }
+ 
 }  // -observeValueForKeyPath:ofObject:change:context:
 
 #pragma mark -
