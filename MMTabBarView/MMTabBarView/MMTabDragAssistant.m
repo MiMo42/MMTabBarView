@@ -184,8 +184,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
         //split off the dragged tab into a new window
 		if ([self destinationTabBar] == nil &&
-		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBarView:)] &&
-		   [sourceDelegate tabView:[sourceTabBarView tabView] shouldDropTabViewItem:[draggedButton tabViewItem] inTabBarView:nil] &&
+		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)] &&
+		   [sourceDelegate tabView:[sourceTabBarView tabView] validateDrop:nil proposedItem: [draggedButton tabViewItem] proposedIndex:0 inTabBarView:nil] != NSDragOperationNone &&
 		   [sourceDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
            
             MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[draggedButton tabViewItem] atPoint:aPoint];
@@ -420,6 +420,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         return [_pasteboardItem attachedTabBarButton];
     
     return nil;
+}
+
+- (NSUInteger)destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView {
+    return [self _destinationIndexForButton:aButton atPoint:aPoint inTabBarView:tabBarView];
 }
 
 #pragma mark -

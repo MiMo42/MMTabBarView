@@ -69,6 +69,8 @@ extern NSString *AttachedTabBarButtonUTI;
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems;
 
+- (NSUInteger)destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView;
+
 @end
 
 void CGContextCopyWindowCaptureContentsToRect(void *grafport, CGRect rect, NSInteger cid, NSInteger wid, NSInteger zero);
