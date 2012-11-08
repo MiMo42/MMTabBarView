@@ -22,6 +22,8 @@
 @interface MMTabBarButtonCell(SharedPrivates)
 
 - (NSRect)_closeButtonRectForBounds:(NSRect)theRect;
+- (CGFloat)_leftMargin;
+- (CGFloat)_rightMargin;
 
 @end
 
@@ -196,7 +198,7 @@ StaticImage(SafariIWITRightCap)
                 
             default:
                 break;
-        }        
+        }
     }
 }
 
@@ -205,11 +207,21 @@ StaticImage(SafariIWITRightCap)
 
 - (NSRect)drawingRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell
 {
-    NSRect rect = NSInsetRect(theRect, 6.0, 0.0);
+    theRect.origin.x += [cell _leftMargin];
+    theRect.size.width -= [cell _leftMargin] + [cell _rightMargin];
+    
+    theRect.origin.y += 1;
+    theRect.size.height -= 1;
+    
+    return theRect;
+
+/*
+     NSRect rect = NSInsetRect(theRect, 6.0, 0.0);
     rect.origin.y += 1;
     rect.size.height -= 1;
     
     return rect;
+*/    
 }
 
 - (NSRect)closeButtonRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell {
