@@ -158,6 +158,7 @@
         if (self != previousSelectedButton) {
             [previousSelectedButton setState:NSOffState];
             [self setState:NSOnState];
+            [self sendAction:[self action] to:[self target]];
         }
     }
 
@@ -179,6 +180,7 @@
             MMAttachedTabBarButton *previousSelectedButton = [self _selectedAttachedTabBarButton];
             [previousSelectedButton setState:NSOffState];
             [self setState:NSOnState];
+            [self sendAction:[self action] to:[self target]];
         }
     }
 }
