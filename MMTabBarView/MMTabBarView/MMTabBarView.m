@@ -1647,6 +1647,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
 
+    NSDragOperation dragOp = NSDragOperationNone;
+
     NSPasteboard *pb = [sender draggingPasteboard];
     
     if ([pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]]) {
@@ -1661,20 +1663,20 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             
         NSTabView *sourceTabView = [[pasteboardItem sourceTabBar] tabView];
         MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
+
+        NSPoint mouseLoc = [self convertPoint:[sender draggingLocation] fromView:nil];
+        NSUInteger dropIndex = [dragAssistant destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:self];
         
-        BOOL allowsDrop = NO;
-        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBarView:)]) {
-            if ([myDelegate tabView:sourceTabView shouldDropTabViewItem:[draggedButton tabViewItem] inTabBarView:self])
-                allowsDrop = YES;
+        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
+            dragOp = [myDelegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:dropIndex inTabBarView:self];
         }
         
-        if (allowsDrop) {
+        if (dragOp != NSDragOperationNone) {
             [dragAssistant draggingEnteredTabBarView:self atPoint:[self convertPoint:[sender draggingLocation] fromView:nil] draggingInfo:sender];
-            return NSDragOperationMove;
         }
     }
 
-	return NSDragOperationNone;
+	return dragOp;
 }
 
 - (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender {
@@ -1682,7 +1684,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     NSPasteboard *pb = [sender draggingPasteboard];
     
     if ([pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]]) {
-    
+        
         MMTabDragAssistant *dragAssistant = [MMTabDragAssistant sharedDragAssistant];
         id <MMTabBarViewDelegate> myDelegate = [self delegate];
     
@@ -1694,16 +1696,19 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
         NSTabView *sourceTabView = [[pasteboardItem sourceTabBar] tabView];
         MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
-                    
-        BOOL canDrop = NO;
-        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:shouldDropTabViewItem:inTabBarView:)]) {
-            canDrop = [myDelegate tabView:sourceTabView shouldDropTabViewItem:[draggedButton tabViewItem] inTabBarView:self];
-        }
+
+        NSPoint mouseLoc = [self convertPoint:[sender draggingLocation] fromView:nil];
+        NSUInteger dropIndex = [dragAssistant destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:self];
         
-        if (canDrop) {
+        NSDragOperation dragOp = NSDragOperationNone;
+        
+        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
+            dragOp = [myDelegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:dropIndex inTabBarView:self];
+        }
+             
+        if (dragOp != NSDragOperationNone) {
             [dragAssistant draggingUpdatedInTabBarView:self atPoint:[self convertPoint:[sender draggingLocation] fromView:nil] draggingInfo:sender];
-            
-            return NSDragOperationMove;
+            return dragOp;
         }
     } else {
             //something that was accepted by the delegate was dragged on
