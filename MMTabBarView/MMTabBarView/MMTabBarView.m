@@ -182,7 +182,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         [center removeObserver:self name:NSWindowDidResignKeyNotification object:nil];
         [center removeObserver:self name:NSWindowDidMoveNotification object:nil];
     
-        [aWindow removeObserver:self forKeyPath:@"toolbar.visible"];
+        [[self window] removeObserver:self forKeyPath:@"toolbar.visible"];
     }
 
 	if (aWindow) {
