@@ -255,8 +255,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
     NSDragOperation dragOp = NSDragOperationMove;
 
-    if (delegate && [delegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:draggingInfo:)]) {
-        dragOp = [delegate tabView:[tabBarView tabView] validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:tabBarView draggingInfo:sender];
+    if (delegate && [delegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
+        dragOp = [delegate tabView:[tabBarView tabView] validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:tabBarView];
     }
     
     if (dragOp != NSDragOperationNone) {
@@ -300,8 +300,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     if (destinationIndex == NSNotFound)
         dragOp = NSDragOperationNone;
     else {
-        if (delegate && [delegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:draggingInfo:)]) {
-            dragOp = [delegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:tabBarView draggingInfo:sender];
+        if (delegate && [delegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
+            dragOp = [delegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:tabBarView];
             }
     }
 
@@ -377,8 +377,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSUInteger destinationIndex = [self _destinationIndexForButton:draggedButton atPoint:location inTabBarView:destTabBarView];
     
     NSDragOperation dragOp = NSDragOperationMove;
-    if (destDelegate && [destDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:draggingInfo:)]) {
-        dragOp = [destDelegate tabView:[destTabBarView tabView] validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:destTabBarView draggingInfo:sender];
+    if (destDelegate && [destDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
+        dragOp = [destDelegate tabView:[destTabBarView tabView] validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:destTabBarView];
     } 
     
     [tabBarView setDestinationIndexForDraggedItem:NSNotFound];
@@ -687,7 +687,11 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             *mouseUp = nil;
     NSDate *expiration = [NSDate distantFuture];
     BOOL   continueDetached = NO;
-                
+
+    id <MMTabBarViewDelegate> delegate = [tabBarView delegate];
+    NSTabView *tabView = [tabBarView tabView];
+    NSTabViewItem *tabViewItem = [aButton tabViewItem];
+    
     NSPoint mouseLocation = [tabBarView convertPoint:[theEvent locationInWindow] fromView:nil];
     NSSize mouseOffset = NSMakeSize(mouseLocation.x-buttonLocation.x, mouseLocation.y-buttonLocation.y);
     
@@ -720,6 +724,13 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             [aButton setSlidingFrame:slidingFrame];
             
             destinationIndex = [self _destinationIndexForButton:aButton atPoint:mouseLocation inTabBarView:tabBarView];
+        
+            NSDragOperation dragOp = NSDragOperationMove;
+            if (delegate && [delegate respondsToSelector:@selector(tabView:validateSlideOfProposedItem:proposedIndex:inTabBarView:)])
+                dragOp = [delegate tabView:tabView validateSlideOfProposedItem:tabViewItem proposedIndex:destinationIndex inTabBarView:tabBarView];
+        
+            if (dragOp == NSDragOperationNone)
+                destinationIndex = NSNotFound;
         
             if (destinationIndex != NSNotFound && destinationIndex != lastDestinationIndex)
                 {
