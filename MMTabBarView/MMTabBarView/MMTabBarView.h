@@ -354,7 +354,7 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
 
 //Drag and drop methods
 - (BOOL)tabView:(NSTabView *)aTabView shouldDragTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView;
-- (NSDragOperation)tabView:(NSTabView *)aTabView validateDrop:(id <NSDraggingInfo>)info proposedItem:(NSTabViewItem *)tabViewItem proposedIndex:(NSUInteger)proposedIndex inTabBarView:(MMTabBarView *)tabBarView;
+- (NSDragOperation)tabView:(NSTabView *)aTabView validateDrop:(id <NSDraggingInfo>)info proposedItem:(NSTabViewItem *)tabViewItem proposedIndex:(NSUInteger)proposedIndex inTabBarView:(MMTabBarView *)tabBarView draggingInfo:(id <NSDraggingInfo>)sender;
 - (BOOL)tabView:(NSTabView *)aTabView shouldAllowTabViewItem:(NSTabViewItem *)tabViewItem toLeaveTabBarView:(MMTabBarView *)tabBarView;
 - (void)tabView:(NSTabView*)aTabView didDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView;
 
@@ -388,6 +388,6 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
 - (void)tabView:(NSTabView *)aTabView tabBarDidUnhide:(id)tabBarControl __attribute__((deprecated("implement -tabView:tabBarViewDidUnhide: instead.")));
 - (CGFloat)desiredWidthForVerticalTabBar:(id)tabBarControl DEPRECATED_ATTRIBUTE;
 
-- (NSDragOperation)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView __attribute__((deprecated("implement -tabView:validateDrop:proposedIndex:inTabBarView: instead.")));
+- (NSDragOperation)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView __attribute__((deprecated("implement -tabView:validateDrop:proposedIndex:inTabBarView:draggingInfo: instead.")));
 
 @end

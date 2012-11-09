@@ -1623,6 +1623,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark NSDraggingSource
 
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
+
+	return [[MMTabDragAssistant sharedDragAssistant] draggingSourceOperationMaskForLocal:isLocal ofTabBarView:self];
+    
 	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
 }
 
@@ -1652,28 +1655,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     NSPasteboard *pb = [sender draggingPasteboard];
     
     if ([pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]]) {
+    
         MMTabDragAssistant *dragAssistant = [MMTabDragAssistant sharedDragAssistant];
-        id <MMTabBarViewDelegate> myDelegate = [self delegate];
-                    
-            // get (single) pasteboard item
-        NSArray *pasteboardItems = [pb pasteboardItems];
-        MMTabPasteboardItem *pasteboardItem = [pasteboardItems lastObject];
-        if (!pasteboardItem)
-            return NSDragOperationNone;
-            
-        NSTabView *sourceTabView = [[pasteboardItem sourceTabBar] tabView];
-        MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
-
-        NSPoint mouseLoc = [self convertPoint:[sender draggingLocation] fromView:nil];
-        NSUInteger dropIndex = [dragAssistant destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:self];
         
-        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
-            dragOp = [myDelegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:dropIndex inTabBarView:self];
-        }
-        
-        if (dragOp != NSDragOperationNone) {
-            [dragAssistant draggingEnteredTabBarView:self atPoint:[self convertPoint:[sender draggingLocation] fromView:nil] draggingInfo:sender];
-        }
+        dragOp = [dragAssistant draggingEntered:sender inTabBarView:self];
     }
 
 	return dragOp;
@@ -1686,30 +1671,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]]) {
         
         MMTabDragAssistant *dragAssistant = [MMTabDragAssistant sharedDragAssistant];
-        id <MMTabBarViewDelegate> myDelegate = [self delegate];
-    
-            // get (single) pasteboard item
-        NSArray *pasteboardItems = [pb pasteboardItems];
-        MMTabPasteboardItem *pasteboardItem = [pasteboardItems lastObject];
-        if (!pasteboardItem)
-            return NSDragOperationNone;
-
-        NSTabView *sourceTabView = [[pasteboardItem sourceTabBar] tabView];
-        MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
-
-        NSPoint mouseLoc = [self convertPoint:[sender draggingLocation] fromView:nil];
-        NSUInteger dropIndex = [dragAssistant destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:self];
-        
-        NSDragOperation dragOp = NSDragOperationNone;
-        
-        if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)]) {
-            dragOp = [myDelegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:dropIndex inTabBarView:self];
-        }
-             
-        if (dragOp != NSDragOperationNone) {
-            [dragAssistant draggingUpdatedInTabBarView:self atPoint:[self convertPoint:[sender draggingLocation] fromView:nil] draggingInfo:sender];
-            return dragOp;
-        }
+        return [dragAssistant draggingUpdated:sender inTabBarView:self];
+         
     } else {
             //something that was accepted by the delegate was dragged on
 
@@ -1984,59 +1947,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	if ([[self delegate] respondsToSelector:@selector(tabView:didSelectTabViewItem:)]) {
 		[[self delegate] performSelector:@selector(tabView:didSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
     }
-    
-/*
-	// here's a weird one - this message is sent before the "tabViewDidChangeNumberOfTabViewItems"
-	// message, thus I can end up updating when there are no cells, if no tabs were (yet) present
-NSLog(@"did select:%@",tabViewItem);
-    if ([self isReorderingTabViewItems])
-        return;
-
-    NSUInteger numberOfTabViewItems = [aTabView numberOfTabViewItems];
-    NSUInteger numberOfAttachedButtons = [self numberOfAttachedButtons];
-        
-	if (numberOfAttachedButtons > 0 && numberOfTabViewItems < numberOfAttachedButtons) {
-    
-		MMAttachedTabBarButton *thisButton = [self attachedButtonForTabViewItem:tabViewItem];
-        
-		if (_alwaysShowActiveTab && [thisButton isInOverflowMenu]) {
-			//temporarily disable the delegate in order to move the tab to a different index
-			id tempDelegate = [aTabView delegate];
-			[aTabView setDelegate:nil];
-
-			// move it all around first
-			[_tabViewItem retain];
-			[thisButton retain];
-			[aTabView removeTabViewItem:tabViewItem];
-			[aTabView insertTabViewItem:tabViewItem atIndex:0];
-            [self removeAttachedButtonAtIndex:tabIndex];
-            [self insertAttachedButton:thisButton atIndex:0];
-			[thisButton setIsInOverflowMenu:NO];                  //very important else we get a fun recursive loop going
-            [[self attachedButtonAtIndex:[self numberOfAttachedButtons]-1] setIsInOverflowMenu:YES];  //these 2 lines are pretty uncool and this logic needs to be updated
-			[thisButton release];
-			[_tabViewItem release];
-
-			[aTabView setDelegate:tempDelegate];
-
-			//reset the selection since removing it changed the selection
-			[aTabView selectTabViewItem:tabViewItem];
-
-			[self update];
-		} else {
-			[_controller setSelectedAttachedButton:thisButton];
-			[self setNeedsDisplay:YES];
-            
-                // update because we have to display close button on selected tab only
-            if (![self allowsBackgroundTabClosing] && ![self disableTabClose]) {
-                [self update];
-            }
-		}
-	}
-
-	if ([[self delegate] respondsToSelector:@selector(tabView:didSelectTabViewItem:)]) {
-		[[self delegate] performSelector:@selector(tabView:didSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
-	}
-*/    
 }
 
 - (BOOL)tabView:(NSTabView *)aTabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem {
@@ -2432,30 +2342,7 @@ NSLog(@"did select:%@",tabViewItem);
         theRect = NSMakeRect(NSMinX([self bounds]), yOffset, buttonSize.width, buttonSize.height);
     }
             
-    return theRect;
-    
-/*
-    NSRect theRect;
-    NSSize buttonSize = [self addTabButtonSize];
-    
-    if ([self orientation] == MMTabBarHorizontalOrientation) {
-        CGFloat xOffset = kMMTabBarCellPadding;
-        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
-        if (lastAttachedButton)
-            xOffset += NSMaxX([lastAttachedButton stackingFrame]);
-                
-        theRect = NSMakeRect(xOffset, NSMinY([self bounds]), buttonSize.width, buttonSize.height);
-    } else {
-        CGFloat yOffset = 0;
-        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
-        if (lastAttachedButton)
-            yOffset += NSMaxY([lastAttachedButton stackingFrame]);
-        
-        theRect = NSMakeRect(NSMinX([self bounds]), yOffset, buttonSize.width, buttonSize.height);
-    }
-            
-    return theRect;
-*/    
+    return theRect;  
 }
 	
 - (NSSize)_overflowButtonSize {
@@ -2491,19 +2378,6 @@ NSLog(@"did select:%@",tabViewItem);
     }
             
     return theRect;
-    
-/*
-    NSRect theRect;
-    NSSize buttonSize = [self overflowButtonSize];
-    
-    if ([self orientation] == MMTabBarHorizontalOrientation) {
-        theRect = NSMakeRect(NSMaxX([self bounds]) - [self rightMargin] - buttonSize.width -kMMTabBarCellPadding, 0.0, buttonSize.width, buttonSize.height);
-    } else {
-        theRect = NSMakeRect(NSMinX([self bounds]), NSMaxY([self bounds]) - [self bottomMargin] - buttonSize.height, buttonSize.width, buttonSize.height);
-    }
-
-    return theRect;
-*/    
 }
 
 - (void)_drawTabBarViewInRect:(NSRect)aRect {
@@ -2884,15 +2758,7 @@ StaticImage(AquaTabNewRollover)
 	_overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
 	[_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
 	[_overflowPopUpButton setHidden:YES];
-/*
-    [[_overflowPopUpButton cell] setBezelDrawingBlock:^(NSCell *cell, NSRect frame, NSView *controlView) {
-    
-        id <MMTabStyle> style = [self style];
-        
-        if ([style respondsToSelector:@selector(drawBezelOfOverflowButtonCell:withFrame:inView:)])
-            [style drawBezelOfOverflowButtonCell:(MMOverflowPopUpButtonCell *)cell withFrame:frame inView:controlView];
-        }];
-*/
+
     if (_style && [_style respondsToSelector:@selector(updateOverflowPopUpButton:ofTabBarView:)])
         [_style updateOverflowPopUpButton:_overflowPopUpButton ofTabBarView:self];
     

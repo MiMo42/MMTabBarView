@@ -26,7 +26,6 @@ extern NSString *AttachedTabBarButtonUTI;
         // standard drag & drop support
     MMTabPasteboardItem             *_pasteboardItem;
 	MMTabBarView                    *_destinationTabBar;
-	NSMutableSet					*_participatingTabBars;
 	BOOL							_isDragging;
         
         // sliding support
@@ -54,18 +53,31 @@ extern NSString *AttachedTabBarButtonUTI;
 // Creation/destruction
 + (MMTabDragAssistant *)sharedDragAssistant;
 
-// Functionality
+#pragma mark Dragging Source Handling
+
+- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal ofTabBarView:(MMTabBarView *)tabBarView;
+
 - (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event;
+
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton fromTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event;
-- (void)draggingEnteredTabBarView:(MMTabBarView *)tabBarView atPoint:(NSPoint)mouseLoc draggingInfo:(id <NSDraggingInfo>)sender;
-- (void)draggingUpdatedInTabBarView:(MMTabBarView *)tabBarView atPoint:(NSPoint)mouseLoc draggingInfo:(id <NSDraggingInfo>)sender;
-- (void)draggingExitedTabBarView:(MMTabBarView *)tabBarView draggingInfo:(id <NSDraggingInfo>)sender;
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender forTabBarView:(MMTabBarView *)tabBarView;
-- (void)draggedImageEndedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
-- (void)finishDragOfPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
 
 - (void)draggedImageBeganAt:(NSPoint)aPoint withTabBarView:(MMTabBarView *)tabBarView;
 - (void)draggedImageMovedTo:(NSPoint)aPoint;
+- (void)draggedImageEndedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
+
+#pragma mark Dragging Destination Handling
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender inTabBarView:(MMTabBarView *)tabBarView;
+
+- (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender inTabBarView:(MMTabBarView *)tabBarView;
+
+- (void)draggingExitedTabBarView:(MMTabBarView *)tabBarView draggingInfo:(id <NSDraggingInfo>)sender;
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender forTabBarView:(MMTabBarView *)tabBarView;
+
+- (void)finishDragOfPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
+
+#pragma mark Dragging Helpers
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems;
 

@@ -28,11 +28,11 @@
 
 @interface MMTabDragAssistant (/*Private*/)
 
+- (NSUInteger)_destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView;
+
 - (NSImage *)_imageForViewOfAttachedButton:(MMAttachedTabBarButton *)aButton forTabBarView:(MMTabBarView *)tabBarView styleMask:(NSUInteger *)outMask;
 - (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window;
 - (void)_expandWindow:(NSWindow *)window atPoint:(NSPoint)point;
-
-- (NSUInteger)_destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView;
 
 - (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)sourceObject;
 
@@ -43,6 +43,12 @@
 - (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
 
 - (MMTabPasteboardItem *)_tabPasteboardItemOfDraggingInfo:(id <NSDraggingInfo>)draggingInfo;
+
+- (void)_beginDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem isSourceWindow:(BOOL)isSourceWindow;
+- (void)_endDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
+
+- (void)_fadeInDragWindow:(NSTimer *)timer;
+- (void)_fadeOutDragWindow:(NSTimer *)timer;
 
 @end
 
@@ -73,7 +79,6 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 - (id)init {
 	if ((self = [super init])) {
 		_destinationTabBar = nil;
-		_participatingTabBars = [[NSMutableSet alloc] init];
 		_isDragging = NO;
         _slideButtonsAnimation = nil;
         
@@ -90,13 +95,17 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     }
 
 	[_destinationTabBar release], _destinationTabBar = nil;
-	[_participatingTabBars release], _participatingTabBars = nil;
     
 	[super dealloc];
 }
 
 #pragma mark -
-#pragma mark Act As Dragging Source
+#pragma mark Dragging Source Handling
+
+- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal ofTabBarView:(MMTabBarView *)tabBarView {
+
+	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
+}
 
 - (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event {
     return [aButton mm_dragShouldBeginFromMouseDown:event withExpiration:[NSDate distantFuture]];
@@ -134,7 +143,6 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 		if ([[tabBarView tabView] numberOfTabViewItems] == 1) {
 			[self _draggingExitedTabBarView:tabBarView withPasteboardItem:[self pasteboardItem]];
-			[[_draggedTab window] setAlphaValue:0.0];
 		}
 	}
 }
@@ -184,9 +192,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
         //split off the dragged tab into a new window
 		if ([self destinationTabBar] == nil &&
-		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:)] &&
-		   [sourceDelegate tabView:[sourceTabBarView tabView] validateDrop:nil proposedItem: [draggedButton tabViewItem] proposedIndex:0 inTabBarView:nil] != NSDragOperationNone &&
-		   [sourceDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
+		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
            
             MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[draggedButton tabViewItem] atPoint:aPoint];
 
@@ -228,64 +234,103 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 }
 
 #pragma mark -
-#pragma mark Act As Dragging Destination
+#pragma mark Dragging Destination Handling
 
-- (void)draggingEnteredTabBarView:(MMTabBarView *)tabBarView atPoint:(NSPoint)mouseLoc draggingInfo:(id <NSDraggingInfo>)sender {
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender inTabBarView:(MMTabBarView *)tabBarView {
+
+    id <MMTabBarViewDelegate> delegate = [tabBarView delegate];
 
     MMTabPasteboardItem *pasteboardItem = [self _tabPasteboardItemOfDraggingInfo:sender];
     if (!pasteboardItem)
-        return;
-        
-	if (_currentTearOffStyle == MMTabBarTearOffMiniwindow && ![self destinationTabBar]) {
-		[_draggedTab switchImages];
-	}
-
-	[self setDestinationTabBar:tabBarView];
-	[self setCurrentMouseLocation:mouseLoc];
-
-	[_participatingTabBars addObject:tabBarView];
-            
-    MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
-  
-	//tell the drag window to display only the header if there is one
-	if (_currentTearOffStyle == MMTabBarTearOffAlphaWindow && _draggedView) {
-		if (_fadeTimer) {
-			[_fadeTimer invalidate];
-		}
-
-		[[_draggedTab window] orderFront:nil];
-		_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(fadeOutDragWindow:) userInfo:nil repeats:YES];
-	}
-
-    NSUInteger destinationIndex = [self _destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:tabBarView];
+        return NSDragOperationNone;
     
-    if (destinationIndex != [tabBarView destinationIndexForDraggedItem])
-        {
-        [tabBarView setDestinationIndexForDraggedItem:destinationIndex];
-        [tabBarView update:YES];
+    MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
+    if (!draggedButton)
+        return NSDragOperationNone;
+
+    NSPoint mouseLoc = [tabBarView convertPoint:[sender draggingLocation] fromView:nil];
+    NSUInteger destinationIndex = [self _destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:tabBarView];
+    if (destinationIndex == NSNotFound)
+        return NSDragOperationNone;
+
+    NSDragOperation dragOp = NSDragOperationMove;
+
+    if (delegate && [delegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:draggingInfo:)]) {
+        dragOp = [delegate tabView:[tabBarView tabView] validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:tabBarView draggingInfo:sender];
+    }
+    
+    if (dragOp != NSDragOperationNone) {
+    
+        if (_draggedView || _draggedTab)
+            [self _endDraggingWindowForPasteboardItem:pasteboardItem];
+    
+        [self setDestinationTabBar:tabBarView];
+        [self setCurrentMouseLocation:mouseLoc];
+        
+        if (destinationIndex != [tabBarView destinationIndexForDraggedItem]) {
+            [tabBarView setDestinationIndexForDraggedItem:destinationIndex];
+            [tabBarView update:YES];
         }
+    }
+
+    return dragOp;
 }
 
-- (void)draggingUpdatedInTabBarView:(MMTabBarView *)tabBarView atPoint:(NSPoint)mouseLoc draggingInfo:(id <NSDraggingInfo>)sender {
+- (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender inTabBarView:(MMTabBarView *)tabBarView {
+
+    id <MMTabBarViewDelegate> delegate = [tabBarView delegate];
 
     MMTabPasteboardItem *pasteboardItem = [self _tabPasteboardItemOfDraggingInfo:sender];
     if (!pasteboardItem)
-        return;
-        
-	if ([self destinationTabBar] != tabBarView) {
-		[self setDestinationTabBar:tabBarView];
-	}
+        return NSDragOperationNone;
     
-	[self setCurrentMouseLocation:mouseLoc];
-
+    NSTabView *sourceTabView = [[pasteboardItem sourceTabBar] tabView];
     MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
+    if (!draggedButton)
+        return NSDragOperationNone;
+
+    NSUInteger previousDestinationIndex = [tabBarView destinationIndexForDraggedItem];
+
+    NSDragOperation dragOp = NSDragOperationMove;
     
+        // get destination index
+    NSPoint mouseLoc = [tabBarView convertPoint:[sender draggingLocation] fromView:nil];
     NSUInteger destinationIndex = [self _destinationIndexForButton:draggedButton atPoint:mouseLoc inTabBarView:tabBarView];
+    
+    if (destinationIndex == NSNotFound)
+        dragOp = NSDragOperationNone;
+    else {
+        if (delegate && [delegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:draggingInfo:)]) {
+            dragOp = [delegate tabView:sourceTabView validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:tabBarView draggingInfo:sender];
+            }
+    }
+
+    if (dragOp != NSDragOperationNone) {
+    
+        if ([self destinationTabBar] != tabBarView) {
+            [self setDestinationTabBar:tabBarView];
+        }
+        
+        [self setCurrentMouseLocation:mouseLoc];
+    } else {
+        [self setDestinationTabBar:nil];
+        destinationIndex = NSNotFound;
+    }
+    
+    if (previousDestinationIndex == NSNotFound && destinationIndex != NSNotFound) {
+            // simulate entered
+        [self draggingEntered:sender inTabBarView:tabBarView];
+    } else if (previousDestinationIndex != NSNotFound && destinationIndex == NSNotFound) {
+            // simulate exited
+        [self draggingExitedTabBarView:tabBarView draggingInfo:sender];
+    }
     
     if (destinationIndex != [tabBarView destinationIndexForDraggedItem]) {
         [tabBarView setDestinationIndexForDraggedItem:destinationIndex];
         [tabBarView update:YES];
         }
+    
+    return dragOp;
 }
 
 - (void)draggingExitedTabBarView:(MMTabBarView *)tabBarView draggingInfo:(id <NSDraggingInfo>)sender {
@@ -299,15 +344,17 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender forTabBarView:(MMTabBarView *)tabBarView {
 
+    BOOL success = NO;
+    
     NSPasteboard *pb = [sender draggingPasteboard];
     
     if (![pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]])
-        return NO;
+        return success;
  
         // get (single) pasteboard item
     MMTabPasteboardItem *pasteboardItem = [self _tabPasteboardItemOfDraggingInfo:sender];
     if (!pasteboardItem)
-        return NO;
+        return success;
         
         // get info about source on pasteboard
     MMTabBarView *sourceTabBarView = [pasteboardItem sourceTabBar];
@@ -315,41 +362,52 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSUInteger sourceIndex = [pasteboardItem sourceIndex];
     MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
     if (!draggedButton)
-        return NO;
+        return success;
     NSTabViewItem *tabViewItem = [draggedButton tabViewItem];
         
         // get destination info
     MMTabBarView *destTabBarView = [self destinationTabBar];
     if (!destTabBarView)
-        return NO;
+        return success;
+    
+    id <MMTabBarViewDelegate> destDelegate = [destTabBarView delegate];
 
     NSPoint location = [destTabBarView convertPoint:[sender draggingLocation] fromView:nil];
         
     NSUInteger destinationIndex = [self _destinationIndexForButton:draggedButton atPoint:location inTabBarView:destTabBarView];
     
+    NSDragOperation dragOp = NSDragOperationMove;
+    if (destDelegate && [destDelegate respondsToSelector:@selector(tabView:validateDrop:proposedItem:proposedIndex:inTabBarView:draggingInfo:)]) {
+        dragOp = [destDelegate tabView:[destTabBarView tabView] validateDrop:sender proposedItem:[draggedButton tabViewItem] proposedIndex:destinationIndex inTabBarView:destTabBarView draggingInfo:sender];
+    } 
+    
     [tabBarView setDestinationIndexForDraggedItem:NSNotFound];
 
-        // remove tab view item and suppress update
-    [sourceTabBarView setIsReorderingTabViewItems:YES];
-    [sourceTabBarView removeTabViewItem:tabViewItem];
-    [sourceTabBarView setIsReorderingTabViewItems:NO];
+    if (dragOp != NSDragOperationNone) {
+            // remove tab view item and suppress update
+        [sourceTabBarView setIsReorderingTabViewItems:YES];
+        [sourceTabBarView removeTabViewItem:tabViewItem];
+        [sourceTabBarView setIsReorderingTabViewItems:NO];
 
-        // insert tab view item and suppress update    
-    [tabBarView setIsReorderingTabViewItems:YES];
-    [tabBarView insertAttachedButton:draggedButton atTabItemIndex:destinationIndex];
-    [tabBarView setIsReorderingTabViewItems:NO];
-                                                        
-    [tabBarView update:NO];
+            // insert tab view item and suppress update    
+        [tabBarView setIsReorderingTabViewItems:YES];
+        [tabBarView insertAttachedButton:draggedButton atTabItemIndex:destinationIndex];
+        [tabBarView setIsReorderingTabViewItems:NO];
+                                                            
+        [tabBarView update:NO];
 
-	if ((sourceTabBarView != destTabBarView || sourceIndex != destinationIndex) && [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBarView:)]) {
-		[[sourceTabBarView delegate] tabView:sourceTabView didDropTabViewItem:tabViewItem inTabBarView:destTabBarView];
-	}
+        if ((sourceTabBarView != destTabBarView || sourceIndex != destinationIndex) && [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBarView:)]) {
+            [[sourceTabBarView delegate] tabView:sourceTabView didDropTabViewItem:tabViewItem inTabBarView:destTabBarView];
+        }
+        
+        success = YES;
+    }
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMTabDragDidEndNotification object:nil];
         
     [self finishDragOfPasteboardItem:pasteboardItem];    
     
-    return YES;    
+    return success;    
 }
 
 - (void)finishDragOfPasteboardItem:(MMTabPasteboardItem *)pasteboardItem {
@@ -381,38 +439,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 	[self setPasteboardItem:nil];
 	[self setDestinationTabBar:nil];
     [destinationTabBarView setDestinationIndexForDraggedItem:NSNotFound];
-	[_participatingTabBars removeAllObjects];
 }
 
-- (void)fadeInDragWindow:(NSTimer *)timer {
-
-	CGFloat value = [[_draggedView window] alphaValue];
-	if (value >= kMMTabDragWindowAlpha || _draggedTab == nil) {
-		[timer invalidate];
-		_fadeTimer = nil;
-	} else {
-		[[_draggedTab window] setAlphaValue:[[_draggedTab window] alphaValue] - kMMTabDragAlphaInterval];
-		[[_draggedView window] setAlphaValue:value + kMMTabDragAlphaInterval];
-	}    
-}
-
-- (void)fadeOutDragWindow:(NSTimer *)timer {
-	CGFloat value = [[_draggedView window] alphaValue];
-	NSWindow *tabWindow = [_draggedTab window], *viewWindow = [_draggedView window];
-
-	if (value <= 0.0) {
-		[viewWindow setAlphaValue:0.0];
-		[tabWindow setAlphaValue:kMMTabDragWindowAlpha];
-
-		[timer invalidate];
-		_fadeTimer = nil;
-	} else {
-		if ([tabWindow alphaValue] < kMMTabDragWindowAlpha) {
-			[tabWindow setAlphaValue:[tabWindow alphaValue] + kMMTabDragAlphaInterval];
-		}
-		[viewWindow setAlphaValue:value - kMMTabDragAlphaInterval];
-	}    
-}
+#pragma mark -
+#pragma mark Dragging Helpers
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems {
 
@@ -469,112 +499,6 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 - (void)animationDidEnd:(NSAnimation *)animation {
     [self _finalizeAnimation:animation];
-}
-
-#pragma mark -
-#pragma mark Private
-
-- (NSImage *)_imageForViewOfAttachedButton:(MMAttachedTabBarButton *)aButton forTabBarView:(MMTabBarView *)tabBarView styleMask:(NSUInteger *)outMask {
-    
-    NSTabView *tabView = [tabBarView tabView];
-    
-    NSImage *viewImage = nil;
-
-	if (outMask) {
-		*outMask = NSBorderlessWindowMask;
-	}
-    
-    id <MMTabBarViewDelegate> tabBarDelegate = [tabBarView delegate];
-    
-    if (tabBarDelegate && [tabBarDelegate respondsToSelector:@selector(tabView:imageForTabViewItem:offset:styleMask:)]) {
-		//get a custom image representation of the view to drag from the delegate
-		NSImage *tabImage = [_draggedTab image];
-		NSPoint drawPoint;
-		_dragWindowOffset = NSZeroSize;
-		viewImage = [tabBarDelegate tabView:tabView imageForTabViewItem:[aButton tabViewItem] offset:&_dragWindowOffset styleMask:outMask];
-		[viewImage lockFocus];
-
-		//draw the tab into the returned window, that way we don't have two windows being dragged (this assumes the tab will be on the window)
-		drawPoint = NSMakePoint(_dragWindowOffset.width, [viewImage size].height - _dragWindowOffset.height);
-
-		if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
-			drawPoint.y += [tabBarView heightOfTabBarButtons] - [tabImage size].height;
-			_dragWindowOffset.height -= [tabBarView heightOfTabBarButtons] - [tabImage size].height;
-		} else {
-			drawPoint.x += [tabBarView frame].size.width - [tabImage size].width;
-		}
-
-        [tabImage drawAtPoint:drawPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
-
-		[viewImage unlockFocus];
-	} else {
-		//the delegate doesn't give a custom image, so use an image of the view
-		NSView *tabView = [[aButton tabViewItem] view];
-		viewImage = [[[NSImage alloc] initWithSize:[tabView frame].size] autorelease];
-		[viewImage lockFocus];
-		[tabView drawRect:[tabView bounds]];
-		[viewImage unlockFocus];
-	}
-
-	if (outMask && (*outMask | NSBorderlessWindowMask)) {
-		_dragWindowOffset.height += 22;
-	}
-
-	return viewImage;
-}
-
-- (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window {
-	NSRect rect = [window frame];
-	NSImage *image = [[[NSImage alloc] initWithSize:rect.size] autorelease];
-	[image lockFocus];
-	rect.origin = NSZeroPoint;
-	CGContextCopyWindowCaptureContentsToRect([[NSGraphicsContext currentContext] graphicsPort], *(CGRect *)&rect, [NSApp contextID], [window windowNumber], 0);
-	[image unlockFocus];
-
-	return image;
-}
-
-- (void)_expandWindow:(NSWindow *)window atPoint:(NSPoint)point {
-	NSRect frame = [window frame];
-	[window setFrameTopLeftPoint:NSMakePoint(point.x - frame.size.width / 2, point.y + frame.size.height / 2)];
-	[window setAlphaValue:0.0];
-	[window makeKeyAndOrderFront:nil];
-
-	NSAnimation *animation = [[NSAnimation alloc] initWithDuration:0.25 animationCurve:NSAnimationEaseInOut];
-	[animation setAnimationBlockingMode:NSAnimationNonblocking];
-	[animation setCurrentProgress:0.1];
-	[animation startAnimation];
-	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(_expandWindowTimerFired:) userInfo:[NSDictionary dictionaryWithObjectsAndKeys:window, @"Window", animation, @"Animation", nil] repeats:YES];
-    [animation release];
-    
-	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSEventTrackingRunLoopMode];
-}
-
-- (void)_expandWindowTimerFired:(NSTimer *)timer {
-	NSWindow *window = [[timer userInfo] objectForKey:@"Window"];
-	NSAnimation *animation = [[timer userInfo] objectForKey:@"Animation"];
-	CGAffineTransform transform;
-	NSPoint translation;
-	NSRect winFrame = [window frame];
-
-	translation.x = (winFrame.size.width / 2.0);
-	translation.y = (winFrame.size.height / 2.0);
-	transform = CGAffineTransformMakeTranslation(translation.x, translation.y);
-	transform = CGAffineTransformScale(transform, 1.0 / [animation currentValue], 1.0 / [animation currentValue]);
-	transform = CGAffineTransformTranslate(transform, -translation.x, -translation.y);
-
-	translation.x = -winFrame.origin.x;
-	translation.y = winFrame.origin.y + winFrame.size.height - [[NSScreen mainScreen] frame].size.height;
-
-	transform = CGAffineTransformTranslate(transform, translation.x, translation.y);
-
-	CGSSetWindowTransform([NSApp contextID], [window windowNumber], transform);
-
-	[window setAlphaValue:[animation currentValue]];
-
-	if (![animation isAnimating]) {
-		[timer invalidate];
-	}
 }
 
 #pragma mark -
@@ -686,6 +610,109 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     return resultingIndex;
 }
 
+- (NSImage *)_imageForViewOfAttachedButton:(MMAttachedTabBarButton *)aButton forTabBarView:(MMTabBarView *)tabBarView styleMask:(NSUInteger *)outMask {
+    
+    NSTabView *tabView = [tabBarView tabView];
+    
+    NSImage *viewImage = nil;
+
+	if (outMask) {
+		*outMask = NSBorderlessWindowMask;
+	}
+    
+    id <MMTabBarViewDelegate> tabBarDelegate = [tabBarView delegate];
+    
+    if (tabBarDelegate && [tabBarDelegate respondsToSelector:@selector(tabView:imageForTabViewItem:offset:styleMask:)]) {
+		//get a custom image representation of the view to drag from the delegate
+		NSImage *tabImage = [_draggedTab image];
+		NSPoint drawPoint;
+		_dragWindowOffset = NSZeroSize;
+		viewImage = [tabBarDelegate tabView:tabView imageForTabViewItem:[aButton tabViewItem] offset:&_dragWindowOffset styleMask:outMask];
+		[viewImage lockFocus];
+
+		//draw the tab into the returned window, that way we don't have two windows being dragged (this assumes the tab will be on the window)
+		drawPoint = NSMakePoint(_dragWindowOffset.width, [viewImage size].height - _dragWindowOffset.height);
+
+		if ([tabBarView orientation] == MMTabBarHorizontalOrientation) {
+			drawPoint.y += [tabBarView heightOfTabBarButtons] - [tabImage size].height;
+			_dragWindowOffset.height -= [tabBarView heightOfTabBarButtons] - [tabImage size].height;
+		} else {
+			drawPoint.x += [tabBarView frame].size.width - [tabImage size].width;
+		}
+
+        [tabImage drawAtPoint:drawPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+
+		[viewImage unlockFocus];
+	} else {
+		//the delegate doesn't give a custom image, so use an image of the view
+		NSView *tabView = [[aButton tabViewItem] view];
+		viewImage = [[[NSImage alloc] initWithSize:[tabView frame].size] autorelease];
+		[viewImage lockFocus];
+		[tabView drawRect:[tabView bounds]];
+		[viewImage unlockFocus];
+	}
+
+	if (outMask && (*outMask | NSBorderlessWindowMask)) {
+		_dragWindowOffset.height += 22;
+	}
+
+	return viewImage;
+}
+
+- (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window {
+	NSRect rect = [window frame];
+	NSImage *image = [[[NSImage alloc] initWithSize:rect.size] autorelease];
+	[image lockFocus];
+	rect.origin = NSZeroPoint;
+	CGContextCopyWindowCaptureContentsToRect([[NSGraphicsContext currentContext] graphicsPort], *(CGRect *)&rect, [NSApp contextID], [window windowNumber], 0);
+	[image unlockFocus];
+
+	return image;
+}
+
+- (void)_expandWindow:(NSWindow *)window atPoint:(NSPoint)point {
+	NSRect frame = [window frame];
+	[window setFrameTopLeftPoint:NSMakePoint(point.x - frame.size.width / 2, point.y + frame.size.height / 2)];
+	[window setAlphaValue:0.0];
+	[window makeKeyAndOrderFront:nil];
+
+	NSAnimation *animation = [[NSAnimation alloc] initWithDuration:0.25 animationCurve:NSAnimationEaseInOut];
+	[animation setAnimationBlockingMode:NSAnimationNonblocking];
+	[animation setCurrentProgress:0.1];
+	[animation startAnimation];
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(_expandWindowTimerFired:) userInfo:[NSDictionary dictionaryWithObjectsAndKeys:window, @"Window", animation, @"Animation", nil] repeats:YES];
+    [animation release];
+    
+	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSEventTrackingRunLoopMode];
+}
+
+- (void)_expandWindowTimerFired:(NSTimer *)timer {
+	NSWindow *window = [[timer userInfo] objectForKey:@"Window"];
+	NSAnimation *animation = [[timer userInfo] objectForKey:@"Animation"];
+	CGAffineTransform transform;
+	NSPoint translation;
+	NSRect winFrame = [window frame];
+
+	translation.x = (winFrame.size.width / 2.0);
+	translation.y = (winFrame.size.height / 2.0);
+	transform = CGAffineTransformMakeTranslation(translation.x, translation.y);
+	transform = CGAffineTransformScale(transform, 1.0 / [animation currentValue], 1.0 / [animation currentValue]);
+	transform = CGAffineTransformTranslate(transform, -translation.x, -translation.y);
+
+	translation.x = -winFrame.origin.x;
+	translation.y = winFrame.origin.y + winFrame.size.height - [[NSScreen mainScreen] frame].size.height;
+
+	transform = CGAffineTransformTranslate(transform, translation.x, translation.y);
+
+	CGSSetWindowTransform([NSApp contextID], [window windowNumber], transform);
+
+	[window setAlphaValue:[animation currentValue]];
+
+	if (![animation isAnimating]) {
+		[timer invalidate];
+	}
+}
+
 - (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)sourceObject {
 
     NSEvent *nextEvent = nil,
@@ -727,7 +754,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
             [aButton setSlidingFrame:slidingFrame];
             
             destinationIndex = [self _destinationIndexForButton:aButton atPoint:mouseLocation inTabBarView:tabBarView];
-
+        
             if (destinationIndex != NSNotFound && destinationIndex != lastDestinationIndex)
                 {
                 destinationIndex = [self _moveAttachedTabBarButton:aButton inTabBarView:tabBarView fromIndex:sourceIndex toIndex:destinationIndex];
@@ -923,13 +950,17 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 - (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem {
 
+    NSParameterAssert(pasteboardItem != nil);
+    
     id <MMTabBarViewDelegate> tabBarDelegate = [tabBarView delegate];
     
     MMTabBarView *sourceTabBarView = [pasteboardItem sourceTabBar];
     NSTabView *sourceTabView = [[pasteboardItem sourceTabBar] tabView];
     MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
-            
-    if (sourceTabBarView && sourceTabBarView == tabBarView) {
+
+    BOOL isLeavingSourceTabBar = (sourceTabBarView && sourceTabBarView == tabBarView);
+
+    if (isLeavingSourceTabBar) {
         if ([tabBarDelegate respondsToSelector:@selector(tabView:shouldAllowTabViewItem:toLeaveTabBarView:)]) {
             if (![tabBarDelegate tabView:sourceTabView shouldAllowTabViewItem:[draggedButton tabViewItem] toLeaveTabBarView:tabBarView]) {
             return;
@@ -937,22 +968,56 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         }
     }
 
+    BOOL shouldDragSourceWindow = ([[sourceTabBarView tabView] numberOfTabViewItems] == 1 && isLeavingSourceTabBar);
+    
+        // do nothing if the tab bar we exited did not participate
+    if (!shouldDragSourceWindow && [tabBarView destinationIndexForDraggedItem] == NSNotFound)
+        return;
+
 	[self setDestinationTabBar:nil];
     [tabBarView setDestinationIndexForDraggedItem:NSNotFound];
     [tabBarView update:YES];
 
-	if (_fadeTimer) {
+        // switch to drag a window representation
+    [self _beginDraggingWindowForPasteboardItem:pasteboardItem isSourceWindow:shouldDragSourceWindow];
+}
+
+- (MMTabPasteboardItem *)_tabPasteboardItemOfDraggingInfo:(id <NSDraggingInfo>)draggingInfo {
+    NSPasteboard *pb = [draggingInfo draggingPasteboard];
+
+        // get (single) pasteboard item
+    NSArray *pasteboardItems = [pb pasteboardItems];
+    for (NSPasteboardItem *anItem in pasteboardItems) {
+        if ([anItem isKindOfClass:[MMTabPasteboardItem class]])
+            return (MMTabPasteboardItem *)anItem;
+    }
+    
+    return nil;
+}
+
+- (void)_beginDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem isSourceWindow:(BOOL)isSourceWindow {
+
+    MMAttachedTabBarButton *draggedButton = [pasteboardItem attachedTabBarButton];
+    if (!draggedButton)
+        return;
+    
+    MMTabBarView *sourceTabBarView = [pasteboardItem sourceTabBar];
+    if (!sourceTabBarView)
+        return;
+    
+    id <MMTabBarViewDelegate> sourceTabBarViewDelegate = [sourceTabBarView delegate];
+    
+    if (_fadeTimer) {
 		[_fadeTimer invalidate];
-		_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(fadeInDragWindow:) userInfo:nil repeats:YES];
+		_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(_fadeInDragWindow:) userInfo:nil repeats:YES];
 	} else if (_draggedTab) {
 		if (_currentTearOffStyle == MMTabBarTearOffAlphaWindow) {
 			//create a new floating drag window
 			if (!_draggedView) {
 				NSUInteger styleMask;
-				NSImage *viewImage = [self _imageForViewOfAttachedButton:draggedButton forTabBarView:tabBarView styleMask:&styleMask];
+				NSImage *viewImage = [self _imageForViewOfAttachedButton:draggedButton forTabBarView:sourceTabBarView styleMask:&styleMask];
 
 				_draggedView = [[MMTabDragWindowController alloc] initWithImage:viewImage styleMask:styleMask tearOffStyle:MMTabBarTearOffAlphaWindow];
-				[[_draggedView window] setAlphaValue:0.0];
 			}
 
             NSPoint windowOrigin = [[_draggedTab window] frame].origin;
@@ -967,8 +1032,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			NSSize imageSize;
 			NSUInteger mask;             //we don't need this but we can't pass nil in for the style mask, as some delegate implementations will crash
 
-			if (!(image = [self _miniwindowImageOfWindow:[tabBarView window]])) {
-				image = [self _imageForViewOfAttachedButton:draggedButton forTabBarView:tabBarView styleMask:&mask];
+			if (!(image = [self _miniwindowImageOfWindow:[sourceTabBarView window]])) {
+				image = [self _imageForViewOfAttachedButton:draggedButton forTabBarView:sourceTabBarView styleMask:&mask];
 			}
 
 			imageSize = [image size];
@@ -983,20 +1048,22 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			[_draggedTab setAlternateImage:image];
 		}
 
+
 		//set the window's alpha mask to zero if the last tab is being dragged
 		//don't fade out the old window if the delegate doesn't respond to the new tab bar method, just to be safe
-		if ([[sourceTabBarView tabView] numberOfTabViewItems] == 1 && sourceTabBarView == tabBarView &&
-		   [[sourceTabBarView delegate] respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
-			[[sourceTabBarView window] setAlphaValue:0.0];
+		if (isSourceWindow && sourceTabBarViewDelegate && [sourceTabBarViewDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
+            [[sourceTabBarView window] orderOut:nil];
 
 			if ([sourceTabBarView tearOffStyle] == MMTabBarTearOffAlphaWindow) {
 				[[_draggedView window] setAlphaValue:kMMTabDragWindowAlpha];
 			} else {
+                [_draggedTab switchImages];
+				_centersDragWindows = YES;
 				//#warning fix me - what should we do when the last tab is dragged as a miniwindow?
 			}
 		} else {
 			if ([sourceTabBarView tearOffStyle] == MMTabBarTearOffAlphaWindow) {
-				_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(fadeInDragWindow:) userInfo:nil repeats:YES];
+				_fadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(_fadeInDragWindow:) userInfo:nil repeats:YES];
 			} else {
 				[_draggedTab switchImages];
 				_centersDragWindows = YES;
@@ -1005,17 +1072,51 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 	}
 }
 
-- (MMTabPasteboardItem *)_tabPasteboardItemOfDraggingInfo:(id <NSDraggingInfo>)draggingInfo {
-    NSPasteboard *pb = [draggingInfo draggingPasteboard];
+-(void)_endDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem {
 
-        // get (single) pasteboard item
-    NSArray *pasteboardItems = [pb pasteboardItems];
-    for (NSPasteboardItem *anItem in pasteboardItems) {
-        if ([anItem isKindOfClass:[MMTabPasteboardItem class]])
-            return (MMTabPasteboardItem *)anItem;
+    if (_currentTearOffStyle == MMTabBarTearOffMiniwindow && _draggedTab) {
+        [_draggedTab switchImages];
     }
     
-    return nil;
+        //tell the drag window to display only the header if there is one
+    if (_currentTearOffStyle == MMTabBarTearOffAlphaWindow && _draggedView) {
+        if (_fadeTimer) {
+            [_fadeTimer invalidate];
+        }
+
+        [[_draggedTab window] orderFront:nil];
+        _fadeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:self selector:@selector(_fadeOutDragWindow:) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)_fadeInDragWindow:(NSTimer *)timer {
+
+	CGFloat value = [[_draggedView window] alphaValue];
+	if (value >= kMMTabDragWindowAlpha || _draggedTab == nil) {
+		[timer invalidate];
+		_fadeTimer = nil;
+	} else {
+		[[_draggedTab window] setAlphaValue:[[_draggedTab window] alphaValue] - kMMTabDragAlphaInterval];
+		[[_draggedView window] setAlphaValue:value + kMMTabDragAlphaInterval];
+	}    
+}
+
+- (void)_fadeOutDragWindow:(NSTimer *)timer {
+	CGFloat value = [[_draggedView window] alphaValue];
+	NSWindow *tabWindow = [_draggedTab window], *viewWindow = [_draggedView window];
+
+	if (value <= 0.0) {
+		[viewWindow setAlphaValue:0.0];
+		[tabWindow setAlphaValue:kMMTabDragWindowAlpha];
+
+		[timer invalidate];
+		_fadeTimer = nil;
+	} else {
+		if ([tabWindow alphaValue] < kMMTabDragWindowAlpha) {
+			[tabWindow setAlphaValue:[tabWindow alphaValue] + kMMTabDragAlphaInterval];
+		}
+		[viewWindow setAlphaValue:value - kMMTabDragAlphaInterval];
+	}    
 }
 
 @end
