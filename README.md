@@ -29,7 +29,8 @@ To, build, simply open default.xcworkspace, choose MMTabBarView Demo scheme and 
 The workspace contains two projects, the MMTabBarView framework and the Demo application.
 
 ## Installing
-Add the .framework bundle to your xcode project, and add it to the Linked Frameworks and Libraries (under Target -> Summary). Next, under Target -> Build Phases, Add a new build phase that copies it to the Frameworks directory of your app. (Add Build Phase > Copy Files. Destination: Frameworks)
+Add the .framework bundle to your Xcode project, and add it to the Linked Frameworks and Libraries (under Target -> Summary). Next, under Target -> Build Phases, Add a new build phase that copies it to the Frameworks directory of your app. (Add Build Phase > Copy Files. Destination: Frameworks).<br>
+Do not forget to set <code>LD_RUNPATH_SEARCH_PATHS</code> to <code>@loader_path/../Frameworks</code> in your Xcode project.
 
 ## Copying
 Some components and lines originally were created by Positive Spin Media. The original is BSD licensed.<br> 
