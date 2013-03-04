@@ -415,6 +415,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [_tabView selectTabViewItem:anItem];
 
     [self setIsReorderingTabViewItems:NO];
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(tabView:didMoveTabViewItem:toIndex:)])
+        [_delegate tabView:_tabView didMoveTabViewItem:anItem toIndex:index];
 }
 
 - (void)removeTabViewItem:(NSTabViewItem *)anItem {
