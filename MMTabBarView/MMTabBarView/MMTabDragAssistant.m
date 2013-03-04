@@ -772,7 +772,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
                 [tabBarView update:NO];
                 
                 // slide Back:
-            } else if (destinationIndex != NSNotFound && sourceIndex == destinationIndex) {
+            } else if (destinationIndex == NSNotFound || (destinationIndex != NSNotFound && sourceIndex == destinationIndex)) {
                 if ([tabBarView automaticallyAnimates]) {
                     [self _slideBackTabBarButton:aButton inTabBarView:tabBarView];
                 } else {
