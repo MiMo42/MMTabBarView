@@ -231,11 +231,6 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 		[self finishDragOfPasteboardItem:pasteboardItem];
     }  
-	
-	//	release pasteboard items et al since MMTabPasteboardItem retains UI objects
-	NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-	[pboard clearContents];
-    [pboard writeObjects:[NSArray arrayWithObject:[[[NSPasteboardItem alloc] init] autorelease]]];
 }
 
 #pragma mark -
