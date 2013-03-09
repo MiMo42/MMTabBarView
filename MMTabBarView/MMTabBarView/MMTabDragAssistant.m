@@ -34,7 +34,7 @@
 - (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window;
 - (void)_expandWindow:(NSWindow *)window atPoint:(NSPoint)point;
 
-- (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)sourceObject;
+- (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent source:(id)sourceObject;
 
 - (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView;
 
@@ -97,6 +97,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     }
 
 	[_destinationTabBar release], _destinationTabBar = nil;
+    [_pasteboardItem release], _pasteboardItem = nil;
     
 	[super dealloc];
 }
@@ -120,22 +121,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 		buttonFrame.origin.y += buttonFrame.size.height;
 	}
         
-    // write to pasteboard
-	NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-    MMTabPasteboardItem *pasteboardItem = [[MMTabPasteboardItem alloc] init];
-	[self setSourceTabBar:tabBarView];
-	[self setAttachedTabBarButton:aButton];
-	[pasteboardItem setSourceIndex:[tabBarView indexOfTabViewItem:[aButton tabViewItem]]];
-    [pasteboardItem setString:[aButton title] forType:AttachedTabBarButtonUTI];
-    [pboard clearContents];
-    [pboard writeObjects:[NSArray arrayWithObject:pasteboardItem]];
-    [self setPasteboardItem:pasteboardItem];
-    [pasteboardItem release];
-
-    // informal
-	[[NSNotificationCenter defaultCenter] postNotificationName:MMTabDragDidBeginNotification object:pasteboardItem];
-        
-    [self _dragAttachedTabBarButton:aButton ofTabBarView:tabBarView at:[aButton frame].origin event:event pasteboard:pboard source:tabBarView];
+    [self _dragAttachedTabBarButton:aButton ofTabBarView:tabBarView at:[aButton frame].origin event:event source:tabBarView];
 }
 
 - (void)draggedImageBeganAt:(NSPoint)aPoint withTabBarView:(MMTabBarView *)tabBarView {
@@ -230,7 +216,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 		[[NSNotificationCenter defaultCenter] postNotificationName:MMTabDragDidEndNotification object:nil];
 
 		[self finishDragOfPasteboardItem:pasteboardItem];
-    }  
+    } 
 }
 
 #pragma mark -
@@ -667,7 +653,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     [[window animator] setAlphaValue:1.0];  
 }
 
-- (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)sourceObject {
+- (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent source:(id)sourceObject {
 
     NSEvent *nextEvent = nil,
             *firstEvent = nil,
@@ -676,6 +662,21 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSDate *expiration = [NSDate distantFuture];
     BOOL   continueDetached = NO;
 
+        // write to pasteboard
+	NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+    MMTabPasteboardItem *pasteboardItem = [[MMTabPasteboardItem alloc] init];
+    [pasteboardItem setSourceIndex:[tabBarView indexOfTabViewItem:[aButton tabViewItem]]];
+    [pasteboardItem setString:[aButton title] forType:AttachedTabBarButtonUTI];
+    [pboard clearContents];
+    [pboard writeObjects:[NSArray arrayWithObject:pasteboardItem]];
+	[self setSourceTabBar:tabBarView];
+	[self setAttachedTabBarButton:aButton];
+    [self setPasteboardItem:pasteboardItem];
+    [pasteboardItem release];
+
+        // informal
+	[[NSNotificationCenter defaultCenter] postNotificationName:MMTabDragDidBeginNotification object:pasteboardItem];
+    
     id <MMTabBarViewDelegate> delegate = [tabBarView delegate];
     NSTabView *tabView = [tabBarView tabView];
     NSTabViewItem *tabViewItem = [aButton tabViewItem];
@@ -786,6 +787,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         [self _dragDetachedButton:aButton ofTabBarView:tabBarView withEvent:firstEvent pasteboard:pboard source:sourceObject];
         
         [aButton release];
+    } else {
+        [self setPasteboardItem:nil];
     }
 }
 

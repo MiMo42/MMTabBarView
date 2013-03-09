@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11E53</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2840</string>
-		<string key="IBDocument.AppKitVersion">1138.47</string>
+		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1138.51</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2840</string>
+			<string key="NS.object.0">3084</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSBox</string>
@@ -61,7 +61,7 @@
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="547639528">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSTabView" id="982771337">
@@ -69,8 +69,6 @@
 							<int key="NSvFlags">274</int>
 							<string key="NSFrame">{{13, 83}, {454, 477}}</string>
 							<reference key="NSSuperview" ref="547639528"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="81385104"/>
 							<array class="NSMutableArray" key="NSTabViewItems">
 								<object class="NSTabViewItem" id="944312339">
 									<object class="NSMutableString" key="NSIdentifier">
@@ -81,7 +79,6 @@
 										<int key="NSvFlags">256</int>
 										<string key="NSFrame">{{10, 33}, {434, 431}}</string>
 										<reference key="NSSuperview" ref="982771337"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="355463507"/>
 									</object>
 									<string key="NSLabel">Tab</string>
@@ -115,8 +112,6 @@
 							<int key="NSvFlags">290</int>
 							<string key="NSFrame">{{20, 20}, {437, 65}}</string>
 							<reference key="NSSuperview" ref="547639528"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="795419747">
 								<int key="NSCellFlags">67108864</int>
@@ -145,14 +140,11 @@
 							<int key="NSvFlags">266</int>
 							<string key="NSFrame">{{0, 562}, {477, 22}}</string>
 							<reference key="NSSuperview" ref="547639528"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="982771337"/>
 							<string key="NSClassName">MMTabBarView</string>
 						</object>
 					</array>
 					<string key="NSFrameSize">{477, 584}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="707679915"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 1002}}</string>
@@ -1692,6 +1684,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="181263325"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">234</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">parentWindow</string>
 						<reference key="source" ref="707160855"/>
 						<reference key="destination" ref="181263325"/>
@@ -2588,7 +2588,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">233</int>
+			<int key="maxID">234</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
