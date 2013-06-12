@@ -96,6 +96,10 @@
     NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:[NSEvent mouseLocation]] fromView:nil];
     
     [[self cell] addTrackingAreasForView:self inRect:[self bounds] withUserInfo:nil mouseLocation:mouseLocation];   
+
+    if ([self mouse:mouseLocation inRect:[self bounds]]) {
+        [[self cell] mouseEntered:nil];
+    }
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
