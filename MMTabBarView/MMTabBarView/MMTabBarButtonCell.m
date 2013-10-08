@@ -508,6 +508,77 @@
 }
 
 #pragma mark -
+#pragma mark NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+    
+    MMTabBarButtonCell *cellCopy = [super copyWithZone:zone];
+    if (cellCopy) {
+    
+        cellCopy->_style = [_style retain];
+        cellCopy->_icon = [_icon retain];
+        cellCopy->_largeImage = [_largeImage retain];
+        cellCopy->_objectCountColor = [_objectCountColor retain];
+        
+        cellCopy->_tabState = _tabState;
+        cellCopy->_showObjectCount = _showObjectCount;
+        cellCopy->_objectCount = _objectCount;
+        cellCopy->_isEdited = _isEdited;
+        cellCopy->_isProcessing = _isProcessing;
+        cellCopy->_hasCloseButton = _hasCloseButton;
+        cellCopy->_suppressCloseButton = _suppressCloseButton;
+        cellCopy->_closeButtonOver = _closeButtonOver;
+    }
+    
+    return cellCopy;
+}
+
+#pragma mark -
+#pragma mark Archiving
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+
+	if ([aCoder allowsKeyedCoding]) {
+        [aCoder encodeObject:_style forKey:@"MMTabBarButtonCellStyle"];
+        [aCoder encodeObject:_icon forKey:@"MMTabBarButtonCellIcon"];
+        [aCoder encodeObject:_largeImage forKey:@"MMTabBarButtonCellLargeImage"];
+        [aCoder encodeObject:_objectCountColor forKey:@"MMTabBarButtonCellLargeObjectCountColor"];
+        
+        [aCoder encodeInteger:_tabState forKey:@"MMTabBarButtonCellTabState"];
+        [aCoder encodeBool:_showObjectCount forKey:@"MMTabBarButtonCellShowObjectCount"];
+        [aCoder encodeInteger:_objectCount forKey:@"MMTabBarButtonCellTabObjectCount"];
+        [aCoder encodeBool:_isEdited forKey:@"MMTabBarButtonCellShowObjectIsEdited"];
+        [aCoder encodeBool:_isProcessing forKey:@"MMTabBarButtonCellShowObjectIsProcessing"];
+        [aCoder encodeBool:_hasCloseButton forKey:@"MMTabBarButtonCellShowObjectHasCloseButton"];
+        [aCoder encodeBool:_suppressCloseButton forKey:@"MMTabBarButtonCellShowObjectSuppressCloseButton"];
+        [aCoder encodeBool:_closeButtonOver forKey:@"MMTabBarButtonCellShowObjectSuppressCloseButtonOver"];
+	}
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if ((self = [super initWithCoder:aDecoder])) {
+		if ([aDecoder allowsKeyedCoding]) {
+        
+            _style = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellStyle"] retain];
+            _icon = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellIcon"] retain];
+            _largeImage = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellLargeImage"] retain];
+            _objectCountColor = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellLargeObjectCountColor"] retain];
+            
+            _tabState = [aDecoder decodeIntegerForKey:@"MMTabBarButtonCellTabState"];
+            _showObjectCount = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectCount"];
+            _objectCount = [aDecoder decodeIntegerForKey:@"MMTabBarButtonCellTabObjectCount"];
+            _isEdited = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectIsEdited"];
+            _isProcessing = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectIsProcessing"];
+            _hasCloseButton = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectHasCloseButton"];
+            _suppressCloseButton = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectSuppressCloseButton"];
+            _closeButtonOver = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectSuppressCloseButtonOver"];
+		}
+	}
+	return self;
+}
+
+#pragma mark -
 #pragma mark Private Methods
 
 #pragma mark > String Values
