@@ -81,9 +81,10 @@
     
     options = NSTrackingEnabledDuringMouseDrag | NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways;
 
-    mouseIsInside = NSMouseInRect(mouseLocation, cellFrame, [controlView isFlipped]);
+    mouseIsInside = [controlView mouse:mouseLocation inRect:cellFrame];
     if (mouseIsInside) {
         options |= NSTrackingAssumeInside;
+        _mouseHovered = YES;
     }
     
     // We make the view the owner, and it delegates the calls back to the cell after it is properly setup for the corresponding row/column in the outlineview
