@@ -24,6 +24,9 @@ extern NSString *AttachedTabBarButtonUTI;
 	NSPoint							_currentMouseLocation;
 
         // standard drag & drop support
+	MMTabBarView					*_sourceTabBar;
+	MMAttachedTabBarButton			*_attachedTabBarButton;
+
     MMTabPasteboardItem             *_pasteboardItem;
 	MMTabBarView                    *_destinationTabBar;
 	BOOL							_isDragging;
@@ -43,6 +46,8 @@ extern NSString *AttachedTabBarButtonUTI;
     MMSlideButtonsAnimation         *_slideButtonsAnimation;
 }
 
+@property (retain) MMTabBarView *sourceTabBar;
+@property (retain) MMAttachedTabBarButton *attachedTabBarButton;
 @property (retain) MMTabPasteboardItem *pasteboardItem;
 @property (retain) MMTabBarView *destinationTabBar;
 @property (assign) BOOL isDragging;
@@ -78,8 +83,6 @@ extern NSString *AttachedTabBarButtonUTI;
 - (void)finishDragOfPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
 
 #pragma mark Dragging Helpers
-
-- (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems;
 
 - (NSUInteger)destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView;
 

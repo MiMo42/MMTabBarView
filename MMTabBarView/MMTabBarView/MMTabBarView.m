@@ -1531,7 +1531,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	}
 
     BOOL isDragging = [[MMTabDragAssistant sharedDragAssistant] isDragging];
-    MMAttachedTabBarButton *draggedButton = [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButtonForDraggedItems];
+    MMAttachedTabBarButton *draggedButton = [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
 
         // go through tab view items, add button for any not present
 	NSArray *visibleTabViewItems = [self visibleTabViewItems];
@@ -1611,7 +1611,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems {
-    return [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButtonForDraggedItems];
+    return [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
 }
 
 - (BOOL)isSliding {
