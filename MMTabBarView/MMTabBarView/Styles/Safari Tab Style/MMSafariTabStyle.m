@@ -81,7 +81,7 @@ StaticImage(SafariIWITRightCap)
 }
 
 - (void)dealloc {
-	[_objectCountStringAttributes release];
+	[_objectCountStringAttributes release], _objectCountStringAttributes = nil;
 
 	[super dealloc];
 }

@@ -50,12 +50,12 @@
 }
 
 - (void)dealloc {
-	[unifiedCloseButton release];
-	[unifiedCloseButtonDown release];
-	[unifiedCloseButtonOver release];
-	[unifiedCloseDirtyButton release];
-	[unifiedCloseDirtyButtonDown release];
-	[unifiedCloseDirtyButtonOver release];
+	[unifiedCloseButton release], unifiedCloseButton = nil;
+	[unifiedCloseButtonDown release], unifiedCloseButtonDown = nil;
+	[unifiedCloseButtonOver release], unifiedCloseButtonOver = nil;
+	[unifiedCloseDirtyButton release], unifiedCloseDirtyButton = nil;
+	[unifiedCloseDirtyButtonDown release], unifiedCloseDirtyButtonDown = nil;
+	[unifiedCloseDirtyButtonOver release], unifiedCloseDirtyButtonOver = nil;
 
 	[super dealloc];
 }
