@@ -26,36 +26,7 @@
     MMRolloverButton *_closeButton;
     
         // progress indicator
-	MMProgressIndicator    *_indicator;
-    
-        // binding related
-    id _isProcessingBindingObservedObject;
-    NSString *_isProcessingBindingKeyPath;
-    NSDictionary *_isProcessingBindingOptions;
-    
-    id _isEditedBindingObservedObject;
-    NSString *_isEditedBindingKeyPath;
-    NSDictionary *_isEditedBindingOptions;
-    
-    id _objectCountBindingObservedObject;
-    NSString *_objectCountBindingKeyPath;
-    NSDictionary *_objectCountBindingOptions;
-
-    id _objectCountColorBindingObservedObject;
-    NSString *_objectCountColorBindingKeyPath;
-    NSDictionary *_objectCountColorBindingOptions;
-    
-    id _iconBindingObservedObject;
-    NSString *_iconBindingKeyPath;
-    NSDictionary *_iconBindingOptions;
-    
-    id _largeImageBindingObservedObject;
-    NSString *_largeImageBindingKeyPath;
-    NSDictionary *_largeImageBindingOptions;
-    
-    id _hasCloseButtonBindingObservedObject;
-    NSString *_hasCloseButtonBindingKeyPath;
-    NSDictionary *_hasCloseButtonBindingOptions;    
+	MMProgressIndicator    *_indicator;    
 }
 
 @property (assign) NSRect stackingFrame;
