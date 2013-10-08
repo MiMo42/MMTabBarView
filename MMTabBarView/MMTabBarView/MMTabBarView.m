@@ -2553,6 +2553,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
+
+        // show object count binding
+	[aButton setShowObjectCount:NO];
+    dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"showObjectCount" toObject:dataSource withKeyPath:@"showObjectCount" options:nil];
     
         // large image binding
    	[aButton setLargeImage:nil];
@@ -2579,6 +2585,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	[aButton unbind:@"title"];
 	[aButton unbind:@"objectCount"];
 	[aButton unbind:@"objectCountColor"];
+    [aButton unbind:@"showObjectCount"];    
 	[aButton unbind:@"isEdited"];
 	[aButton unbind:@"hasCloseButton"];
     [aButton unbind:@"isProcessing"];
