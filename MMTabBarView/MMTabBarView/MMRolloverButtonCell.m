@@ -137,11 +137,15 @@
 #pragma mark Copying
 
 - (id)copyWithZone:(NSZone *)zone {
-    MMRolloverButtonCell *cell = [super copyWithZone:zone];
-    [cell setRolloverButtonType:_rolloverButtonType];
-    [cell setSimulateClickOnMouseHovered:_simulateClickOnMouseHovered];
-    [cell setRolloverImage:_rolloverImage];
-    return cell;
+
+    MMRolloverButtonCell *cellCopy = [super copyWithZone:zone];
+    if (cellCopy) {
+        cellCopy->_rolloverButtonType = _rolloverButtonType;
+        cellCopy->_simulateClickOnMouseHovered = _simulateClickOnMouseHovered;
+        cellCopy->_rolloverImage = [_rolloverImage retain];
+    }
+    
+    return cellCopy;    
 }
 
 @end
