@@ -18,6 +18,7 @@
 	NSString    *_iconName;
 	NSInteger   _objectCount;
     NSColor     *_objectCountColor;
+    BOOL        _showObjectCount;
 	BOOL        _isEdited;
     BOOL        _hasCloseButton;
 }
@@ -30,6 +31,7 @@
 @property (assign) BOOL      isProcessing;
 @property (assign) NSInteger objectCount;
 @property (retain) NSColor   *objectCountColor;
+@property (assign) BOOL      showObjectCount;
 @property (assign) BOOL      isEdited;
 @property (assign) BOOL      hasCloseButton;
 
