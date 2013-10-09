@@ -2758,26 +2758,24 @@ StaticImage(AquaTabNewRollover)
 
 - (void)_updateOverflowPopUpButton {
 
-    if (_overflowPopUpButton) {
-        [_overflowPopUpButton removeFromSuperview];
-        [_overflowPopUpButton release], _overflowPopUpButton = nil;
-    }
+    if (!_overflowPopUpButton)
+        {
+            // the overflow button/menu
+        NSRect overflowButtonRect = [self overflowButtonRect];
+        _overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
+        [_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
+        [_overflowPopUpButton setHidden:YES];
+        
+        [self addSubview:_overflowPopUpButton];        
+        }
     
-        // the overflow button/menu
-	NSRect overflowButtonRect = [self overflowButtonRect];
-	_overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
-	[_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
-	[_overflowPopUpButton setHidden:YES];
-
     if (_style && [_style respondsToSelector:@selector(updateOverflowPopUpButton:ofTabBarView:)])
         [_style updateOverflowPopUpButton:_overflowPopUpButton ofTabBarView:self];
-    
-	[self addSubview:_overflowPopUpButton];
     
     if (_useOverflowMenu && _tabView && [self numberOfAttachedButtons] != [_tabView numberOfTabViewItems]) {
        [_overflowPopUpButton setHidden:NO];    
     } else {
        [_overflowPopUpButton setHidden:YES];
-    }
+    }   
 }
 @end
