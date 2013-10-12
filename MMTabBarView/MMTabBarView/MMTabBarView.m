@@ -2553,6 +2553,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
+
+        // show object count binding
+	[aButton setShowObjectCount:NO];
+    dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"showObjectCount" toObject:dataSource withKeyPath:@"showObjectCount" options:nil];
     
         // large image binding
    	[aButton setLargeImage:nil];
@@ -2579,6 +2585,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	[aButton unbind:@"title"];
 	[aButton unbind:@"objectCount"];
 	[aButton unbind:@"objectCountColor"];
+    [aButton unbind:@"showObjectCount"];    
 	[aButton unbind:@"isEdited"];
 	[aButton unbind:@"hasCloseButton"];
     [aButton unbind:@"isProcessing"];
@@ -2751,26 +2758,24 @@ StaticImage(AquaTabNewRollover)
 
 - (void)_updateOverflowPopUpButton {
 
-    if (_overflowPopUpButton) {
-        [_overflowPopUpButton removeFromSuperview];
-        [_overflowPopUpButton release], _overflowPopUpButton = nil;
-    }
+    if (!_overflowPopUpButton)
+        {
+            // the overflow button/menu
+        NSRect overflowButtonRect = [self overflowButtonRect];
+        _overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
+        [_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
+        [_overflowPopUpButton setHidden:YES];
+        
+        [self addSubview:_overflowPopUpButton];        
+        }
     
-        // the overflow button/menu
-	NSRect overflowButtonRect = [self overflowButtonRect];
-	_overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
-	[_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
-	[_overflowPopUpButton setHidden:YES];
-
     if (_style && [_style respondsToSelector:@selector(updateOverflowPopUpButton:ofTabBarView:)])
         [_style updateOverflowPopUpButton:_overflowPopUpButton ofTabBarView:self];
-    
-	[self addSubview:_overflowPopUpButton];
     
     if (_useOverflowMenu && _tabView && [self numberOfAttachedButtons] != [_tabView numberOfTabViewItems]) {
        [_overflowPopUpButton setHidden:NO];    
     } else {
        [_overflowPopUpButton setHidden:YES];
-    }
+    }   
 }
 @end

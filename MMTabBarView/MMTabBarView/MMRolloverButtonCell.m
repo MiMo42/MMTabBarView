@@ -81,9 +81,10 @@
     
     options = NSTrackingEnabledDuringMouseDrag | NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways;
 
-    mouseIsInside = NSMouseInRect(mouseLocation, cellFrame, [controlView isFlipped]);
+    mouseIsInside = [controlView mouse:mouseLocation inRect:cellFrame];
     if (mouseIsInside) {
         options |= NSTrackingAssumeInside;
+        _mouseHovered = YES;
     }
     
     // We make the view the owner, and it delegates the calls back to the cell after it is properly setup for the corresponding row/column in the outlineview
@@ -137,11 +138,15 @@
 #pragma mark Copying
 
 - (id)copyWithZone:(NSZone *)zone {
-    MMRolloverButtonCell *cell = [super copyWithZone:zone];
-    [cell setRolloverButtonType:_rolloverButtonType];
-    [cell setSimulateClickOnMouseHovered:_simulateClickOnMouseHovered];
-    [cell setRolloverImage:_rolloverImage];
-    return cell;
+
+    MMRolloverButtonCell *cellCopy = [super copyWithZone:zone];
+    if (cellCopy) {
+        cellCopy->_rolloverButtonType = _rolloverButtonType;
+        cellCopy->_simulateClickOnMouseHovered = _simulateClickOnMouseHovered;
+        cellCopy->_rolloverImage = [_rolloverImage retain];
+    }
+    
+    return cellCopy;    
 }
 
 @end

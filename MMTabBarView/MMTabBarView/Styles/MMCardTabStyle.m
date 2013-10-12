@@ -58,12 +58,12 @@
 }
 
 - (void)dealloc {
-    [cardCloseButton release];
-    [cardCloseButtonDown release];
-    [cardCloseButtonOver release];
-    [cardCloseDirtyButton release];
-    [cardCloseDirtyButtonDown release];
-    [cardCloseDirtyButtonOver release]; 
+    [cardCloseButton release], cardCloseButton = nil;
+    [cardCloseButtonDown release], cardCloseButtonDown = nil;
+    [cardCloseButtonOver release], cardCloseButtonOver = nil;
+    [cardCloseDirtyButton release], cardCloseDirtyButton = nil;
+    [cardCloseDirtyButtonDown release], cardCloseDirtyButtonDown = nil;
+    [cardCloseDirtyButtonOver release], cardCloseDirtyButtonOver = nil;
     
     [super dealloc];
 }

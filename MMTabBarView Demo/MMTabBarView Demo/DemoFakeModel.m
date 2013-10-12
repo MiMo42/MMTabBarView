@@ -18,6 +18,7 @@
 @synthesize isProcessing = _isProcessing;
 @synthesize objectCount = _objectCount;
 @synthesize objectCountColor = _objectCountColor;
+@synthesize showObjectCount = _showObjectCount;
 @synthesize isEdited = _isEdited;
 @synthesize hasCloseButton = _hasCloseButton;
 
@@ -32,6 +33,7 @@
         _hasCloseButton = YES;
         _title = [@"Untitled" retain];
         _objectCountColor = nil;
+        _showObjectCount = YES;
 	}
 	return self;
 }

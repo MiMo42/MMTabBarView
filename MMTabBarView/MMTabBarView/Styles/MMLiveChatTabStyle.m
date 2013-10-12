@@ -54,14 +54,14 @@
 }
 
 - (void)dealloc {
-	[liveChatCloseButton release];
-	[liveChatCloseButtonDown release];
-	[liveChatCloseButtonOver release];
-	[liveChatCloseDirtyButton release];
-	[liveChatCloseDirtyButtonDown release];
-	[liveChatCloseDirtyButtonOver release];
+	[liveChatCloseButton release], liveChatCloseButton = nil;
+	[liveChatCloseButtonDown release], liveChatCloseButtonDown = nil;
+	[liveChatCloseButtonOver release], liveChatCloseButtonOver = nil;
+	[liveChatCloseDirtyButton release], liveChatCloseDirtyButton = nil;
+	[liveChatCloseDirtyButtonDown release], liveChatCloseDirtyButtonDown = nil;
+	[liveChatCloseDirtyButtonOver release], liveChatCloseDirtyButtonOver = nil;
     
-	[_objectCountStringAttributes release];
+	[_objectCountStringAttributes release], _objectCountStringAttributes = nil;
 
 	[super dealloc];
 }

@@ -19,6 +19,7 @@ static char isEdited_key;
 static char hasCloseButton_key;
 static char objectCount_key;
 static char objectCountColor_key;
+static char showObjectCount_key;
 
 - (NSImage *)largeImage
 {
@@ -75,6 +76,18 @@ static char objectCountColor_key;
 {
     objc_setAssociatedObject(self,&objectCountColor_key,aColor,
                              OBJC_ASSOCIATION_RETAIN);    
+}
+
+- (BOOL)showObjectCount
+{
+    return [objc_getAssociatedObject(self,&showObjectCount_key) boolValue];
+}
+
+- (void)setShowObjectCount:(BOOL)flag
+{
+    NSNumber *boolValue = [NSNumber numberWithBool:flag];
+    objc_setAssociatedObject(self,&showObjectCount_key,boolValue,
+                             OBJC_ASSOCIATION_RETAIN);
 }
 
 - (BOOL)isEdited

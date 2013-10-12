@@ -17,6 +17,7 @@
 @property (assign) BOOL isProcessing;
 @property (assign) NSInteger objectCount;
 @property (retain) NSColor *objectCountColor;
+@property (assign) BOOL showObjectCount;
 @property (assign) BOOL isEdited;
 @property (assign) BOOL hasCloseButton;
 
