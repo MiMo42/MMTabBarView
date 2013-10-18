@@ -245,8 +245,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 						}
 
 						if (totalOccupiedWidth > availableWidth) {
-							NSLog(@"**** -[MMTabBarController _generateWidthsFromAttachedButtons:] This is a failure (available %f, total %f, width is %f)",
-								  availableWidth, totalOccupiedWidth, width);
+							//NSLog(@"**** -[MMTabBarController _generateWidthsFromAttachedButtons:] This is a failure (available %f, total %f, width is %f)", availableWidth, totalOccupiedWidth, width);
 							remainingButtonsMustGoToOverflow = YES;
 						}
 
