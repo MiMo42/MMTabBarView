@@ -2556,7 +2556,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
         // show object count binding
 	[aButton setShowObjectCount:NO];
-    dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
+    dataSource = [self _dataSourceForSelector:@selector(showObjectCount) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"showObjectCount" toObject:dataSource withKeyPath:@"showObjectCount" options:nil];
     
