@@ -1632,11 +1632,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark NSDraggingSource
 
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+    return NSDragOperationCopy;
+}
+
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
 
 	return [[MMTabDragAssistant sharedDragAssistant] draggingSourceOperationMaskForLocal:isLocal ofTabBarView:self];
-    
-	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
 }
 
 - (BOOL)ignoreModifierKeysWhileDragging {
