@@ -98,6 +98,7 @@
 @synthesize destinationIndexForDraggedItem = _destinationIndexForDraggedItem;
 @synthesize isResizing = _isResizing;
 @dynamic needsUpdate;
+@synthesize resizeTabsToFitTotalWidth = _resizeTabsToFitTotalWidth;
 
 static NSMutableDictionary *registeredStyleClasses = nil;
 
@@ -2260,6 +2261,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     _isReorderingTabViewItems = NO;
     _destinationIndexForDraggedItem = NSNotFound;
     _needsUpdate = NO;
+    _resizeTabsToFitTotalWidth = NO;
 
     [self _updateOverflowPopUpButton];
 
