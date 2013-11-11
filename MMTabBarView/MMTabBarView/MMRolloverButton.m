@@ -19,6 +19,7 @@
 
     self = [super initWithFrame:frameRect];
     if (self) {
+        self.focusRingType = NSFocusRingTypeNone;
     }
     
     return self;
