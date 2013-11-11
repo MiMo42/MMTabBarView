@@ -309,11 +309,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (BOOL)isWindowActive {
     NSWindow *window = [self window];
     BOOL windowActive = NO;
-    if ([window isKeyWindow])
+    
+    if ([window isKeyWindow]) {
         windowActive = YES;
-    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive])
+    }
+    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive]) {
         windowActive = YES;
-        
+    }
+    else if (window.attachedSheet != nil) {
+        // Don't gray out the tab bar if we're displaying a sheet.
+        windowActive = YES;
+    }
     return windowActive;
 }
 
