@@ -167,6 +167,9 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 				if (width > [_tabBarView buttonMaxWidth]) {
 					width = [_tabBarView buttonMaxWidth];
 				}
+            }
+            else if (_tabBarView.resizeTabsToFitTotalWidth) {
+                width = _tabBarView.frame.size.width / buttonCount;
 			} else {
 				width = [_tabBarView buttonOptimumWidth];
 			}
