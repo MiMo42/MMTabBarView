@@ -1906,6 +1906,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	return YES;
 }
 
+- (BOOL)acceptsFirstResponder {
+    return NO;
+}
+
 - (void)mouseDown:(NSEvent *)theEvent {
 
 	NSPoint mousePt = [self convertPoint:[theEvent locationInWindow] fromView:nil];
