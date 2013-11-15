@@ -98,6 +98,7 @@
 @synthesize destinationIndexForDraggedItem = _destinationIndexForDraggedItem;
 @synthesize isResizing = _isResizing;
 @dynamic needsUpdate;
+@synthesize resizeTabsToFitTotalWidth = _resizeTabsToFitTotalWidth;
 
 static NSMutableDictionary *registeredStyleClasses = nil;
 
@@ -308,11 +309,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (BOOL)isWindowActive {
     NSWindow *window = [self window];
     BOOL windowActive = NO;
-    if ([window isKeyWindow])
+    
+    if ([window isKeyWindow]) {
         windowActive = YES;
-    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive])
+    }
+    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive]) {
         windowActive = YES;
-        
+    }
+    else if (window.attachedSheet != nil) {
+        // Don't gray out the tab bar if we're displaying a sheet.
+        windowActive = YES;
+    }
     return windowActive;
 }
 
@@ -1625,11 +1632,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark NSDraggingSource
 
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+    return NSDragOperationCopy;
+}
+
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
 
 	return [[MMTabDragAssistant sharedDragAssistant] draggingSourceOperationMaskForLocal:isLocal ofTabBarView:self];
-    
-	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
 }
 
 - (BOOL)ignoreModifierKeysWhileDragging {
@@ -1895,6 +1904,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
 	return YES;
+}
+
+- (BOOL)acceptsFirstResponder {
+    return NO;
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
@@ -2260,6 +2273,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     _isReorderingTabViewItems = NO;
     _destinationIndexForDraggedItem = NSNotFound;
     _needsUpdate = NO;
+    _resizeTabsToFitTotalWidth = NO;
 
     [self _updateOverflowPopUpButton];
 
@@ -2556,7 +2570,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
         // show object count binding
 	[aButton setShowObjectCount:NO];
-    dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
+    dataSource = [self _dataSourceForSelector:@selector(showObjectCount) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"showObjectCount" toObject:dataSource withKeyPath:@"showObjectCount" options:nil];
     

@@ -96,6 +96,7 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
     MMTabBarTearOffStyle            _tearOffStyle;
     BOOL                            _allowsBackgroundTabClosing;
     BOOL                            _selectsTabsOnMouseDown;
+    BOOL                            _resizeTabsToFitTotalWidth;
 
     // vertical tab resizing
     BOOL                            _allowsResizing;
@@ -132,6 +133,7 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
 @property (assign) NSUInteger destinationIndexForDraggedItem;
 @property (readonly) BOOL isResizing;
 @property (assign) BOOL needsUpdate;
+@property (assign) BOOL resizeTabsToFitTotalWidth;
 
 #pragma mark Control Characteristics
 
