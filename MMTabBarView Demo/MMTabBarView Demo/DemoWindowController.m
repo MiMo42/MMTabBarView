@@ -138,6 +138,10 @@
 	[[[tabView selectedTabViewItem] identifier] setValue:[sender color] forKeyPath:@"objectCountColor"];
 }
 
+- (IBAction)showObjectCountAction:(id)sender {
+	[[[tabView selectedTabViewItem] identifier] setValue:[NSNumber numberWithBool:[sender state]] forKeyPath:@"showObjectCount"];
+}
+
 - (IBAction)isProcessingAction:(id)sender {
 	[[[tabView selectedTabViewItem] identifier] setValue:[NSNumber numberWithBool:[sender state]] forKeyPath:@"isProcessing"];
 }
@@ -417,6 +421,10 @@
 		[hasCloserButton setState:[[tabViewItem identifier] hasCloseButton]];
 	}
 
+	if ([[tabViewItem identifier] respondsToSelector:@selector(showObjectCount)]) {
+		[showObjectCountButton setState:[[tabViewItem identifier] showObjectCount]];
+	}
+    
 	if ([[tabViewItem identifier] respondsToSelector:@selector(largeImage)]) {
 		[hasLargeImageButton setState:[[tabViewItem identifier] largeImage] != nil];
 	}
@@ -446,6 +454,11 @@
 
 - (void)tabView:(NSTabView *)aTabView didCloseTabViewItem:(NSTabViewItem *)tabViewItem {
 	NSLog(@"didCloseTabViewItem: %@", [tabViewItem label]);
+}
+
+- (void)tabView:(NSTabView *)aTabView didMoveTabViewItem:(NSTabViewItem *)tabViewItem toIndex:(NSUInteger)index
+{
+    NSLog(@"tab view did move tab view item %@ to index:%ld",[tabViewItem label],index);
 }
 
 - (void)addNewTabToTabView:(NSTabView *)aTabView {

@@ -19,6 +19,7 @@
 
     self = [super initWithFrame:frameRect];
     if (self) {
+        self.focusRingType = NSFocusRingTypeNone;
     }
     
     return self;
@@ -93,7 +94,12 @@
         [[self cell] mouseExited:nil];
 
     // recreate tracking areas and tool tip rects
-    NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:[NSEvent mouseLocation]] fromView:nil];
+    
+    NSPoint mouseLocationInScreenCoos = [NSEvent mouseLocation];
+    
+    NSPoint mouseLocationInWindowCoos = [[self window] convertRectFromScreen:NSMakeRect(mouseLocationInScreenCoos.x, mouseLocationInScreenCoos.y, 0.0, 0.0)].origin;
+    
+    NSPoint mouseLocation = [self convertPoint:mouseLocationInWindowCoos fromView:nil];
     
     [[self cell] addTrackingAreasForView:self inRect:[self bounds] withUserInfo:nil mouseLocation:mouseLocation];   
 }

@@ -98,6 +98,7 @@
 @synthesize destinationIndexForDraggedItem = _destinationIndexForDraggedItem;
 @synthesize isResizing = _isResizing;
 @dynamic needsUpdate;
+@synthesize resizeTabsToFitTotalWidth = _resizeTabsToFitTotalWidth;
 
 static NSMutableDictionary *registeredStyleClasses = nil;
 
@@ -308,11 +309,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (BOOL)isWindowActive {
     NSWindow *window = [self window];
     BOOL windowActive = NO;
-    if ([window isKeyWindow])
+    
+    if ([window isKeyWindow]) {
         windowActive = YES;
-    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive])
+    }
+    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive]) {
         windowActive = YES;
-        
+    }
+    else if ([window isMainWindow]) {
+        // Don't gray out the tab bar if we're displaying a sheet.
+        windowActive = YES;
+    }
     return windowActive;
 }
 
@@ -415,6 +422,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [_tabView selectTabViewItem:anItem];
 
     [self setIsReorderingTabViewItems:NO];
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(tabView:didMoveTabViewItem:toIndex:)])
+        [_delegate tabView:_tabView didMoveTabViewItem:anItem toIndex:index];
 }
 
 - (void)removeTabViewItem:(NSTabViewItem *)anItem {
@@ -1528,7 +1538,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	}
 
     BOOL isDragging = [[MMTabDragAssistant sharedDragAssistant] isDragging];
-    MMAttachedTabBarButton *draggedButton = [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButtonForDraggedItems];
+    MMAttachedTabBarButton *draggedButton = [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
 
         // go through tab view items, add button for any not present
 	NSArray *visibleTabViewItems = [self visibleTabViewItems];
@@ -1608,7 +1618,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems {
-    return [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButtonForDraggedItems];
+    return [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
 }
 
 - (BOOL)isSliding {
@@ -1622,11 +1632,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark NSDraggingSource
 
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+    return NSDragOperationCopy;
+}
+
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
 
 	return [[MMTabDragAssistant sharedDragAssistant] draggingSourceOperationMaskForLocal:isLocal ofTabBarView:self];
-    
-	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
 }
 
 - (BOOL)ignoreModifierKeysWhileDragging {
@@ -1892,6 +1904,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
 	return YES;
+}
+
+- (BOOL)acceptsFirstResponder {
+    return NO;
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
@@ -2257,6 +2273,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     _isReorderingTabViewItems = NO;
     _destinationIndexForDraggedItem = NSNotFound;
     _needsUpdate = NO;
+    _resizeTabsToFitTotalWidth = NO;
 
     [self _updateOverflowPopUpButton];
 
@@ -2550,6 +2567,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
+
+        // show object count binding
+	[aButton setShowObjectCount:NO];
+    dataSource = [self _dataSourceForSelector:@selector(showObjectCount) withTabViewItem:item];
+    if (dataSource)
+        [aButton bind:@"showObjectCount" toObject:dataSource withKeyPath:@"showObjectCount" options:nil];
     
         // large image binding
    	[aButton setLargeImage:nil];
@@ -2576,6 +2599,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	[aButton unbind:@"title"];
 	[aButton unbind:@"objectCount"];
 	[aButton unbind:@"objectCountColor"];
+    [aButton unbind:@"showObjectCount"];    
 	[aButton unbind:@"isEdited"];
 	[aButton unbind:@"hasCloseButton"];
     [aButton unbind:@"isProcessing"];
@@ -2748,26 +2772,24 @@ StaticImage(AquaTabNewRollover)
 
 - (void)_updateOverflowPopUpButton {
 
-    if (_overflowPopUpButton) {
-        [_overflowPopUpButton removeFromSuperview];
-        [_overflowPopUpButton release], _overflowPopUpButton = nil;
-    }
+    if (!_overflowPopUpButton)
+        {
+            // the overflow button/menu
+        NSRect overflowButtonRect = [self overflowButtonRect];
+        _overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
+        [_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
+        [_overflowPopUpButton setHidden:YES];
+        
+        [self addSubview:_overflowPopUpButton];        
+        }
     
-        // the overflow button/menu
-	NSRect overflowButtonRect = [self overflowButtonRect];
-	_overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
-	[_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
-	[_overflowPopUpButton setHidden:YES];
-
     if (_style && [_style respondsToSelector:@selector(updateOverflowPopUpButton:ofTabBarView:)])
         [_style updateOverflowPopUpButton:_overflowPopUpButton ofTabBarView:self];
-    
-	[self addSubview:_overflowPopUpButton];
     
     if (_useOverflowMenu && _tabView && [self numberOfAttachedButtons] != [_tabView numberOfTabViewItems]) {
        [_overflowPopUpButton setHidden:NO];    
     } else {
        [_overflowPopUpButton setHidden:YES];
-    }
+    }   
 }
 @end

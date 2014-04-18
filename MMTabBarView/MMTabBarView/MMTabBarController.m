@@ -40,6 +40,9 @@
 - (void)dealloc {
 
     _tabBarView = nil; // non retained!
+    
+    [_overflowMenu release], _overflowMenu = nil;
+    
 	[super dealloc];
 }
 
@@ -164,6 +167,9 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 				if (width > [_tabBarView buttonMaxWidth]) {
 					width = [_tabBarView buttonMaxWidth];
 				}
+            }
+            else if (_tabBarView.resizeTabsToFitTotalWidth) {
+                width = _tabBarView.frame.size.width / buttonCount;
 			} else {
 				width = [_tabBarView buttonOptimumWidth];
 			}
@@ -242,8 +248,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 						}
 
 						if (totalOccupiedWidth > availableWidth) {
-							NSLog(@"**** -[MMTabBarController _generateWidthsFromAttachedButtons:] This is a failure (available %f, total %f, width is %f)",
-								  availableWidth, totalOccupiedWidth, width);
+							//NSLog(@"**** -[MMTabBarController _generateWidthsFromAttachedButtons:] This is a failure (available %f, total %f, width is %f)", availableWidth, totalOccupiedWidth, width);
 							remainingButtonsMustGoToOverflow = YES;
 						}
 

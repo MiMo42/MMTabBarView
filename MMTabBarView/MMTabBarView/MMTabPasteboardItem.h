@@ -12,14 +12,9 @@
 @class MMTabBarView;
 
 @interface MMTabPasteboardItem : NSPasteboardItem {
-
-    MMTabBarView *_sourceTabBar;
-    MMAttachedTabBarButton *_attachedTabBarButton;
     NSUInteger _sourceIndex;
 }
 
-@property (retain) MMTabBarView *sourceTabBar;
-@property (retain) MMAttachedTabBarButton *attachedTabBarButton;
 @property (assign) NSUInteger sourceIndex;
 
 @end

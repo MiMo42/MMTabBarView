@@ -69,15 +69,15 @@
 }
 
 - (void)dealloc {
-	[_closeButton release];
-	[_closeButtonDown release];
-	[_closeButtonOver release];
+	[_closeButton release], _closeButton = nil;
+	[_closeButtonDown release], _closeButtonDown = nil;
+	[_closeButtonOver release], _closeButtonOver = nil;
 
-	[_closeDirtyButton release];
-	[_closeDirtyButtonDown release];
-	[_closeDirtyButtonOver release];
+	[_closeDirtyButton release], _closeDirtyButton = nil;
+	[_closeDirtyButtonDown release], _closeDirtyButtonDown = nil;
+	[_closeDirtyButtonOver release], _closeDirtyButtonOver = nil;
 
-	[_gradientImage release];
+	[_gradientImage release], _gradientImage = nil;
 
 	[super dealloc];
 }

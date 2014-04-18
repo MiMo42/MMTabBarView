@@ -61,16 +61,16 @@
 }
 
 - (void)dealloc {
-	[aquaTabBg release];
-	[aquaTabBgDown release];
-	[aquaDividerDown release];
-	[aquaDivider release];
-	[aquaCloseButton release];
-	[aquaCloseButtonDown release];
-	[aquaCloseButtonOver release];
-	[aquaCloseDirtyButton release];
-	[aquaCloseDirtyButtonDown release];
-	[aquaCloseDirtyButtonOver release];
+	[aquaTabBg release], aquaTabBg = nil;
+	[aquaTabBgDown release], aquaTabBgDown = nil;
+	[aquaDividerDown release], aquaDividerDown = nil;
+	[aquaDivider release], aquaDivider = nil;
+	[aquaCloseButton release], aquaCloseButton = nil;
+	[aquaCloseButtonDown release], aquaCloseButtonDown = nil;
+	[aquaCloseButtonOver release], aquaCloseButtonOver = nil;
+	[aquaCloseDirtyButton release], aquaCloseDirtyButton = nil;
+	[aquaCloseDirtyButtonDown release], aquaCloseDirtyButtonDown = nil;
+	[aquaCloseDirtyButtonOver release], aquaCloseDirtyButtonOver = nil;
 
 	[super dealloc];
 }

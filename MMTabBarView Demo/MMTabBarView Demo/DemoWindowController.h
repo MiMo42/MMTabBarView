@@ -24,6 +24,7 @@
     IBOutlet NSColorWell            *objectCounterColorWell;
 	IBOutlet NSPopUpButton			*iconButton;
     IBOutlet NSButton				*hasCloserButton;
+    IBOutlet NSButton               *showObjectCountButton;
 
 	IBOutlet NSPopUpButton			*popUp_style;
 	IBOutlet NSPopUpButton			*popUp_orientation;
@@ -47,23 +48,24 @@
 
 - (void)addNewTabWithTitle:(NSString *)aTitle;
 
-// UI
+- (MMTabBarView *)tabBar;
+
+// Actions
 - (IBAction)addNewTab:(id)sender;
 - (IBAction)closeTab:(id)sender;
+
 - (IBAction)setIconNamed:(id)sender;
 - (IBAction)setObjectCount:(id)sender;
 - (IBAction)setObjectCountColor:(id)sender;
 - (IBAction)setTabLabel:(id)sender;
 
-// Actions
+- (IBAction)showObjectCountAction:(id)sender;
 - (IBAction)isProcessingAction:(id)sender;
 - (IBAction)isEditedAction:(id)sender;
 - (IBAction)hasCloseButtonAction:(id)sender;
 - (IBAction)hasLargeImageAction:(id)sender;
 
-- (MMTabBarView *)tabBar;
-
-// toolbar
+// Toolbar
 - (IBAction)toggleToolbar:(id)sender;
 - (BOOL)validateToolbarItem:(NSToolbarItem *)theItem;
 

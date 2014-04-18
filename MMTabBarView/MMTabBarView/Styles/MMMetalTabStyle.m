@@ -53,14 +53,14 @@ StaticImage(TabNewMetalRollover)
 }
 
 - (void)dealloc {
-	[metalCloseButton release];
-	[metalCloseButtonDown release];
-	[metalCloseButtonOver release];
-	[metalCloseDirtyButton release];
-	[metalCloseDirtyButtonDown release];
-	[metalCloseDirtyButtonOver release];
+	[metalCloseButton release], metalCloseButton = nil;
+	[metalCloseButtonDown release], metalCloseButtonDown = nil;
+	[metalCloseButtonOver release], metalCloseButtonOver = nil;
+	[metalCloseDirtyButton release], metalCloseDirtyButton = nil;
+	[metalCloseDirtyButtonDown release], metalCloseDirtyButtonDown = nil;
+	[metalCloseDirtyButtonOver release], metalCloseDirtyButtonOver = nil;
 
-	[_objectCountStringAttributes release];
+	[_objectCountStringAttributes release], _objectCountStringAttributes = nil;
 
 	[super dealloc];
 }
