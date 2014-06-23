@@ -11,6 +11,10 @@
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
+@interface MMAquaTabStyle (Private)
+- (NSImage *)_flipImage:(NSImage *)image;
+@end
+
 @implementation MMAquaTabStyle
 
 + (NSString *)name {
@@ -34,22 +38,19 @@
 - (void) loadImages {
 	// Aqua Tabs Images
 	aquaTabBg = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsBackground"]];
-	[aquaTabBg setFlipped:YES];
+  aquaTabBg = [[self _flipImage:aquaTabBg] retain];
 
 	aquaTabBgDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDown"]];
-	[aquaTabBgDown setFlipped:YES];
+  aquaTabBgDown = [[self _flipImage:aquaTabBgDown] retain];
 
 	aquaTabBgDownGraphite = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDownGraphite"]];
-	[aquaTabBgDown setFlipped:YES];
+  //aquaTabBgDownGraphite = [[self _flipImage:aquaTabBgDownGraphite] retain];
 
 	aquaTabBgDownNonKey = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDownNonKey"]];
-	[aquaTabBgDown setFlipped:YES];
+  //aquaTabBgDownNonKey = [[self _flipImage:aquaTabBgDownNonKey] retain];
 
 	aquaDividerDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsSeparatorDown"]];
-	[aquaDivider setFlipped:NO];
-
 	aquaDivider = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsSeparator"]];
-	[aquaDivider setFlipped:NO];
 
 	aquaCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
 	aquaCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
@@ -123,7 +124,7 @@
 		//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
 		rect = [tabBarView bounds];
 
-		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
+		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 }
 
@@ -305,6 +306,22 @@
 	}
 	//}
 	return self;
+}
+
+#pragma mark -
+
+- (NSImage *)_flipImage:(NSImage *)image
+{
+  NSSize imageSize = [image size];
+  NSImage *flippedImage = [[[NSImage alloc] initWithSize:imageSize] autorelease];
+
+  [flippedImage lockFocusFlipped:YES];
+
+  [image drawAtPoint:NSZeroPoint fromRect:NSMakeRect(0, 0, imageSize.width, imageSize.height) operation:NSCompositeSourceOver fraction:1.0];
+
+  [flippedImage unlockFocus];
+
+  return flippedImage;
 }
 
 @end
