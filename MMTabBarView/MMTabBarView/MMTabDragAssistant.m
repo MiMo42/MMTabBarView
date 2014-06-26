@@ -1001,7 +1001,6 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			}
 
 			imageSize = [image size];
-			[image setScalesWhenResized:YES];
 
 			if (imageSize.width > imageSize.height) {
 				[image setSize:NSMakeSize(125, 125 * (imageSize.height / imageSize.width))];
