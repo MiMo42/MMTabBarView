@@ -41,7 +41,7 @@ Thanks to the guys recently improved PSMTabBarControl and inspired me to finally
 
 ## License
 Copyright © 2005, Positive Spin Media. All rights reserved.<br>
-Copyright © 2012, Michael Monscheuer. All rights reserved.<br>
+Copyright © 2014, Michael Monscheuer. All rights reserved.<br>
 
 <hr>
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
