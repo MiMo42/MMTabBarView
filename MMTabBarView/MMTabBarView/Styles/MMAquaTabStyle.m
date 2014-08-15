@@ -34,22 +34,16 @@
 - (void) loadImages {
 	// Aqua Tabs Images
 	aquaTabBg = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsBackground"]];
-	[aquaTabBg setFlipped:YES];
 
 	aquaTabBgDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDown"]];
-	[aquaTabBgDown setFlipped:YES];
 
 	aquaTabBgDownGraphite = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDownGraphite"]];
-	[aquaTabBgDown setFlipped:YES];
 
 	aquaTabBgDownNonKey = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDownNonKey"]];
-	[aquaTabBgDown setFlipped:YES];
 
 	aquaDividerDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsSeparatorDown"]];
-	[aquaDivider setFlipped:NO];
 
 	aquaDivider = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsSeparator"]];
-	[aquaDivider setFlipped:NO];
 
 	aquaCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
 	aquaCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
@@ -123,7 +117,7 @@
 		//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
 		rect = [tabBarView bounds];
 
-		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:NO hints:nil];
+		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 }
 
@@ -175,7 +169,7 @@
             left = aquaDivider;
         }
 
-        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![controlView isFlipped]);
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,[controlView isFlipped]);
 
 	} else { // Unselected Tab
 		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
@@ -192,7 +186,7 @@
             left = aquaDivider;
         
         if (![button isOverflowButton]) {
-            NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![controlView isFlipped]);
+            NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,[controlView isFlipped]);
         }
 	}
 }
@@ -245,7 +239,7 @@
             right = aquaDivider;
         }
         
-        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![tabBarView isFlipped]);
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,[tabBarView isFlipped]);
 
         // Draw unselected
 	} else {
@@ -261,7 +255,7 @@
         if ([tabBarView showAddTabButton])
             right = aquaDivider;
         
-        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,![tabBarView isFlipped]);
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0f,[tabBarView isFlipped]);
 	}
 }
 
