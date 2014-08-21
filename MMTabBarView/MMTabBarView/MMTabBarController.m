@@ -40,8 +40,10 @@
 - (void)dealloc {
 
     _tabBarView = nil; // non retained!
-	[_overflowMenu release], _overflowMenu = nil;
-	[super dealloc];
+
+    [_overflowMenu release], _overflowMenu = nil;
+
+    [super dealloc];
 }
 
 /*!
