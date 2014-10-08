@@ -90,11 +90,11 @@ typedef enum MMTabStateMask : NSUInteger {
 
 - (void)updateImages;
 
-#pragma Progress Indicator Support
+#pragma mark Progress Indicator Support
 
 - (MMProgressIndicator *)indicator;
 
-#pragma Close Button Support
+#pragma mark Close Button Support
 
 - (MMRolloverButton *)closeButton;
 - (BOOL)shouldDisplayCloseButton;

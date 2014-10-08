@@ -78,7 +78,7 @@
 
 - (void)updateImages;
 
-#pragma Close Button Support
+#pragma mark Close Button Support
 
 - (BOOL)shouldDisplayCloseButton;
 
