@@ -1490,9 +1490,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             }
         
             // update already scheduled? -> do not schedule again
-        if (newState && _needsUpdate)
+        if (_needsUpdate)
             return;
         
+        _needsUpdate = YES;
         [[NSOperationQueue mainQueue] addOperationWithBlock:
             ^{
             [self update];
@@ -1501,6 +1502,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)update {
+
+    if (!_needsUpdate) {
+        return;
+    }
+
+    _needsUpdate = NO;
 
     if (![[self window] isVisible] || [self isHidden])
         [self update:NO];
