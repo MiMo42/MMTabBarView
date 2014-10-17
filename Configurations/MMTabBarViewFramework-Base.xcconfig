@@ -1,7 +1,7 @@
 #include "Base.xcconfig"
 PRODUCT_NAME = MMTabBarView
 DYLIB_CURRENT_VERSION = 1
-SKIP_INSTALL = NO
+SKIP_INSTALL = YES
 GCC_ENABLE_OBJC_GC = unsupported
 FRAMEWORK_VERSION = A
 INFOPLIST_FILE = MMTabBarView/MMTabBarView/MMTabBarView-Info.plist
