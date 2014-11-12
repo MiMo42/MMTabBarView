@@ -2082,7 +2082,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		[aCoder encodeInteger:_buttonOptimumWidth forKey:@"MMbuttonOptimumWidth"];
 		[aCoder encodeBool:_isHidden forKey:@"MMisHidden"];
 		[aCoder encodeObject:_partnerView forKey:@"MMpartnerView"];
-		[aCoder encodeObject:_delegate forKey:@"MMdelegate"];
 		[aCoder encodeBool:_useOverflowMenu forKey:@"MMuseOverflowMenu"];
 		[aCoder encodeBool:_automaticallyAnimates forKey:@"MMautomaticallyAnimates"];
 		[aCoder encodeBool:_alwaysShowActiveTab forKey:@"MMalwaysShowActiveTab"];
@@ -2125,7 +2124,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 			_useOverflowMenu = [aDecoder decodeBoolForKey:@"MMuseOverflowMenu"];
 			_automaticallyAnimates = [aDecoder decodeBoolForKey:@"MMautomaticallyAnimates"];
 			_alwaysShowActiveTab = [aDecoder decodeBoolForKey:@"MMalwaysShowActiveTab"];
-			_delegate = [[aDecoder decodeObjectForKey:@"MMdelegate"] retain];
 		}
 	}
 
