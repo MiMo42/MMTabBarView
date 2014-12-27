@@ -116,6 +116,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	if (self) {
 		// Initialization
 		[self _commonInit];
+
+		_style = [[MMMetalTabStyle alloc] init];
+
 		[self registerForDraggedTypes:[NSArray arrayWithObjects:AttachedTabBarButtonUTI, nil]];
 
 		// resize
@@ -2125,6 +2128,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 			_automaticallyAnimates = [aDecoder decodeBoolForKey:@"MMautomaticallyAnimates"];
 			_alwaysShowActiveTab = [aDecoder decodeBoolForKey:@"MMalwaysShowActiveTab"];
 		}
+
+		if (_style == nil) {
+			_style = [[MMMetalTabStyle alloc] init];
+		}
 	}
 
 	return self;
@@ -2274,7 +2281,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	_buttonMaxWidth = 280;
 	_buttonOptimumWidth = 130;
 	_tearOffStyle = MMTabBarTearOffAlphaWindow;
-	_style = [[MMMetalTabStyle alloc] init];
+	_style = nil;
     _isReorderingTabViewItems = NO;
     _destinationIndexForDraggedItem = NSNotFound;
     _needsUpdate = NO;
