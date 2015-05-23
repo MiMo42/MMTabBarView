@@ -75,9 +75,13 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 #pragma mark -
 #pragma mark Dragging Source Handling
 
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal ofTabBarView:(MMTabBarView *)tabBarView {
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context ofTabBarView:(MMTabBarView *)tabBarView {
+    if (context == NSDraggingContextOutsideApplication)
+        return NSDragOperationNone;
+    else if (context == NSDraggingContextWithinApplication)
+        return NSDragOperationMove;
 
-	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
+    return NSDragOperationNone;
 }
 
 - (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event {
@@ -94,9 +98,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     [self _dragAttachedTabBarButton:aButton ofTabBarView:tabBarView at:[aButton frame].origin event:event source:tabBarView];
 }
 
-- (void)draggedImageBeganAt:(NSPoint)aPoint withTabBarView:(MMTabBarView *)tabBarView {
+- (void)draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint withTabBarView:(MMTabBarView *)tabBarView {
+
 	if (_draggedTab) {
-		[[_draggedTab window] setFrameTopLeftPoint:aPoint];
+		[[_draggedTab window] setFrameTopLeftPoint:screenPoint];
 		[[_draggedTab window] orderFront:nil];
 
 		if ([[tabBarView tabView] numberOfTabViewItems] == 1) {
@@ -105,7 +110,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 	}
 }
 
-- (void)draggedImageMovedTo:(NSPoint)aPoint {
+- (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint {
 	if (_draggedTab) {
 		if (_centersDragWindows) {
 			if ([_draggedTab isAnimating]) {
@@ -119,7 +124,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			frame.origin.y -= frame.size.height / 2;
 			[[_draggedTab window] setFrame:frame display:NO];
 		} else {
-			[[_draggedTab window] setFrameTopLeftPoint:aPoint];
+			[[_draggedTab window] setFrameTopLeftPoint:screenPoint];
 		}
 
 		if (_draggedView) {
@@ -127,15 +132,15 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			//the relative position of the dragged view window will be different
 			//depending on the position of the tab bar relative to the controlled tab view
 
-			aPoint.y -= [[_draggedTab window] frame].size.height;
-			aPoint.x -= _dragWindowOffset.width;
-			aPoint.y += _dragWindowOffset.height;
-			[[_draggedView window] setFrameTopLeftPoint:aPoint];
+			screenPoint.y -= [[_draggedTab window] frame].size.height;
+			screenPoint.x -= _dragWindowOffset.width;
+			screenPoint.y += _dragWindowOffset.height;
+			[[_draggedView window] setFrameTopLeftPoint:screenPoint];
 		}
 	}
 }
 
-- (void)draggedImageEndedAt:(NSPoint)aPoint operation:(NSDragOperation)operation {
+- (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
 
     MMTabPasteboardItem *pasteboardItem = [self pasteboardItem];
     
@@ -150,7 +155,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 		if ([self destinationTabBar] == nil &&
 		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
            
-            MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[_attachedTabBarButton tabViewItem] atPoint:aPoint];
+            MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[_attachedTabBarButton tabViewItem] atPoint:screenPoint];
 
 			if (tabBarView) {
 
@@ -777,8 +782,13 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     _draggedTab = [[MMTabDragWindowController alloc] initWithImage:dragImage styleMask:NSBorderlessWindowMask tearOffStyle:_currentTearOffStyle];
 
     NSPoint location = [aButton frame].origin;
-        
-    [tabBarView dragImage:[[NSImage alloc] initWithSize:NSMakeSize(1, 1)] at:location offset:NSZeroSize event:theEvent pasteboard:pboard source:source slideBack:NO];
+
+    NSDraggingItem *item = [[NSDraggingItem alloc] initWithPasteboardWriter:[NSString string]];
+    [item setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dragImage];
+    
+    [tabBarView beginDraggingSessionWithItems:[NSArray arrayWithObject:item] event:theEvent source:source];
+    
+//    [tabBarView dragImage:[[NSImage alloc] initWithSize:NSMakeSize(1, 1)] at:location offset:NSZeroSize event:theEvent pasteboard:pboard source:source slideBack:NO];
 }
 
 - (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView {

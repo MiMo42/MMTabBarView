@@ -1637,29 +1637,25 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark NSDraggingSource
 
-- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
-    return NSDragOperationCopy;
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+	return [[MMTabDragAssistant sharedDragAssistant] draggingSession:session sourceOperationMaskForDraggingContext:context ofTabBarView:self];
 }
 
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
-
-	return [[MMTabDragAssistant sharedDragAssistant] draggingSourceOperationMaskForLocal:isLocal ofTabBarView:self];
-}
-
-- (BOOL)ignoreModifierKeysWhileDragging {
+- (BOOL)ignoreModifierKeysForDraggingSession:(NSDraggingSession *)session {
 	return YES;
 }
 
-- (void)draggedImage:(NSImage *)anImage beganAt:(NSPoint)screenPoint {
-	[[MMTabDragAssistant sharedDragAssistant] draggedImageBeganAt:screenPoint withTabBarView:self];
+- (void)draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint {
+    [[MMTabDragAssistant sharedDragAssistant] draggingSession:session willBeginAtPoint:screenPoint withTabBarView:self];
 }
 
-- (void)draggedImage:(NSImage *)image movedTo:(NSPoint)screenPoint {
-	[[MMTabDragAssistant sharedDragAssistant] draggedImageMovedTo:screenPoint];
+- (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint {
+    [[MMTabDragAssistant sharedDragAssistant] draggingSession:session movedToPoint:screenPoint];
 }
 
-- (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation {
-	[[MMTabDragAssistant sharedDragAssistant] draggedImageEndedAt:aPoint operation:operation];
+- (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
+	[[MMTabDragAssistant sharedDragAssistant] draggingSession:session endedAtPoint:screenPoint operation:operation];
 }
 
 #pragma mark -
