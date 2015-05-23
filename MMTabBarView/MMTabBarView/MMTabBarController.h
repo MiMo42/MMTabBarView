@@ -16,7 +16,7 @@
 	NSMenu			*_overflowMenu;
 }
 
-- (id)initWithTabBarView:(MMTabBarView *)aTabBarView;
+- (instancetype)initWithTabBarView:(MMTabBarView *)aTabBarView;
 
 - (NSMenu *)overflowMenu;
 

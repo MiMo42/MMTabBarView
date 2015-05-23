@@ -11,42 +11,38 @@
 #import "MMTabBarView.h"
 #import "MMRolloverButton.h"
 #import "MMProgressIndicator.h"
-#import "MMTabBarButtonCell.h"
+#import "MMTabBarButton.Common.h"
 
 @class MMTabBarView;
+@class MMTabBarButtonCell;
 
 @protocol MMTabStyle;
 
-@interface MMTabBarButton : MMRolloverButton {
+@interface MMTabBarButton : MMRolloverButton
 
-        // the layouted frame rect
-    NSRect _stackingFrame;
-    
-        // close button
-    MMRolloverButton *_closeButton;
-    
-        // progress indicator
-	MMProgressIndicator    *_indicator;    
-}
+- (instancetype)initWithFrame:(NSRect)frame;
+
+#pragma mark Properties
 
 @property (assign) NSRect stackingFrame;
-@property (retain) MMRolloverButton *closeButton;
+@property (strong) MMRolloverButton *closeButton;
 @property (assign) SEL closeButtonAction;
-@property (readonly, retain) MMProgressIndicator *indicator;
-
-- (id)initWithFrame:(NSRect)frame;
+@property (readonly, strong) MMProgressIndicator *indicator;
 
 - (MMTabBarButtonCell *)cell;
 - (void)setCell:(MMTabBarButtonCell *)aCell;
 
 - (MMTabBarView *)tabBarView;
 
+#pragma mark Update Cell
+
 - (void)updateCell;
+- (void)updateImages;
 
 #pragma mark Dividers
 
-- (BOOL)shouldDisplayLeftDivider;
-- (BOOL)shouldDisplayRightDivider;
+@property (readonly) BOOL shouldDisplayLeftDivider;
+@property (readonly) BOOL shouldDisplayRightDivider;
 
 #pragma mark Determine Sizes
 
@@ -55,37 +51,24 @@
 
 #pragma mark Interfacing Cell
 
-- (id <MMTabStyle>)style;
-- (void)setStyle:(id <MMTabStyle>)newStyle;
+@property (strong) id <MMTabStyle> style;
+@property (assign) MMTabStateMask tabState;
 
-- (MMTabStateMask)tabState;
-- (void)setTabState:(MMTabStateMask)newState;
+@property (strong) NSImage *icon;
+@property (strong) NSImage *largeImage;
 
-- (NSImage *)icon;
-- (void)setIcon:(NSImage *)anIcon;
-- (NSImage *)largeImage;
-- (void)setLargeImage:(NSImage *)anImage;
-- (BOOL)showObjectCount;
-- (void)setShowObjectCount:(BOOL)newState;
-- (NSInteger)objectCount;
-- (void)setObjectCount:(NSInteger)newCount;
-- (NSColor *)objectCountColor;
-- (void)setObjectCountColor:(NSColor *)newColor;
-- (BOOL)isEdited;
-- (void)setIsEdited:(BOOL)newState;
-- (BOOL)isProcessing;
-- (void)setIsProcessing:(BOOL)newState;
+@property (assign) BOOL showObjectCount;
+@property (assign) NSInteger objectCount;
 
-- (void)updateImages;
+@property (strong) NSColor *objectCountColor;
+
+@property (assign) BOOL isEdited;
+@property (assign) BOOL isProcessing;
 
 #pragma mark Close Button Support
 
-- (BOOL)shouldDisplayCloseButton;
-
-- (BOOL)hasCloseButton;
-- (void)setHasCloseButton:(BOOL)newState;
-
-- (BOOL)suppressCloseButton;
-- (void)setSuppressCloseButton:(BOOL)newState;
+@property (readonly) BOOL shouldDisplayCloseButton;
+@property (assign) BOOL hasCloseButton;
+@property (assign) BOOL suppressCloseButton;
 
 @end

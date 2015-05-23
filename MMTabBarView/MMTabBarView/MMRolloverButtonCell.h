@@ -7,11 +7,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum MMRolloverButtonType : NSUInteger
+typedef NS_ENUM(NSUInteger, MMRolloverButtonType)
 {
     MMRolloverActionButton = 0,
     MMRolloverSwitchButton
-} MMRolloverButtonType;
+};
 
 @interface MMRolloverButtonCell : NSButtonCell {
 
@@ -23,7 +23,7 @@ typedef enum MMRolloverButtonType : NSUInteger
 }
 
 @property (readonly) BOOL mouseHovered;
-@property (retain) NSImage *rolloverImage;
+@property (strong) NSImage *rolloverImage;
 @property (assign) MMRolloverButtonType rolloverButtonType;
 @property (assign) BOOL simulateClickOnMouseHovered;
 

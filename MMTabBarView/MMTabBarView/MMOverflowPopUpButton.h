@@ -22,7 +22,7 @@ typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *cont
 
 // archiving
 - (void)encodeWithCoder:(NSCoder *)aCoder;
-- (id)initWithCoder:(NSCoder *)aDecoder;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
 
 // bezel drawing
 - (MMCellBezelDrawingBlock)bezelDrawingBlock;

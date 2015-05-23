@@ -48,22 +48,25 @@ static NSImage* _static##name##Image() \
 
 @protocol MMTabStyle;
 
-typedef enum MMTabBarOrientation : NSUInteger {
+typedef NS_ENUM(NSUInteger, MMTabBarOrientation)
+{
     MMTabBarHorizontalOrientation = 0,
     MMTabBarVerticalOrientation
-} MMTabBarOrientation;
+};
 
-typedef enum MMTabBarTearOffStyle : NSUInteger {
+typedef NS_ENUM(NSUInteger, MMTabBarTearOffStyle)
+{
     MMTabBarTearOffAlphaWindow,
     MMTabBarTearOffMiniwindow
-} MMTabBarTearOffStyle;
+};
 
-typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
+typedef NS_ENUM(NSUInteger, MMAttachedButtonsEnumerationOptions)
+{
 
     MMAttachedButtonsEnumerationNone               = 0,
     MMAttachedButtonsEnumerationUpdateTabStateMask = 1 << 1,
     MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
-} MMAttachedButtonsEnumerationOptions;
+};
 
 @protocol MMTabBarViewDelegate;
 
@@ -127,9 +130,9 @@ typedef enum MMAttachedButtonsEnumerationOptions : NSUInteger {
     id <MMTabBarViewDelegate>       _delegate;
 }
 
-@property (retain) IBOutlet NSTabView *tabView;
-@property (retain) IBOutlet NSView *partnerView;
-@property (assign) IBOutlet id <MMTabBarViewDelegate> delegate;
+@property (strong) IBOutlet NSTabView *tabView;
+@property (strong) IBOutlet NSView *partnerView;
+@property (unsafe_unretained) IBOutlet id <MMTabBarViewDelegate> delegate;
 @property (assign) NSUInteger destinationIndexForDraggedItem;
 @property (readonly) BOOL isResizing;
 @property (assign) BOOL needsUpdate;

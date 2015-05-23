@@ -24,18 +24,18 @@
 }
 
 @property (copy)   NSString *title;
-@property (retain) NSImage  *largeImage;
-@property (retain) NSImage  *icon;
-@property (retain) NSString *iconName;
+@property (strong) NSImage  *largeImage;
+@property (strong) NSImage  *icon;
+@property (strong) NSString *iconName;
 
 @property (assign) BOOL      isProcessing;
 @property (assign) NSInteger objectCount;
-@property (retain) NSColor   *objectCountColor;
+@property (strong) NSColor   *objectCountColor;
 @property (assign) BOOL      showObjectCount;
 @property (assign) BOOL      isEdited;
 @property (assign) BOOL      hasCloseButton;
 
 // designated initializer
-- (id)init;
+- (instancetype)init;
 
 @end

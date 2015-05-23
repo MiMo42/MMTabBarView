@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 Michael Monscheuer. All rights reserved.
 //
 
-#ifndef MMTabBarView_MMTabBarButtonCell_Private_h
-#define MMTabBarView_MMTabBarButtonCell_Private_h
+@interface MMTabBarButtonCell (PrivateDrawing)
 
+- (NSRect)_closeButtonRectForBounds:(NSRect)theRect;
+- (CGFloat)_leftMargin;
+- (CGFloat)_rightMargin;
 
-#endif
+- (void)_drawObjectCounterWithFrame:(NSRect)frame inView:(NSView *)controlView;
+- (void)_drawIconWithFrame:(NSRect)frame inView:(NSView *)controlView;
+
+@end

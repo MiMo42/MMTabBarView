@@ -158,6 +158,9 @@
 		06789DBF161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */; };
 		069789581610A9E8009BB894 /* MMOverflowPopUpButtonCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 069789561610A9E8009BB894 /* MMOverflowPopUpButtonCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		069789591610A9E8009BB894 /* MMOverflowPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 069789571610A9E8009BB894 /* MMOverflowPopUpButtonCell.m */; };
+		06AE02301B10A21000C65A84 /* MMTabBarButton.Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AE02321B10A50200C65A84 /* MMTabBarButtonCell.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AE02341B10A6F500C65A84 /* MMTabBarView.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */; };
 		06DB23AA1609F5830071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23A91609F5830071BDA0 /* Cocoa.framework */; };
@@ -322,6 +325,9 @@
 		06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
 		069789561610A9E8009BB894 /* MMOverflowPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMOverflowPopUpButtonCell.h; sourceTree = "<group>"; };
 		069789571610A9E8009BB894 /* MMOverflowPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMOverflowPopUpButtonCell.m; sourceTree = "<group>"; };
+		06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTabBarButton.Common.h; sourceTree = "<group>"; };
+		06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarButtonCell.Private.h; sourceTree = "<group>"; };
+		06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarView.Private.h; sourceTree = "<group>"; };
 		06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSafariTabStyle.h; sourceTree = "<group>"; };
 		06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSafariTabStyle.m; sourceTree = "<group>"; };
 		06DB23A61609F5830071BDA0 /* MMTabBarView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MMTabBarView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -439,8 +445,10 @@
 				0634EFE11609FC7F00A6C86A /* MMAttachedTabBarButtonCell.h */,
 				0634EFE21609FC7F00A6C86A /* MMAttachedTabBarButtonCell.m */,
 				0634EFED1609FC7F00A6C86A /* MMTabBarButton.h */,
+				06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */,
 				0634EFEE1609FC7F00A6C86A /* MMTabBarButton.m */,
 				0634EFEF1609FC7F00A6C86A /* MMTabBarButtonCell.h */,
+				06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */,
 				0634EFF01609FC7F00A6C86A /* MMTabBarButtonCell.m */,
 			);
 			name = "Tab Buttons";
@@ -637,6 +645,7 @@
 				066375A116171EEF004A1128 /* MMTabBarItem.h */,
 				0634F0001609FC7F00A6C86A /* MMTabStyle.h */,
 				06DB23B61609F5830071BDA0 /* MMTabBarView.h */,
+				06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */,
 				06DB23B71609F5830071BDA0 /* MMTabBarView.m */,
 				0634F0261609FD4400A6C86A /* Animations */,
 				0634F0431609FEB200A6C86A /* Button Layout */,
@@ -675,11 +684,13 @@
 				0634F0091609FC7F00A6C86A /* MMProgressIndicator.h in Headers */,
 				0634F00B1609FC7F00A6C86A /* MMRolloverButton.h in Headers */,
 				0634F00D1609FC7F00A6C86A /* MMRolloverButtonCell.h in Headers */,
+				06AE02301B10A21000C65A84 /* MMTabBarButton.Common.h in Headers */,
 				0634F00F1609FC7F00A6C86A /* MMSlideButtonsAnimation.h in Headers */,
 				0634F0111609FC7F00A6C86A /* MMTabBarButton.h in Headers */,
 				0634F0131609FC7F00A6C86A /* MMTabBarButtonCell.h in Headers */,
 				0634F0181609FC7F00A6C86A /* MMTabBarController.h in Headers */,
 				0634F01A1609FC7F00A6C86A /* MMTabDragAssistant.h in Headers */,
+				06AE02341B10A6F500C65A84 /* MMTabBarView.Private.h in Headers */,
 				0634F01C1609FC7F00A6C86A /* MMTabDragView.h in Headers */,
 				0634F01E1609FC7F00A6C86A /* MMTabDragWindow.h in Headers */,
 				0634F0201609FC7F00A6C86A /* MMTabDragWindowController.h in Headers */,
@@ -694,6 +705,7 @@
 				0634F09A160A0CDB00A6C86A /* MMTabBarView.h in Headers */,
 				0634F0B2160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h in Headers */,
 				06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */,
+				06AE02321B10A50200C65A84 /* MMTabBarButtonCell.Private.h in Headers */,
 				069789581610A9E8009BB894 /* MMOverflowPopUpButtonCell.h in Headers */,
 				06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */,
 				06789DB6161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h in Headers */,
@@ -951,6 +963,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0634F0C8160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -967,6 +980,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0634F0C9160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

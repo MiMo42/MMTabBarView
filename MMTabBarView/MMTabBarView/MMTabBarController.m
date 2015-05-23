@@ -30,7 +30,7 @@
     @param      A MMTabBarView.
     @returns    A newly created MMTabBarController instance.
  */
-- (id)initWithTabBarView:(MMTabBarView *)aTabBarView {
+- (instancetype)initWithTabBarView:(MMTabBarView *)aTabBarView {
 	if ((self = [super init])) {
 		_tabBarView = aTabBarView;
 	}
@@ -41,9 +41,8 @@
 
     _tabBarView = nil; // non retained!
 
-    [_overflowMenu release], _overflowMenu = nil;
+    _overflowMenu = nil;
 
-    [super dealloc];
 }
 
 /*!
@@ -72,7 +71,7 @@
     
         MMAttachedTabBarButton *draggedButton = [_tabBarView attachedTabBarButtonForDraggedItems];
         if (draggedButton) {
-            NSMutableArray *mutable = [[attachedButtons mutableCopy] autorelease];
+            NSMutableArray *mutable = [attachedButtons mutableCopy];
             [mutable insertObject:draggedButton atIndex:[_tabBarView destinationIndexForDraggedItem]];
             attachedButtons = mutable;
             
@@ -407,7 +406,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 
     NSUInteger buttonCount = [buttons count];
 
-	[_overflowMenu release], _overflowMenu = nil;
+	_overflowMenu = nil;
     
     __block NSRect buttonRect = [_tabBarView genericButtonRect];
 

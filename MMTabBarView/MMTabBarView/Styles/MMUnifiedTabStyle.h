@@ -9,17 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabStyle.h"
 
-@interface MMUnifiedTabStyle : NSObject <MMTabStyle> {
-
-	NSImage				*unifiedCloseButton;
-	NSImage				*unifiedCloseButtonDown;
-	NSImage				*unifiedCloseButtonOver;
-	NSImage				*unifiedCloseDirtyButton;
-	NSImage				*unifiedCloseDirtyButtonDown;
-	NSImage				*unifiedCloseDirtyButtonOver;
-
-	CGFloat				_leftMargin;
-}
+@interface MMUnifiedTabStyle : NSObject <MMTabStyle>
 
 @property (assign) CGFloat leftMarginForTabBarView;
 

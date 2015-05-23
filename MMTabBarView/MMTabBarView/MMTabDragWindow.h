@@ -13,8 +13,8 @@
 @interface MMTabDragWindow : NSWindow {
 	MMTabDragView					*_dragView;
 }
-+ (MMTabDragWindow *)dragWindowWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask;
++ (instancetype)dragWindowWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask;
 
-- (id)initWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask;
+- (instancetype)initWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask;
 - (MMTabDragView *)dragView;
 @end

@@ -12,13 +12,21 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 
-@interface MMMetalTabStyle (/*Private*/)
-
-- (BOOL)_shouldDrawHorizontalTopBorderLineInView:(id)controlView;
+@interface MMMetalTabStyle ()
 
 @end
 
 @implementation MMMetalTabStyle
+{
+	NSImage					*metalCloseButton;
+	NSImage					*metalCloseButtonDown;
+	NSImage					*metalCloseButtonOver;
+	NSImage					*metalCloseDirtyButton;
+	NSImage					*metalCloseDirtyButtonDown;
+	NSImage					*metalCloseDirtyButtonOver;
+
+	NSDictionary			*_objectCountStringAttributes;
+}
 
 StaticImage(TabNewMetal)
 StaticImage(TabNewMetalPressed)
@@ -35,7 +43,7 @@ StaticImage(TabNewMetalRollover)
 #pragma mark -
 #pragma mark Creation/Destruction
 
-- (id) init {
+- (instancetype) init {
 	if ((self = [super init])) {
 		metalCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Front"]];
 		metalCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Front_Pressed"]];
@@ -53,16 +61,14 @@ StaticImage(TabNewMetalRollover)
 }
 
 - (void)dealloc {
-	[metalCloseButton release], metalCloseButton = nil;
-	[metalCloseButtonDown release], metalCloseButtonDown = nil;
-	[metalCloseButtonOver release], metalCloseButtonOver = nil;
-	[metalCloseDirtyButton release], metalCloseDirtyButton = nil;
-	[metalCloseDirtyButtonDown release], metalCloseDirtyButtonDown = nil;
-	[metalCloseDirtyButtonOver release], metalCloseDirtyButtonOver = nil;
+	metalCloseButton = nil;
+	metalCloseButtonDown = nil;
+	metalCloseButtonOver = nil;
+	metalCloseDirtyButton = nil;
+	metalCloseDirtyButtonDown = nil;
+	metalCloseDirtyButtonOver = nil;
 
-	[_objectCountStringAttributes release], _objectCountStringAttributes = nil;
-
-	[super dealloc];
+	_objectCountStringAttributes = nil;
 }
 
 #pragma mark -
@@ -156,13 +162,13 @@ StaticImage(TabNewMetalRollover)
 
 - (NSAttributedString *)attributedObjectCountStringValueForTabCell:(MMTabBarButtonCell *)cell {
 	NSString *contents = [NSString stringWithFormat:@"%lu", (unsigned long)[cell objectCount]];
-	return [[[NSMutableAttributedString alloc] initWithString:contents attributes:_objectCountStringAttributes] autorelease];
+	return [[NSMutableAttributedString alloc] initWithString:contents attributes:_objectCountStringAttributes];
 }
 
 - (NSAttributedString *)attributedStringValueForTabCell:(MMTabBarButtonCell *)cell {
 	NSMutableAttributedString *attrStr;
 	NSString *contents = [cell title];
-	attrStr = [[[NSMutableAttributedString alloc] initWithString:contents] autorelease];
+	attrStr = [[NSMutableAttributedString alloc] initWithString:contents];
 	NSRange range = NSMakeRange(0, [contents length]);
 
 	// Add font attribute
@@ -171,7 +177,7 @@ StaticImage(TabNewMetalRollover)
 
 	// Add shadow attribute
 	NSShadow* shadow;
-	shadow = [[[NSShadow alloc] init] autorelease];
+	shadow = [[NSShadow alloc] init];
 	CGFloat shadowAlpha;
 	if (([cell state] == NSOnState) || [cell mouseHovered]) {
 		shadowAlpha = 0.8;
@@ -186,7 +192,7 @@ StaticImage(TabNewMetalRollover)
 	// Paragraph Style for Truncating Long Text
 	static NSMutableParagraphStyle *TruncatingTailParagraphStyle = nil;
 	if (!TruncatingTailParagraphStyle) {
-		TruncatingTailParagraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] retain];
+		TruncatingTailParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 		[TruncatingTailParagraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 		[TruncatingTailParagraphStyle setAlignment:NSCenterTextAlignment];
 	}
@@ -345,36 +351,6 @@ StaticImage(TabNewMetalRollover)
             }
         }
     }
-}
-
-#pragma mark -
-#pragma mark Archiving
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	//[super encodeWithCoder:aCoder];
-	if ([aCoder allowsKeyedCoding]) {
-		[aCoder encodeObject:metalCloseButton forKey:@"metalCloseButton"];
-		[aCoder encodeObject:metalCloseButtonDown forKey:@"metalCloseButtonDown"];
-		[aCoder encodeObject:metalCloseButtonOver forKey:@"metalCloseButtonOver"];
-		[aCoder encodeObject:metalCloseDirtyButton forKey:@"metalCloseDirtyButton"];
-		[aCoder encodeObject:metalCloseDirtyButtonDown forKey:@"metalCloseDirtyButtonDown"];
-		[aCoder encodeObject:metalCloseDirtyButtonOver forKey:@"metalCloseDirtyButtonOver"];
-	}
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	// self = [super initWithCoder:aDecoder];
-	//if (self) {
-	if ([aDecoder allowsKeyedCoding]) {
-		metalCloseButton = [[aDecoder decodeObjectForKey:@"metalCloseButton"] retain];
-		metalCloseButtonDown = [[aDecoder decodeObjectForKey:@"metalCloseButtonDown"] retain];
-		metalCloseButtonOver = [[aDecoder decodeObjectForKey:@"metalCloseButtonOver"] retain];
-		metalCloseDirtyButton = [[aDecoder decodeObjectForKey:@"metalCloseDirtyButton"] retain];
-		metalCloseDirtyButtonDown = [[aDecoder decodeObjectForKey:@"metalCloseDirtyButtonDown"] retain];
-		metalCloseDirtyButtonOver = [[aDecoder decodeObjectForKey:@"metalCloseDirtyButtonOver"] retain];
-	}
-	//}
-	return self;
 }
 
 #pragma mark -

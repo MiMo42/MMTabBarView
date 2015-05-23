@@ -12,10 +12,6 @@
 
 @implementation MMAppDelegate
 
-- (void)dealloc
-{
-    [super dealloc];
-}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)pNotification {
     [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];

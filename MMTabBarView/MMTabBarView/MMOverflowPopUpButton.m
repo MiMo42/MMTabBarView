@@ -48,7 +48,7 @@ StaticImage(overflowImagePressed)
     return [MMOverflowPopUpButtonCell class];
 }
 
-- (id)initWithFrame:(NSRect)frameRect pullsDown:(BOOL)flag {
+- (instancetype)initWithFrame:(NSRect)frameRect pullsDown:(BOOL)flag {
 	if (self = [super initWithFrame:frameRect pullsDown:YES]) {
     
         _isAnimating = NO;
@@ -67,9 +67,6 @@ StaticImage(overflowImagePressed)
 	return self;
 }
 
-- (void)dealloc {
-	[super dealloc];
-}
 
 - (void)viewWillMoveToSuperview:(NSView *)newSuperview {
     [super viewWillMoveToSuperview:newSuperview];
@@ -194,7 +191,7 @@ StaticImage(overflowImagePressed)
 	[super encodeWithCoder:aCoder];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
 	}
 	return self;

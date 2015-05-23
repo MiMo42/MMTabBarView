@@ -14,7 +14,7 @@
 - (NSString *)stringByTruncatingToLength:(NSUInteger)truncationLength {
     NSUInteger len = [self length];
     if (len < truncationLength)
-        return [[self copy] autorelease];
+        return [self copy];
         
         // Unicode character 2026 is ellipsis
     return [[self substringToIndex:truncationLength - 10] stringByAppendingString:@"\u2026"];

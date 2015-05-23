@@ -8,7 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum MMBezierShapeCapMask : NSUInteger {
+typedef NS_ENUM(NSUInteger, MMBezierShapeCapMask)
+{
     MMBezierShapeLeftCap           = 0x0001,
     MMBezierShapeRightCap          = 0x0002,
     
@@ -16,7 +17,7 @@ typedef enum MMBezierShapeCapMask : NSUInteger {
     
     MMBezierShapeFlippedVertically = 0x1000,
     MMBezierShapeFillPath          = 0x2000
-} MMBezierShapeCapMask;
+};
 
 @interface NSBezierPath (MMTabBarViewExtensions)
 

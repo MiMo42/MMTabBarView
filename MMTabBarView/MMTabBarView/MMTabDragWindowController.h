@@ -23,7 +23,7 @@
 	BOOL								_showingAlternate;
 	NSRect								_originalWindowFrame;
 }
-- (id)initWithImage:(NSImage *)image styleMask:(NSUInteger) styleMask tearOffStyle:(MMTabBarTearOffStyle)tearOffStyle;
+- (instancetype)initWithImage:(NSImage *)image styleMask:(NSUInteger) styleMask tearOffStyle:(MMTabBarTearOffStyle)tearOffStyle;
 
 - (NSImage *)image;
 - (NSImage *)alternateImage;

@@ -60,7 +60,7 @@
 	[toolbar setAutosavesConfiguration:YES];
     [toolbar setShowsBaselineSeparator:NO];
     
-	[[self window] setToolbar:[toolbar autorelease]];
+	[[self window] setToolbar:toolbar];
 
     [tabBar addObserver:self forKeyPath:@"orientation" options:NSKeyValueObservingOptionNew context:NULL];
 
@@ -82,8 +82,6 @@
 	NSTabViewItem *newItem = [[NSTabViewItem alloc] initWithIdentifier:newModel];
 	[tabView addTabViewItem:newItem];
     [tabView selectTabViewItem:newItem];    
-    [newModel release];
-    [newItem release];
 }
 
 - (void)addDefaultTabs {
@@ -111,7 +109,7 @@
         [[tabBar delegate] tabView:tabView willCloseTabViewItem:tabViewItem];
     }
     
-    [tabView removeTabViewItem:[[tabViewItem retain] autorelease]];
+    [tabView removeTabViewItem:tabViewItem];
     
     if (([tabBar delegate]) && ([[tabBar delegate] respondsToSelector:@selector(tabView:didCloseTabViewItem:)])) {
         [[tabBar delegate] tabView:tabView didCloseTabViewItem:tabViewItem];
@@ -188,8 +186,6 @@
 - (void)windowWillClose:(NSNotification *)note {
 
     [tabBar removeObserver:self forKeyPath:@"orientation"];
-
-	[self autorelease];
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
@@ -503,17 +499,17 @@
 
 - (NSImage *)tabView:(NSTabView *)aTabView imageForTabViewItem:(NSTabViewItem *)tabViewItem offset:(NSSize *)offset styleMask:(NSUInteger *)styleMask {
 	// grabs whole window image
-	NSImage *viewImage = [[[NSImage alloc] init] autorelease];
+	NSImage *viewImage = [[NSImage alloc] init];
 	NSRect contentFrame = [[[self window] contentView] frame];
 	[[[self window] contentView] lockFocus];
-	NSBitmapImageRep *viewRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:contentFrame] autorelease];
+	NSBitmapImageRep *viewRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:contentFrame];
 	[viewImage addRepresentation:viewRep];
 	[[[self window] contentView] unlockFocus];
 
 	// grabs snapshot of dragged tabViewItem's view (represents content being dragged)
 	NSView *viewForImage = [tabViewItem view];
 	NSRect viewRect = [viewForImage frame];
-	NSImage *tabViewImage = [[[NSImage alloc] initWithSize:viewRect.size] autorelease];
+	NSImage *tabViewImage = [[NSImage alloc] initWithSize:viewRect.size];
 	[tabViewImage lockFocus];
 	[viewForImage drawRect:[viewForImage bounds]];
 	[tabViewImage unlockFocus];
@@ -621,7 +617,7 @@
 		[item setAction:@selector(toggle:)];
 	}
 
-	return [item autorelease];
+	return item;
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {

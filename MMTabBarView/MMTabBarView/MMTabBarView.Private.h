@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Michael Monscheuer. All rights reserved.
 //
 
-#ifndef MMTabBarView_MMTabBarView_Private_h
-#define MMTabBarView_MMTabBarView_Private_h
+@interface MMTabBarView (PrivateDrawing)
 
+- (void)_drawInteriorInRect:(NSRect)rect;
+- (NSRect)_addTabButtonRect;
+- (NSRect)_overflowButtonRect;
 
-#endif
+@end

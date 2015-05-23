@@ -6,8 +6,29 @@
 //  Copyright (c) 2015 Michael Monscheuer. All rights reserved.
 //
 
-#ifndef MMTabBarView_MMTabBarButton_Common_h
-#define MMTabBarView_MMTabBarButton_Common_h
+typedef NS_ENUM(NSUInteger, MMCloseButtonImageType)
+{
+    MMCloseButtonImageTypeStandard = 0,
+    MMCloseButtonImageTypeRollover,
+    MMCloseButtonImageTypePressed,
+    MMCloseButtonImageTypeDirty,
+    MMCloseButtonImageTypeDirtyRollover,
+    MMCloseButtonImageTypeDirtyPressed
+};
 
-
-#endif
+typedef NS_ENUM(NSUInteger,MMTabStateMask)
+{
+	MMTab_LeftIsSelectedMask		= 1 << 2,
+	MMTab_RightIsSelectedMask		= 1 << 3,
+    
+    MMTab_LeftIsSliding             = 1 << 4,
+    MMTab_RightIsSliding            = 1 << 5,
+    
+    MMTab_PlaceholderOnLeft         = 1 << 6,
+    MMTab_PlaceholderOnRight        = 1 << 7,
+    
+	MMTab_PositionLeftMask			= 1 << 8,
+	MMTab_PositionMiddleMask		= 1 << 9,
+	MMTab_PositionRightMask         = 1 << 10,
+	MMTab_PositionSingleMask		= 1 << 11
+};

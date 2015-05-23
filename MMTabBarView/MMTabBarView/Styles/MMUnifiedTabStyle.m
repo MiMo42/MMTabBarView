@@ -12,16 +12,18 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 
-@interface MMUnifiedTabStyle (/*Private*/)
-
-- (void)_drawCardBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
-- (void)_drawBoxBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
-
+@interface MMUnifiedTabStyle ()
 @end
 
 @implementation MMUnifiedTabStyle
-
-@synthesize leftMarginForTabBarView = _leftMargin;
+{
+	NSImage				*unifiedCloseButton;
+	NSImage				*unifiedCloseButtonDown;
+	NSImage				*unifiedCloseButtonOver;
+	NSImage				*unifiedCloseDirtyButton;
+	NSImage				*unifiedCloseDirtyButtonDown;
+	NSImage				*unifiedCloseDirtyButtonOver;
+}
 
 + (NSString *)name {
     return @"Unified";
@@ -34,7 +36,7 @@
 #pragma mark -
 #pragma mark Creation/Destruction
 
-- (id) init {
+- (instancetype) init {
 	if ((self = [super init])) {
 		unifiedCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
 		unifiedCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
@@ -44,20 +46,19 @@
 		unifiedCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
 		unifiedCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
 
-		_leftMargin = 0.0;
+		_leftMarginForTabBarView = 0.0;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[unifiedCloseButton release], unifiedCloseButton = nil;
-	[unifiedCloseButtonDown release], unifiedCloseButtonDown = nil;
-	[unifiedCloseButtonOver release], unifiedCloseButtonOver = nil;
-	[unifiedCloseDirtyButton release], unifiedCloseDirtyButton = nil;
-	[unifiedCloseDirtyButtonDown release], unifiedCloseDirtyButtonDown = nil;
-	[unifiedCloseDirtyButtonOver release], unifiedCloseDirtyButtonOver = nil;
+	unifiedCloseButton = nil;
+	unifiedCloseButtonDown = nil;
+	unifiedCloseButtonOver = nil;
+	unifiedCloseDirtyButton = nil;
+	unifiedCloseDirtyButtonDown = nil;
+	unifiedCloseDirtyButtonOver = nil;
 
-	[super dealloc];
 }
 
 #pragma mark -
@@ -65,14 +66,14 @@
 
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
-        return _leftMargin;
+        return _leftMarginForTabBarView;
     else
         return 0.0f;
 }
 
 - (CGFloat)rightMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
-        return _leftMargin;
+        return _leftMarginForTabBarView;
     else
         return 0.0f;
 }
@@ -149,7 +150,6 @@
 	} else {
         NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.835 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.843 alpha:1.0]];
         [gradient drawInRect:gradientRect angle:90.0];
-        [gradient release];
     }
 
 	[[NSColor colorWithCalibratedWhite:0.576 alpha:1.0] set];
@@ -285,36 +285,6 @@
 }
 
 #pragma mark -
-#pragma mark Archiving
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	//[super encodeWithCoder:aCoder];
-	if ([aCoder allowsKeyedCoding]) {
-		[aCoder encodeObject:unifiedCloseButton forKey:@"unifiedCloseButton"];
-		[aCoder encodeObject:unifiedCloseButtonDown forKey:@"unifiedCloseButtonDown"];
-		[aCoder encodeObject:unifiedCloseButtonOver forKey:@"unifiedCloseButtonOver"];
-		[aCoder encodeObject:unifiedCloseDirtyButton forKey:@"unifiedCloseDirtyButton"];
-		[aCoder encodeObject:unifiedCloseDirtyButtonDown forKey:@"unifiedCloseDirtyButtonDown"];
-		[aCoder encodeObject:unifiedCloseDirtyButtonOver forKey:@"unifiedCloseDirtyButtonOver"];
-	}
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	// self = [super initWithCoder:aDecoder];
-	//if (self) {
-	if ([aDecoder allowsKeyedCoding]) {
-		unifiedCloseButton = [[aDecoder decodeObjectForKey:@"unifiedCloseButton"] retain];
-		unifiedCloseButtonDown = [[aDecoder decodeObjectForKey:@"unifiedCloseButtonDown"] retain];
-		unifiedCloseButtonOver = [[aDecoder decodeObjectForKey:@"unifiedCloseButtonOver"] retain];
-		unifiedCloseDirtyButton = [[aDecoder decodeObjectForKey:@"unifiedCloseDirtyButton"] retain];
-		unifiedCloseDirtyButtonDown = [[aDecoder decodeObjectForKey:@"unifiedCloseDirtyButtonDown"] retain];
-		unifiedCloseDirtyButtonOver = [[aDecoder decodeObjectForKey:@"unifiedCloseDirtyButtonOver"] retain];
-	}
-	//}
-	return self;
-}
-
-#pragma mark -
 #pragma mark Private Methods
 
 - (void)_drawCardBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView {
@@ -332,13 +302,11 @@
             NSColor *endColor = [NSColor colorWithDeviceWhite:0.663 alpha:1.000];
             NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
             [gradient drawInBezierPath:fillPath angle:80.0];
-            [gradient release];
         } else if ([button mouseHovered]) {
             NSColor *startColor = [NSColor colorWithDeviceWhite:0.8 alpha:1.000];
             NSColor *endColor = [NSColor colorWithDeviceWhite:0.8 alpha:1.000];
             NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
             [gradient drawInBezierPath:fillPath angle:80.0];
-            [gradient release];            
         }
         
     } else {
@@ -349,7 +317,6 @@
             [[NSGraphicsContext currentContext] setShouldAntialias:NO];
             [gradient drawInBezierPath:fillPath angle:90.0];
             [[NSGraphicsContext currentContext] setShouldAntialias:YES];
-            [gradient release];
         }
     }        
 

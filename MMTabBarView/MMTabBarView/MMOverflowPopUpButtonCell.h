@@ -22,8 +22,8 @@
 }
 
 @property (copy) MMCellBezelDrawingBlock bezelDrawingBlock;
-@property (retain) NSImage *image;
-@property (retain) NSImage *secondImage;
+@property (strong) NSImage *image;
+@property (strong) NSImage *secondImage;
 @property (assign) CGFloat secondImageAlpha;
 
 - (void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)controlView alpha:(CGFloat)alpha;

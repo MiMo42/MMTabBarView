@@ -13,15 +13,20 @@
 #import "NSCell+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 
-@interface MMLiveChatTabStyle (/*Private*/)
-
-- (void)_drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
-
+@interface MMLiveChatTabStyle ()
 @end
 
 @implementation MMLiveChatTabStyle
+{
+	NSImage				*liveChatCloseButton;
+	NSImage				*liveChatCloseButtonDown;
+	NSImage				*liveChatCloseButtonOver;
+	NSImage				*liveChatCloseDirtyButton;
+	NSImage				*liveChatCloseDirtyButtonDown;
+	NSImage				*liveChatCloseDirtyButtonOver;
 
-@synthesize leftMarginForTabBarView = _leftMargin;
+	NSDictionary		*_objectCountStringAttributes;
+}
 
 + (NSString *)name {
     return @"LiveChat";
@@ -34,7 +39,7 @@
 #pragma mark -
 #pragma mark Creation/Destruction
 
-- (id) init {
+- (instancetype) init {
 	if ((self = [super init])) {
 		liveChatCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
 		liveChatCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
@@ -48,22 +53,20 @@
 										[[NSColor whiteColor] colorWithAlphaComponent:0.85], NSForegroundColorAttributeName,
 										[[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Lucida Grande" size:11.0] toHaveTrait:NSBoldFontMask], NSFontAttributeName,
 										nil];
-		_leftMargin = 5.0;
+		_leftMarginForTabBarView = 5.0;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[liveChatCloseButton release], liveChatCloseButton = nil;
-	[liveChatCloseButtonDown release], liveChatCloseButtonDown = nil;
-	[liveChatCloseButtonOver release], liveChatCloseButtonOver = nil;
-	[liveChatCloseDirtyButton release], liveChatCloseDirtyButton = nil;
-	[liveChatCloseDirtyButtonDown release], liveChatCloseDirtyButtonDown = nil;
-	[liveChatCloseDirtyButtonOver release], liveChatCloseDirtyButtonOver = nil;
+	liveChatCloseButton = nil;
+	liveChatCloseButtonDown = nil;
+	liveChatCloseButtonOver = nil;
+	liveChatCloseDirtyButton = nil;
+	liveChatCloseDirtyButtonDown = nil;
+	liveChatCloseDirtyButtonOver = nil;
     
-	[_objectCountStringAttributes release], _objectCountStringAttributes = nil;
-
-	[super dealloc];
+	_objectCountStringAttributes = nil;
 }
 
 #pragma mark -
@@ -71,14 +74,14 @@
 
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
-        return _leftMargin;
+        return _leftMarginForTabBarView;
     else
         return 0.0;
 }
 
 - (CGFloat)rightMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
-        return _leftMargin;
+        return _leftMarginForTabBarView;
     else
         return 0.0;
 }
@@ -334,13 +337,13 @@
 
 - (NSAttributedString *)attributedObjectCountStringValueForTabCell:(MMTabBarButtonCell *)cell {
 	NSString *contents = [NSString stringWithFormat:@"%lu", (unsigned long)[cell objectCount]];
-	return [[[NSMutableAttributedString alloc] initWithString:contents attributes:_objectCountStringAttributes] autorelease];
+	return [[NSMutableAttributedString alloc] initWithString:contents attributes:_objectCountStringAttributes];
 }
 
 - (NSAttributedString *)attributedStringValueForTabCell:(MMTabBarButtonCell *)cell {
 	NSMutableAttributedString *attrStr;
 	NSString * contents = [cell title];
-	attrStr = [[[NSMutableAttributedString alloc] initWithString:contents] autorelease];
+	attrStr = [[NSMutableAttributedString alloc] initWithString:contents];
 	NSRange range = NSMakeRange(0, [contents length]);
 
 	[attrStr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0] range:range];
@@ -348,7 +351,7 @@
 	// Paragraph Style for Truncating Long Text
 	static NSMutableParagraphStyle *TruncatingTailParagraphStyle = nil;
 	if (!TruncatingTailParagraphStyle) {
-		TruncatingTailParagraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] retain];
+		TruncatingTailParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 		[TruncatingTailParagraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 	}
 	[attrStr addAttribute:NSParagraphStyleAttributeName value:TruncatingTailParagraphStyle range:range];
@@ -369,7 +372,6 @@
 		NSBezierPath *path = [NSBezierPath bezierPathWithRect:gradientRect];
         NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.75 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.75 alpha:0.0]];
         [gradient drawInBezierPath:path angle:90.0];
-        [gradient release];
 	}
     
 	[[NSColor colorWithCalibratedWhite:0.576 alpha:1.0] set];
@@ -497,18 +499,6 @@
 }
 
 #pragma mark -
-#pragma mark Archiving
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	// ... do not encode anything
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	// ... do not read anything
-	return [self init];
-}
-
-#pragma mark -
 #pragma mark Private Methods
 
 - (void)_drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView {
@@ -542,7 +532,6 @@
     
     NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
     [gradient drawInBezierPath:fillPath angle:90.0];
-    [gradient release];
 
     NSBezierPath *outlinePath = outlinePath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:capMask];
   

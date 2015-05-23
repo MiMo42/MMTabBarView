@@ -12,7 +12,7 @@
 
 @implementation MMSlideButtonsAnimation
 
-- (id)initWithTabBarButtons:(NSSet *)buttons {
+- (instancetype)initWithTabBarButtons:(NSSet *)buttons {
 
     NSArray *viewAnimations = [self _viewAnimationsForButtons:buttons];
 
@@ -32,7 +32,6 @@
     NSMutableArray *animations = [[self viewAnimations] mutableCopy];
     [animations addObject:aDict];
     [self setViewAnimations:animations];
-    [animations release];
 }
 
 #pragma mark -
@@ -54,7 +53,6 @@
             
         [animations addObject:animDict];
         
-        [animDict release];
     }
     
     return animations;
