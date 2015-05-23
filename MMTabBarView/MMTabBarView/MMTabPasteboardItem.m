@@ -10,8 +10,6 @@
 
 @implementation MMTabPasteboardItem
 
-@synthesize sourceIndex = _sourceIndex;
-
 - (instancetype)init {
     self = [super init];
     if (self) {

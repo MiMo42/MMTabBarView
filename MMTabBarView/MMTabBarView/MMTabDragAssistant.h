@@ -17,34 +17,12 @@
 
 extern NSString *AttachedTabBarButtonUTI;
 
-@interface MMTabDragAssistant : NSObject <NSAnimationDelegate> {
+@interface MMTabDragAssistant : NSObject <NSAnimationDelegate>
 
-@private
+// Creation/destruction
++ (instancetype)sharedDragAssistant;
 
-	NSPoint							_currentMouseLocation;
-
-        // standard drag & drop support
-	MMTabBarView					*_sourceTabBar;
-	MMAttachedTabBarButton			*_attachedTabBarButton;
-
-    MMTabPasteboardItem             *_pasteboardItem;
-	MMTabBarView                    *_destinationTabBar;
-	BOOL							_isDragging;
-        
-        // sliding support
-    BOOL                            _isSliding;
-
-        // Support for dragging into new windows
-	MMTabDragWindowController		*_draggedTab;
-	MMTabDragWindowController		*_draggedView;
-	NSSize							_dragWindowOffset;
-	NSTimer							*_fadeTimer;
-	BOOL							_centersDragWindows;
-	MMTabBarTearOffStyle			_currentTearOffStyle;
-
-        // Animation
-    MMSlideButtonsAnimation         *_slideButtonsAnimation;
-}
+#pragma mark Properties
 
 @property (strong) MMTabBarView *sourceTabBar;
 @property (strong) MMAttachedTabBarButton *attachedTabBarButton;
@@ -54,9 +32,6 @@ extern NSString *AttachedTabBarButtonUTI;
 @property (assign) NSPoint currentMouseLocation;
 
 @property (assign) BOOL isSliding;
-
-// Creation/destruction
-+ (instancetype)sharedDragAssistant;
 
 #pragma mark Dragging Source Handling
 

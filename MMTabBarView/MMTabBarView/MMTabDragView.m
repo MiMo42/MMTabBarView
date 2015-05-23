@@ -8,7 +8,6 @@
 
 #import "MMTabDragView.h"
 
-
 @implementation MMTabDragView
 
 - (instancetype)initWithFrame:(NSRect)frame {
@@ -17,7 +16,6 @@
 	}
 	return self;
 }
-
 
 - (void)drawRect:(NSRect)rect {
 	//1.0 fade means show the primary image
@@ -30,26 +28,6 @@
 	[_image drawInRect:[self bounds] fromRect:srcRect operation:NSCompositeSourceOver fraction:primaryAlpha respectFlipped:YES hints:nil];
 	srcRect.size = [_alternateImage size];
 	[_alternateImage drawInRect:[self bounds] fromRect:srcRect operation:NSCompositeSourceOver fraction:alternateAlpha respectFlipped:YES hints:nil];
-}
-
-- (void)setFadeValue:(CGFloat)value {
-	_alpha = value;
-}
-
-- (NSImage *)image {
-	return _image;
-}
-
-- (void)setImage:(NSImage *)image {
-	_image = image;
-}
-
-- (NSImage *)alternateImage {
-	return _alternateImage;
-}
-
-- (void)setAlternateImage:(NSImage *)image {
-	_alternateImage = image;
 }
 
 @end

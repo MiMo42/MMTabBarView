@@ -12,17 +12,9 @@
 typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
 
 @interface MMOverflowPopUpButton : NSPopUpButton {
-
-    BOOL _isAnimating;                      // pulsating animation of image and second image
 }
 
-// accessors
-- (NSImage *)secondImage;
-- (void)setSecondImage:(NSImage *)anImage;
-
-// archiving
-- (void)encodeWithCoder:(NSCoder *)aCoder;
-- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+@property (strong) NSImage *secondImage;
 
 // bezel drawing
 - (MMCellBezelDrawingBlock)bezelDrawingBlock;

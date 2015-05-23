@@ -10,6 +10,9 @@
 #import "MMTabDragView.h"
 
 @implementation MMTabDragWindow
+{
+    MMTabDragView *_dragView;
+}
 
 + (instancetype)dragWindowWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask {
 	return [[MMTabDragWindow alloc] initWithImage:image styleMask:styleMask];

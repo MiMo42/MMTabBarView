@@ -31,74 +31,74 @@
 
 #define DIVIDER_WIDTH 3
 
-@interface MMTabBarView (/*Private*/)
+@interface MMTabBarView ()
 
+// reordering
 @property (assign) BOOL isReorderingTabViewItems;
-
-- (void)_commonInit;
-
-// providing defaults
-- (BOOL)_supportsOrientation:(MMTabBarOrientation)orientation;
-- (CGFloat)_heightOfTabBarButtons;
-- (CGFloat)_rightMargin;
-- (CGFloat)_leftMargin;
-- (CGFloat)_topMargin;
-- (CGFloat)_bottomMargin;
-- (NSSize)_addTabButtonSize;
-- (NSRect)_addTabButtonRect;
-- (NSSize)_overflowButtonSize;
-- (NSRect)_overflowButtonRect;
-- (void)_drawTabBarViewInRect:(NSRect)aRect;
-- (void)_drawBezelInRect:(NSRect)rect;
-- (void)_drawButtonBezelsInRect:(NSRect)rect;
-- (void)_drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex inRect:(NSRect)rect;
-- (void)_drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton inRect:(NSRect)rect;
-- (void)_drawInteriorInRect:(NSRect)rect;
-
-// determine positions
-- (void)_positionOverflowMenu;
-- (void)_positionAddTabButton;
-- (void)_checkWindowFrame;
-
-// convenience
-- (void)_bindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton andTabViewItem:(NSTabViewItem *)item;
-- (void)_unbindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton;
-
-// synchronize selection
-- (void)_synchronizeSelection;
 
 // resizing
 @property (assign) BOOL isResizing;
-- (NSCursor *)_resizingMouseCursor;
-- (void)_beginResizingWithMouseDownEvent:(NSEvent *)theEvent;
-
-// misc
-- (BOOL)_shouldDisplayTabBar;
+@property (readonly) NSCursor *resizingMouseCursor;
 
 // private actions
-- (void)_overflowMenuAction:(id)sender;
-- (void)_didClickTabButton:(id)sender;
-- (void)_didClickCloseButton:(id)sender;
-
-// notification handlers
-- (void)frameDidChange:(NSNotification *)notification;
-- (void)windowDidMove:(NSNotification *)aNotification;
-
-// update buttons
-- (void)_updateAddTabButton;
-- (void)_updateOverflowPopUpButton;
+- (IBAction)_overflowMenuAction:(id)sender;
+- (IBAction)_didClickTabButton:(id)sender;
+- (IBAction)_didClickCloseButton:(id)sender;
 
 @end
 
 @implementation MMTabBarView
+{
+    // control basics
+    NSTabView                       *_tabView;                    // the tab view being navigated
+    MMOverflowPopUpButton           *_overflowPopUpButton;        // for too many tabs
+    MMRolloverButton                *_addTabButton;
+    MMTabBarController              *_controller;
 
-@dynamic tabView;
-@synthesize partnerView = _partnerView;
-@dynamic delegate;
-@synthesize destinationIndexForDraggedItem = _destinationIndexForDraggedItem;
-@synthesize isResizing = _isResizing;
-@dynamic needsUpdate;
-@synthesize resizeTabsToFitTotalWidth = _resizeTabsToFitTotalWidth;
+    // Spring-loading.
+    NSTimer                         *_springTimer;
+    NSTabViewItem                   *_tabViewItemWithSpring;
+
+    // configuration
+    id <MMTabStyle>                 _style;
+    BOOL                            _onlyShowCloseOnHover;    
+    BOOL                            _canCloseOnlyTab;
+    BOOL                            _disableTabClose;
+    BOOL                            _hideForSingleTab;
+    BOOL                            _showAddTabButton;
+    BOOL                            _sizeButtonsToFit;
+    BOOL                            _useOverflowMenu;
+    BOOL                            _alwaysShowActiveTab;
+    BOOL                            _allowsScrubbing;
+    NSInteger                       _resizeAreaCompensation;
+    MMTabBarOrientation             _orientation;
+    BOOL                            _automaticallyAnimates;
+    MMTabBarTearOffStyle            _tearOffStyle;
+    BOOL                            _allowsBackgroundTabClosing;
+    BOOL                            _selectsTabsOnMouseDown;
+
+    // vertical tab resizing
+    BOOL                            _allowsResizing;
+
+    // button width
+    NSInteger                       _buttonMinWidth;
+    NSInteger                       _buttonMaxWidth;
+    NSInteger                       _buttonOptimumWidth;
+
+    // animation
+    MMSlideButtonsAnimation         *_slideButtonsAnimation;
+    
+    // animation for hide/show
+    NSViewAnimation                 *_hideShowTabBarAnimation;
+    BOOL                            _isHidden;
+    NSInteger                       _tabBarWidth;   // stored width of vertical tab bar
+        
+    // states
+    BOOL                            _needsUpdate;
+
+    // delegate
+    id <MMTabBarViewDelegate>       _delegate;
+}
 
 static NSMutableDictionary *registeredStyleClasses = nil;
 
@@ -226,7 +226,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     
 	if ([self orientation] == MMTabBarVerticalOrientation) {
 
-        NSCursor *cursor = [self _resizingMouseCursor];
+        NSCursor *cursor = [self resizingMouseCursor];
         [self addCursorRect:[self dividerRect] cursor:cursor];
 	}
 }
@@ -2247,8 +2247,6 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Private Methods
 
-@synthesize isReorderingTabViewItems = _isReorderingTabViewItems;
-
 - (void)_commonInit {
 	_controller = [[MMTabBarController alloc] initWithTabBarView:self];
 
@@ -2643,7 +2641,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
 }
 
-- (NSCursor *)_resizingMouseCursor {
+- (NSCursor *)resizingMouseCursor {
 
     if (NSWidth([self frame]) <= [self buttonMinWidth]) {
         return [NSCursor resizeRightCursor];
@@ -2668,7 +2666,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     [self setIsResizing:YES];
                 
-    NSCursor *cursor = [self _resizingMouseCursor];
+    NSCursor *cursor = [self resizingMouseCursor];
     [cursor set];
             
     while ((nextEvent = [[self window] nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
@@ -2686,7 +2684,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             CGFloat resizeAmount = [nextEvent deltaX];
             if ((currentPoint.x > frame.size.width && resizeAmount > 0) || (currentPoint.x < frame.size.width && resizeAmount < 0)) {
 
-                cursor = [self _resizingMouseCursor];
+                cursor = [self resizingMouseCursor];
                 [cursor set];
 
                 NSRect partnerFrame = [_partnerView frame];

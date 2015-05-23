@@ -10,11 +10,12 @@
 
 @class MMTabDragView;
 
-@interface MMTabDragWindow : NSWindow {
-	MMTabDragView					*_dragView;
-}
+@interface MMTabDragWindow : NSWindow
+
 + (instancetype)dragWindowWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask;
 
 - (instancetype)initWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask;
-- (MMTabDragView *)dragView;
+
+@property (readonly) MMTabDragView *dragView;
+
 @end

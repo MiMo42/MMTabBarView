@@ -8,11 +8,11 @@
 #import "MMRolloverButtonCell.h"
 
 @implementation MMRolloverButtonCell
+{
+    MMRolloverButtonType _rolloverButtonType;
+}
 
-@synthesize mouseHovered = _mouseHovered;
-@synthesize rolloverImage = _rolloverImage;
 @dynamic rolloverButtonType;
-@synthesize simulateClickOnMouseHovered = _simulateClickOnMouseHovered;
 
 - (instancetype)init
 {

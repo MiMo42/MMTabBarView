@@ -9,7 +9,10 @@
 @interface MMTabBarView (PrivateDrawing)
 
 - (void)_drawInteriorInRect:(NSRect)rect;
-- (NSRect)_addTabButtonRect;
-- (NSRect)_overflowButtonRect;
+
+@property (readonly) NSRect _addTabButtonRect;
+@property (readonly) NSRect _overflowButtonRect;
+
+@property (assign) BOOL isReorderingTabViewItems;
 
 @end

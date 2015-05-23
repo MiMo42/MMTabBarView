@@ -19,7 +19,8 @@
 
 // identity
 + (NSString *)name;
-- (NSString *)name;
+
+@property (readonly) NSString *name;
 
 @optional
 

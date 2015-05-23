@@ -161,6 +161,7 @@
 		06AE02301B10A21000C65A84 /* MMTabBarButton.Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06AE02321B10A50200C65A84 /* MMTabBarButtonCell.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06AE02341B10A6F500C65A84 /* MMTabBarView.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AE02361B10AD5500C65A84 /* MMTabBarButton.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */; };
 		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */; };
 		06DB23AA1609F5830071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23A91609F5830071BDA0 /* Cocoa.framework */; };
@@ -328,6 +329,7 @@
 		06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTabBarButton.Common.h; sourceTree = "<group>"; };
 		06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarButtonCell.Private.h; sourceTree = "<group>"; };
 		06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarView.Private.h; sourceTree = "<group>"; };
+		06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarButton.Private.h; sourceTree = "<group>"; };
 		06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSafariTabStyle.h; sourceTree = "<group>"; };
 		06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSafariTabStyle.m; sourceTree = "<group>"; };
 		06DB23A61609F5830071BDA0 /* MMTabBarView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MMTabBarView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -445,6 +447,7 @@
 				0634EFE11609FC7F00A6C86A /* MMAttachedTabBarButtonCell.h */,
 				0634EFE21609FC7F00A6C86A /* MMAttachedTabBarButtonCell.m */,
 				0634EFED1609FC7F00A6C86A /* MMTabBarButton.h */,
+				06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */,
 				06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */,
 				0634EFEE1609FC7F00A6C86A /* MMTabBarButton.m */,
 				0634EFEF1609FC7F00A6C86A /* MMTabBarButtonCell.h */,
@@ -678,6 +681,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0634EFD91609FC4C00A6C86A /* MMAttachedTabBarButton.h in Headers */,
+				06AE02361B10AD5500C65A84 /* MMTabBarButton.Private.h in Headers */,
 				0634F0031609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.h in Headers */,
 				0634F0051609FC7F00A6C86A /* MMAttachedTabBarButtonCell.h in Headers */,
 				0634F0071609FC7F00A6C86A /* MMOverflowPopUpButton.h in Headers */,

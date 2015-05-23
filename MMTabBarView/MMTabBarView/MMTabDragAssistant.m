@@ -14,56 +14,27 @@
 #import "MMSlideButtonsAnimation.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
-@interface MMTabBarView (SharedPrivate)
+#import "MMTabBarView.Private.h"
+#import "MMTabBarButton.Private.h"
 
-@property (assign) BOOL isReorderingTabViewItems;
-
-@end
-
-@interface MMTabBarButton (SharedPrivate)
-
-- (NSRect)_indicatorRectForBounds:(NSRect)theRect;
-
-@end
-
-@interface MMTabDragAssistant (/*Private*/)
-
-- (NSUInteger)_destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView;
-
-- (NSImage *)_imageForViewOfAttachedButton:(MMAttachedTabBarButton *)aButton forTabBarView:(MMTabBarView *)tabBarView styleMask:(NSUInteger *)outMask;
-- (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window;
-- (void)_expandWindow:(NSWindow *)window atPoint:(NSPoint)point;
-
-- (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent source:(id)sourceObject;
-
-- (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView;
-
-- (NSUInteger)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex;
-
-- (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
-
-- (MMTabPasteboardItem *)_tabPasteboardItemOfDraggingInfo:(id <NSDraggingInfo>)draggingInfo;
-
-- (void)_beginDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem isSourceWindow:(BOOL)isSourceWindow;
-- (void)_endDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
-
-- (void)_fadeInDragWindow:(NSTimer *)timer;
-- (void)_fadeOutDragWindow:(NSTimer *)timer;
-
+@interface MMTabDragAssistant ()
 @end
 
 NSString *AttachedTabBarButtonUTI = @"de.monscheuer.mmtabbarview.attachedbutton";
 
 @implementation MMTabDragAssistant
+{
+        // Support for dragging into new windows
+	MMTabDragWindowController		*_draggedTab;
+	MMTabDragWindowController		*_draggedView;
+	NSSize							_dragWindowOffset;
+	NSTimer							*_fadeTimer;
+	BOOL							_centersDragWindows;
+	MMTabBarTearOffStyle			_currentTearOffStyle;
 
-@synthesize sourceTabBar = _sourceTabBar;
-@synthesize attachedTabBarButton = _attachedTabBarButton;
-@synthesize pasteboardItem = _pasteboardItem;
-@synthesize destinationTabBar = _destinationTabBar;
-@synthesize isDragging = _isDragging;
-@synthesize currentMouseLocation = _currentMouseLocation;
-
-@synthesize isSliding = _isSliding;
+        // Animation
+    MMSlideButtonsAnimation         *_slideButtonsAnimation;
+}
 
 static MMTabDragAssistant *sharedDragAssistant = nil;
 

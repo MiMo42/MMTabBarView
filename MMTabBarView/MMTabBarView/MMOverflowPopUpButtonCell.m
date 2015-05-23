@@ -9,18 +9,14 @@
 #import "MMOverflowPopUpButtonCell.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 
-@interface MMOverflowPopUpButtonCell (/*Private*/)
-
-- (NSRect)_imageRectForBounds:(NSRect)theRect forImage:(NSImage *)anImage;
+@interface MMOverflowPopUpButtonCell ()
 
 @end
 
 @implementation MMOverflowPopUpButtonCell
-
-@dynamic image;
-@synthesize secondImage = _secondImage;
-@synthesize secondImageAlpha = _secondImageAlpha;
-@synthesize bezelDrawingBlock = _bezelDrawingBlock;
+{
+    NSImage *_image;
+}
 
 - (instancetype)initTextCell:(NSString *)stringValue pullsDown:(BOOL)pullDown {
     self = [super initTextCell:stringValue pullsDown:pullDown];

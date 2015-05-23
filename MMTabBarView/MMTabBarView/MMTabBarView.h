@@ -38,7 +38,6 @@ static NSImage* _static##name##Image() \
     return image; \
 }
 
-@class MMOverflowPopUpButton;
 @class MMRolloverButton;
 @class MMTabBarViewler;
 @class MMTabBarButton;
@@ -70,69 +69,11 @@ typedef NS_ENUM(NSUInteger, MMAttachedButtonsEnumerationOptions)
 
 @protocol MMTabBarViewDelegate;
 
-@interface MMTabBarView : NSView <NSDraggingSource, NSDraggingDestination, NSAnimationDelegate> {
-                                                
-    // control basics
-    NSTabView                       *_tabView;                    // the tab view being navigated
-    MMOverflowPopUpButton           *_overflowPopUpButton;        // for too many tabs
-    MMRolloverButton                *_addTabButton;
-    MMTabBarController              *_controller;
-
-    // Spring-loading.
-    NSTimer                         *_springTimer;
-    NSTabViewItem                   *_tabViewItemWithSpring;
-
-    // configuration
-    id <MMTabStyle>                 _style;
-    BOOL                            _onlyShowCloseOnHover;    
-    BOOL                            _canCloseOnlyTab;
-    BOOL                            _disableTabClose;
-    BOOL                            _hideForSingleTab;
-    BOOL                            _showAddTabButton;
-    BOOL                            _sizeButtonsToFit;
-    BOOL                            _useOverflowMenu;
-    BOOL                            _alwaysShowActiveTab;
-    BOOL                            _allowsScrubbing;
-    NSInteger                       _resizeAreaCompensation;
-    MMTabBarOrientation             _orientation;
-    BOOL                            _automaticallyAnimates;
-    MMTabBarTearOffStyle            _tearOffStyle;
-    BOOL                            _allowsBackgroundTabClosing;
-    BOOL                            _selectsTabsOnMouseDown;
-    BOOL                            _resizeTabsToFitTotalWidth;
-
-    // vertical tab resizing
-    BOOL                            _allowsResizing;
-    BOOL                            _isResizing;
-
-    // button width
-    NSInteger                       _buttonMinWidth;
-    NSInteger                       _buttonMaxWidth;
-    NSInteger                       _buttonOptimumWidth;
-
-    // animation
-    MMSlideButtonsAnimation         *_slideButtonsAnimation;
-    
-    // animation for hide/show
-    NSViewAnimation                 *_hideShowTabBarAnimation;
-    BOOL                            _isHidden;
-    NSView                          *_partnerView;    // gets resized when hide/show
-    NSInteger                       _tabBarWidth;   // stored width of vertical tab bar
-        
-    // states
-    BOOL                            _isReorderingTabViewItems;
-    BOOL                            _needsUpdate;
-
-    // drag and drop
-    NSUInteger                      _destinationIndexForDraggedItem;  // NSNotFound = none
-
-    // delegate
-    id <MMTabBarViewDelegate>       _delegate;
-}
+@interface MMTabBarView : NSView <NSDraggingSource, NSDraggingDestination, NSAnimationDelegate>
 
 @property (strong) IBOutlet NSTabView *tabView;
 @property (strong) IBOutlet NSView *partnerView;
-@property (unsafe_unretained) IBOutlet id <MMTabBarViewDelegate> delegate;
+@property (weak) IBOutlet id <MMTabBarViewDelegate> delegate;
 @property (assign) NSUInteger destinationIndexForDraggedItem;
 @property (readonly) BOOL isResizing;
 @property (assign) BOOL needsUpdate;

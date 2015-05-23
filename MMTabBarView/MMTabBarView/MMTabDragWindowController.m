@@ -11,6 +11,15 @@
 #import "MMTabDragView.h"
 
 @implementation MMTabDragWindowController
+{
+	MMTabBarTearOffStyle				_tearOffStyle;
+	MMTabDragView						*_view;
+	NSAnimation							*_animation;
+	NSTimer								*_timer;
+
+	BOOL								_showingAlternate;
+	NSRect								_originalWindowFrame;
+}
 
 - (instancetype)initWithImage:(NSImage *)image styleMask:(NSUInteger)styleMask tearOffStyle:(MMTabBarTearOffStyle)tearOffStyle {
 	MMTabDragWindow *window = [MMTabDragWindow dragWindowWithImage:image styleMask:styleMask];
@@ -32,8 +41,6 @@
 	if (_timer) {
 		[_timer invalidate];
 	}
-
-
 }
 
 - (NSImage *)image {
@@ -92,7 +99,7 @@
 	frame.origin.x = mousePoint.x - (frame.size.width / 2);
 	frame.origin.y = mousePoint.y - (frame.size.height / 2);
 
-	[_view setFadeValue:_showingAlternate ? 1.0f - animationValue : animationValue];
+	[_view setAlpha:_showingAlternate ? 1.0f - animationValue : animationValue];
 	[[self window] setFrame:frame display:YES];
 
 	if (![_animation isAnimating]) {

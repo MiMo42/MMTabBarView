@@ -26,11 +26,6 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 
 @implementation MMTabBarButton
 
-@synthesize stackingFrame = _stackingFrame;
-@synthesize closeButton = _closeButton;
-@dynamic closeButtonAction;
-@synthesize indicator = _indicator;
-
 + (void)initialize
 {
     if (self == [MMTabBarButton class]) {

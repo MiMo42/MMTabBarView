@@ -12,14 +12,7 @@
 
 @class MMImageTransitionAnimation;
 
-@interface MMOverflowPopUpButtonCell : NSPopUpButtonCell <NSAnimationDelegate> {
-
-@private
-    MMCellBezelDrawingBlock _bezelDrawingBlock;
-    NSImage *_image;
-    NSImage *_secondImage;
-    CGFloat _secondImageAlpha;
-}
+@interface MMOverflowPopUpButtonCell : NSPopUpButtonCell <NSAnimationDelegate>
 
 @property (copy) MMCellBezelDrawingBlock bezelDrawingBlock;
 @property (strong) NSImage *image;

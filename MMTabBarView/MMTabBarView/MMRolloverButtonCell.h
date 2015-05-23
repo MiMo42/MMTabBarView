@@ -13,14 +13,7 @@ typedef NS_ENUM(NSUInteger, MMRolloverButtonType)
     MMRolloverSwitchButton
 };
 
-@interface MMRolloverButtonCell : NSButtonCell {
-
-@private
-    NSImage *_rolloverImage;
-    BOOL _mouseHovered;
-    MMRolloverButtonType _rolloverButtonType;
-    BOOL _simulateClickOnMouseHovered;
-}
+@interface MMRolloverButtonCell : NSButtonCell 
 
 @property (readonly) BOOL mouseHovered;
 @property (strong) NSImage *rolloverImage;
