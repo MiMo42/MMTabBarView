@@ -116,14 +116,15 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			if ([_draggedTab isAnimating]) {
 				return;
 			}
-
+NSLog(@"screen point:%@",NSStringFromPoint(screenPoint));
 			//Ignore aPoint, as it seems to give wacky values
 			NSRect frame = [[_draggedTab window] frame];
-			frame.origin = [NSEvent mouseLocation];
+			frame.origin = screenPoint; //[NSEvent mouseLocation];
 			frame.origin.x -= frame.size.width / 2;
 			frame.origin.y -= frame.size.height / 2;
 			[[_draggedTab window] setFrame:frame display:NO];
 		} else {
+NSLog(@"screen point:%@",NSStringFromPoint(screenPoint));
 			[[_draggedTab window] setFrameTopLeftPoint:screenPoint];
 		}
 
@@ -131,7 +132,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 			//move the view representation with the tab
 			//the relative position of the dragged view window will be different
 			//depending on the position of the tab bar relative to the controlled tab view
-
+NSLog(@"screen point:%@",NSStringFromPoint(screenPoint));
 			screenPoint.y -= [[_draggedTab window] frame].size.height;
 			screenPoint.x -= _dragWindowOffset.width;
 			screenPoint.y += _dragWindowOffset.height;
@@ -784,7 +785,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSPoint location = [aButton frame].origin;
 
     NSDraggingItem *item = [[NSDraggingItem alloc] initWithPasteboardWriter:[NSString string]];
-    [item setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dragImage];
+    NSImage *dummyImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
+    [item setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dummyImage];
     
     [tabBarView beginDraggingSessionWithItems:[NSArray arrayWithObject:item] event:theEvent source:source];
     
