@@ -806,7 +806,7 @@
         result.origin.y += (constrainedDrawingRect.size.height - scaledImageSize.height) / 2.0;
     }
         
-    return result;
+    return NSIntegralRect(result);
 }
 
 - (NSRect)_indicatorRectForBounds:(NSRect)theRect {
