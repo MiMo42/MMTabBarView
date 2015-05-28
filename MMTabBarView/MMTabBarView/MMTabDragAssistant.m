@@ -633,13 +633,14 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSDate *expiration = [NSDate distantFuture];
     BOOL   continueDetached = NO;
 
-        // write to pasteboard
-	NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        // create pasteboard item
     MMTabPasteboardItem *pasteboardItem = [[MMTabPasteboardItem alloc] init];
     [pasteboardItem setSourceIndex:[tabBarView indexOfTabViewItem:[aButton tabViewItem]]];
     [pasteboardItem setString:[aButton title] forType:AttachedTabBarButtonUTI];
-    [pboard clearContents];
-    [pboard writeObjects:[NSArray arrayWithObject:pasteboardItem]];
+
+        // create dragging item
+    NSDraggingItem *draggingItem = [[NSDraggingItem alloc] initWithPasteboardWriter:pasteboardItem];
+    
 	[self setSourceTabBar:tabBarView];
 	[self setAttachedTabBarButton:aButton];
     [self setPasteboardItem:pasteboardItem];
@@ -752,8 +753,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         [self setIsSliding:NO];
         [aButton setIsInDraggedSlide:NO];
         
-            
-        [self _dragDetachedButton:aButton ofTabBarView:tabBarView withEvent:firstEvent pasteboard:pboard source:sourceObject];
+        [self _dragDetachedButton:aButton ofTabBarView:tabBarView withEvent:firstEvent draggingItem:draggingItem source:sourceObject];
         
     } else {
         [self setPasteboardItem:nil];
@@ -765,7 +765,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
    [tabBarView update];
 }
 
-- (void)_dragDetachedButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withEvent:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)source {
+- (void)_dragDetachedButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withEvent:(NSEvent *)theEvent draggingItem:(NSDraggingItem *)draggingItem source:(id)source {
 
     [self setIsDragging:YES];
 
@@ -780,13 +780,11 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     _draggedTab = [[MMTabDragWindowController alloc] initWithImage:dragImage styleMask:NSBorderlessWindowMask tearOffStyle:_currentTearOffStyle];
 
     NSPoint location = [aButton frame].origin;
-
-    NSDraggingItem *item = [[NSDraggingItem alloc] initWithPasteboardWriter:[NSString string]];
-    NSImage *dummyImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
-    [item setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dummyImage];
     
-//    [tabBarView beginDraggingSessionWithItems:[NSArray arrayWithObject:item] event:theEvent source:source];
-    [tabBarView dragImage:[[NSImage alloc] initWithSize:NSMakeSize(1, 1)] at:location offset:NSZeroSize event:theEvent pasteboard:pboard source:source slideBack:NO];
+    NSImage *dummyImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
+    [draggingItem setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dummyImage];
+    
+    [tabBarView beginDraggingSessionWithItems:[NSArray arrayWithObject:draggingItem] event:theEvent source:source];
 }
 
 - (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView {
