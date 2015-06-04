@@ -10,7 +10,7 @@
 
 @interface MMSlideButtonsAnimation : NSViewAnimation
 
-- (instancetype)initWithTabBarButtons:(NSSet *)buttons;
+- (instancetype)initWithTabBarButtons:(NSSet *)buttons NS_DESIGNATED_INITIALIZER;
 
 - (void)addAnimationDictionary:(NSDictionary *)aDict;
 

@@ -12,14 +12,44 @@
 
 @optional
 
+/**
+ *  Title
+ */
 @property (copy)   NSString  *title;
-@property (retain) NSImage   *icon;
-@property (retain) NSImage   *largeImage;
-@property (assign) NSInteger objectCount;
-@property (retain) NSColor   *objectCountColor;
 
+/**
+ *  Icon
+ */
+@property (strong) NSImage   *icon;
+
+/**
+ *  Large image
+ */
+@property (strong) NSImage   *largeImage;
+
+/**
+ *  Object count to display
+ */
+@property (assign) NSInteger objectCount;
+
+/**
+ *  Color of object count badge
+ */
+@property (strong) NSColor   *objectCountColor;
+
+/**
+ *  Processing state
+ */
 @property (assign) BOOL isProcessing;
+
+/**
+ *  Edited state
+ */
 @property (assign) BOOL isEdited;
+
+/**
+ *  Returns YES if item has close button
+ */
 @property (assign) BOOL hasCloseButton;
 
 @end

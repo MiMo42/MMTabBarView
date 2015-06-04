@@ -11,13 +11,16 @@
 
 typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
 
-@interface MMOverflowPopUpButton : NSPopUpButton {
-}
+@interface MMOverflowPopUpButton : NSPopUpButton 
 
+/**
+ *  Second image
+ */
 @property (strong) NSImage *secondImage;
 
-// bezel drawing
-- (MMCellBezelDrawingBlock)bezelDrawingBlock;
-- (void)setBezelDrawingBlock:(MMCellBezelDrawingBlock)aBlock;
+/**
+ *  Block to be used for drawing the bezel
+ */
+@property (copy) MMCellBezelDrawingBlock bezelDrawingBlock;
 
 @end

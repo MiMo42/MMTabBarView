@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, MMRolloverButtonType)
 @property (assign) BOOL simulateClickOnMouseHovered;
 
 #pragma mark Tracking Area Support
+
 - (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(NSDictionary *)userInfo mouseLocation:(NSPoint)mouseLocation;
 - (void)mouseEntered:(NSEvent *)event;
 - (void)mouseExited:(NSEvent *)event;
