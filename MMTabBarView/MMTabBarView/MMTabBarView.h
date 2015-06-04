@@ -47,173 +47,535 @@ static NSImage* _static##name##Image() \
 
 @protocol MMTabStyle;
 
-typedef NS_ENUM(NSUInteger, MMTabBarOrientation)
-{
-    MMTabBarHorizontalOrientation = 0,
-    MMTabBarVerticalOrientation
+/**
+ *  Tab bar orientation
+ */
+typedef NS_ENUM(NSUInteger, MMTabBarOrientation){
+/**
+ *  Horizontal orientation
+ */
+MMTabBarHorizontalOrientation = 0,
+/**
+ *  Vertical orientation
+ */
+MMTabBarVerticalOrientation
 };
 
-typedef NS_ENUM(NSUInteger, MMTabBarTearOffStyle)
-{
-    MMTabBarTearOffAlphaWindow,
-    MMTabBarTearOffMiniwindow
+/**
+ *  Tear off style
+ */
+typedef NS_ENUM(NSUInteger, MMTabBarTearOffStyle){
+/**
+ *  Show alpha window
+ */
+MMTabBarTearOffAlphaWindow,
+/**
+ *  Show mini window
+ */
+MMTabBarTearOffMiniwindow
 };
 
-typedef NS_ENUM(NSUInteger, MMAttachedButtonsEnumerationOptions)
-{
-
-    MMAttachedButtonsEnumerationNone               = 0,
-    MMAttachedButtonsEnumerationUpdateTabStateMask = 1 << 1,
-    MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
+/**
+ *  Attached tab bar buttons enumeration options
+ */
+typedef NS_ENUM(NSUInteger, MMAttachedButtonsEnumerationOptions){
+/**
+ *  No options
+ */
+MMAttachedButtonsEnumerationNone               = 0,
+/**
+ *  Update tab state
+ */
+MMAttachedButtonsEnumerationUpdateTabStateMask = 1 << 1,
+/**
+ *  Update button state
+ */
+MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
 };
 
 @protocol MMTabBarViewDelegate;
 
 @interface MMTabBarView : NSView <NSDraggingSource, NSDraggingDestination, NSAnimationDelegate>
 
-@property (strong) IBOutlet NSTabView *tabView;
-@property (strong) IBOutlet NSView *partnerView;
-@property (weak) IBOutlet id <MMTabBarViewDelegate> delegate;
-@property (assign) NSUInteger destinationIndexForDraggedItem;
-@property (readonly) BOOL isResizing;
-@property (assign) BOOL needsUpdate;
-@property (assign) BOOL resizeTabsToFitTotalWidth;
+#pragma mark Basics
 
-#pragma mark Control Characteristics
-
+/**
+ *  Get bundle of class
+ *
+ *  @return The bundle
+ */
 + (NSBundle *)bundle;
-- (CGFloat)availableWidthForButtons;
-- (CGFloat)availableHeightForButtons;
+
+#pragma mark Outlets
+
+/**
+ *  Tab view
+ */
+@property (strong) IBOutlet NSTabView *tabView;
+
+/**
+ *  A partner view
+ */
+@property (strong) IBOutlet NSView *partnerView;
+
+/**
+ *  Delegate
+ */
+@property (weak)   IBOutlet id <MMTabBarViewDelegate> delegate;
+
+#pragma mark Working with View's current state
+
+/**
+ *  Get available width for buttons
+ */
+@property (readonly) CGFloat availableWidthForButtons;
+
+/**
+ *  Get available height for buttons
+ */
+@property (readonly) CGFloat availableHeightForButtons;
+
+/**
+ *  Get generic button rect
+ *
+ *  @return The button rect
+ */
 - (NSRect)genericButtonRect;
-- (BOOL)isWindowActive;
+
+/**
+ *  Check if overflow button is currently visible
+ */
+@property (readonly) BOOL isOverflowButtonVisible;
+
+/**
+ *  Get window's active state
+ */
+@property (readonly) BOOL isWindowActive;
+
+/**
+ *  Check if in resize mode
+ */
+@property (readonly) BOOL isResizing;
+
+/**
+ *  Check if receiver needs update
+ */
+@property (assign) BOOL needsUpdate;
+
+#pragma mark Drag & Drop Support
+
+/**
+ *  Check if detached dragging of tab view item is allowed
+ *
+ *  @param anItem A Tab view item
+ *
+ *  @return YES or NO
+ */
 - (BOOL)allowsDetachedDraggingOfTabViewItem:(NSTabViewItem *)anItem;
+
+/**
+ *  Get destination index for dragged item
+ */
+@property (assign) NSUInteger destinationIndexForDraggedItem;
 
 #pragma mark Style Class Registry
 
+/**
+ *  Register default tab style classes
+ */
 + (void)registerDefaultTabStyleClasses;
+
+/**
+ *  Register a tab style class
+ *
+ *  @param aStyleClass A tab style class
+ */
 + (void)registerTabStyleClass:(Class <MMTabStyle>)aStyleClass;
+
+/**
+ *  Unregister tab style class
+ *
+ *  @param aStyleClass A tab style class
+ */
 + (void)unregisterTabStyleClass:(Class <MMTabStyle>)aStyleClass;
+
+/**
+ *  Get registered tab style classes
+ *
+ *  @return Array of all registered classes
+ */
 + (NSArray *)registeredTabStyleClasses;
+
+/**
+ *  Get registered class for specified tab style name
+ *
+ *  @param name Name of a registered tab style
+ *
+ *  @return The matching tab style class
+ */
 + (Class <MMTabStyle>)registeredClassForStyleName:(NSString *)name;
 
 #pragma mark Tab View Item Management
 
-- (NSUInteger)numberOfTabViewItems;
-- (NSUInteger)numberOfVisibleTabViewItems;
-- (NSArray *)visibleTabViewItems;
+/**
+ *  Get number of tab view items
+ */
+@property (readonly) NSUInteger numberOfTabViewItems;
+
+/**
+ *  Get number of visible tab view items
+ */
+@property (readonly) NSUInteger numberOfVisibleTabViewItems;
+
+/**
+ *  Get array of visible tab view items
+ */
+@property (readonly) NSArray *visibleTabViewItems;
+
+/**
+ *  Get index of specified tab view item
+ *
+ *  @param anItem A tab view item
+ *
+ *  @return The index into array of tab view items
+ */
 - (NSUInteger)indexOfTabViewItem:(NSTabViewItem *)anItem;
-- (NSTabViewItem *)selectedTabViewItem;
+
+/**
+ *  Get selected tab view item
+ */
+@property (readonly) NSTabViewItem *selectedTabViewItem;
+
+/**
+ *  Select specified tab view item
+ *
+ *  @param anItem A tab view item
+ */
 - (void)selectTabViewItem:(NSTabViewItem *)anItem;
+
+/**
+ *  Move a tab view item to specified index
+ *
+ *  @param anItem A tab view item
+ *  @param index  The destination index
+ */
 - (void)moveTabViewItem:(NSTabViewItem *)anItem toIndex:(NSUInteger)index;
+
+/**
+ *  Remove a tab view item
+ *
+ *  @param anItem Tab view item to remove
+ */
 - (void)removeTabViewItem:(NSTabViewItem *)anItem;
 
-- (NSTabViewItem *)tabViewItemPinnedToOverflowButton;
-- (void)setTabViewItemPinnedToOverflowButton:(NSTabViewItem *)item;
+/**
+ *  Tab view item currently pinned to overflow button
+ */
+@property (strong) NSTabViewItem *tabViewItemPinnedToOverflowButton;
 
 #pragma mark Attached Buttons Management
 
-- (NSUInteger)numberOfAttachedButtons;
-- (NSSet *)attachedButtons;
-- (NSArray *)orderedAttachedButtons;
+/**
+ *  Get number of attached tab bar buttons
+ */
+@property (readonly) NSUInteger numberOfAttachedButtons;
+
+/**
+ *  Get array of all attached tab bar buttons
+ */
+@property (readonly) NSSet *attachedButtons;
+
+/**
+ *  Get ordered array of attached tab bar buttons
+ */
+@property (readonly) NSArray *orderedAttachedButtons;
+
+/**
+ *  Get array of attached tab bar buttons sorted by using a comparator
+ *
+ *  @param cmptr A comparator block
+ *
+ *  @return The sorted array
+ */
 - (NSArray *)sortedAttachedButtonsUsingComparator:(NSComparator)cmptr;
+
+/**
+ *  INsert attached tab bar button for specified tab view item
+ *
+ *  @param item  A tab view item
+ *  @param index Index to insert attached tab bar button at
+ */
 - (void)insertAttachedButtonForTabViewItem:(NSTabViewItem *)item atIndex:(NSUInteger)index;
+
+/**
+ *  Add attached tab bar button for specified tab view item
+ *
+ *  @param tab view item to add attached tab bar button for
+ */
 - (void)addAttachedButtonForTabViewItem:(NSTabViewItem *)item;
+
+/**
+ *  Remove attached tab bar button
+ *
+ *  @param aButton A tab bar button
+ */
 - (void)removeAttachedButton:(MMAttachedTabBarButton *)aButton;
+
+/**
+ *  Remove attached tab bar button and synchronize tab view items
+ *
+ *  @param aButton          A tab bar button
+ *  @param syncTabViewItems YES: synchronize tab view items
+ */
 - (void)removeAttachedButton:(MMAttachedTabBarButton *)aButton synchronizeTabViewItems:(BOOL)syncTabViewItems;
+
+/**
+ *  Insert specified attached tab bar button at index
+ *
+ *  @param aButton A tab bar button
+ *  @param anIndex Destination index
+ */
 - (void)insertAttachedButton:(MMAttachedTabBarButton *)aButton atTabItemIndex:(NSUInteger)anIndex;
 
 #pragma mark Find Attached Buttons
 
-- (NSIndexSet *)viewIndexesOfAttachedButtons;
+/**
+ *  Get view indexes of attached buttons
+ */
+@property (readonly) NSIndexSet *viewIndexesOfAttachedButtons;
 
-- (NSUInteger)viewIndexOfSelectedAttachedButton;
+/**
+ *  Get view index of selected attached button
+ */
+@property (readonly) NSUInteger viewIndexOfSelectedAttachedButton;
 
-- (MMAttachedTabBarButton *)selectedAttachedButton;
-- (MMAttachedTabBarButton *)lastAttachedButton;
+/**
+ *  Get selected attached tab bar button
+ */
+@property (readonly) MMAttachedTabBarButton *selectedAttachedButton;
 
+/**
+ *   Get last attached tab bar button
+ */
+@property (readonly) MMAttachedTabBarButton *lastAttachedButton;
+
+/**
+ *  Get attached tab bar button at point
+ *
+ *  @param aPoint A point in receiver's coos
+ *
+ *  @return The matching attached tab bar button (or nil)
+ */
 - (MMAttachedTabBarButton *)attachedButtonAtPoint:(NSPoint)aPoint;
 
+/**
+ *  Get attached tab bar button for specified tab view item
+ *
+ *  @param anItem A tab view item
+ *
+ *  @return Matching attached tab bar button (or nil)
+ */
 - (MMAttachedTabBarButton *)attachedButtonForTabViewItem:(NSTabViewItem *)anItem;
 
+/**
+ *  Get index of specified attached tab bar button
+ *
+ *  @param aButton A tab bar button
+ *
+ *  @return Index of tab bar button
+ */
 - (NSUInteger)indexOfAttachedButton:(MMAttachedTabBarButton *)aButton;
 
 #pragma mark Button State Management
 
+/**
+ *  Update tab state mask of specified attached tab bar button
+ *
+ *  @param aButton    An attached tab bar button
+ *  @param index      Button index
+ *  @param prevButton Previous button
+ *  @param nextButton Next Button
+ */
 - (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton;
+
+/**
+ *  Update tab state mask of specified attached tab bar button
+ *
+ *  @param aButton An attached tab bar button
+ *  @param index   Button index
+ */
 - (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index;
+
+/**
+ *  Update tab state mask of all attached buttons
+ */
 - (void)updateTabStateMaskOfAttachedButtons;
 
 #pragma mark Sending Messages to Attached Buttons
 
+/**
+ *  Enumerate attached tab bar buttons
+ *
+ *  @param block Block to execute
+ */
 - (void)enumerateAttachedButtonsUsingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, BOOL *stop))block;
 
+/**
+ *  Enumerate attached tab bar buttons with options
+ *
+ *  @param opts  Options (@see MMAttachedButtonsEnumerationOptions)
+ *  @param block Block to execute
+ */
 - (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block;
 
+/**
+ *  Enumerate attached tab bar buttons in range with options
+ *
+ *  @param buttons Array of attached tab bar buttons
+ *  @param range   Button index range
+ *  @param opts    Options (@see MMAttachedButtonsEnumerationOptions)
+ *  @param block   Block to execute
+ */
 - (void)enumerateAttachedButtons:(NSArray *)buttons inRange:(NSRange)range withOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block;
 
 #pragma mark Find Tab Bar Buttons
 
+/**
+ *  Fin tab bar button at point
+ *
+ *  @param point Point in receiver's coo system
+ *
+ *  @return Matching tab bar button (or nil)
+ */
 - (MMTabBarButton *)tabBarButtonAtPoint:(NSPoint)point;
 
 #pragma mark Control Configuration
 
-- (id<MMTabStyle>)style;
-- (void)setStyle:(id <MMTabStyle>)newStyle;
-- (NSString *)styleName;
+/**
+ *  The tab style to use
+ */
+@property (strong) id <MMTabStyle> style;
+
+/**
+ *  Name of tab style
+ */
+@property (readonly) NSString *styleName;
+
+/**
+ *  Set tab style by style name
+ *
+ *  @param name Name of registered tab style
+ */
 - (void)setStyleNamed:(NSString *)name;
 
-- (MMTabBarOrientation)orientation;
-- (void)setOrientation:(MMTabBarOrientation)value;
-- (BOOL)onlyShowCloseOnHover;
-- (void)setOnlyShowCloseOnHover:(BOOL)value;
-- (BOOL)canCloseOnlyTab;
-- (void)setCanCloseOnlyTab:(BOOL)value;
-- (BOOL)disableTabClose;
-- (void)setDisableTabClose:(BOOL)value;
-- (BOOL)hideForSingleTab;
-- (void)setHideForSingleTab:(BOOL)value;
-- (BOOL)showAddTabButton;
-- (void)setShowAddTabButton:(BOOL)value;
-- (NSInteger)buttonMinWidth;
-- (void)setButtonMinWidth:(NSInteger)value;
-- (NSInteger)buttonMaxWidth;
-- (void)setButtonMaxWidth:(NSInteger)value;
-- (NSInteger)buttonOptimumWidth;
-- (void)setButtonOptimumWidth:(NSInteger)value;
-- (BOOL)sizeButtonsToFit;
-- (void)setSizeButtonsToFit:(BOOL)value;
-- (BOOL)useOverflowMenu;
-- (void)setUseOverflowMenu:(BOOL)value;
-- (BOOL)allowsBackgroundTabClosing;
-- (void)setAllowsBackgroundTabClosing:(BOOL)value;
-- (BOOL)allowsResizing;
-- (void)setAllowsResizing:(BOOL)value;
-- (BOOL)selectsTabsOnMouseDown;
-- (void)setSelectsTabsOnMouseDown:(BOOL)value;
-- (BOOL)automaticallyAnimates;
-- (void)setAutomaticallyAnimates:(BOOL)value;
-- (BOOL)alwaysShowActiveTab;
-- (void)setAlwaysShowActiveTab:(BOOL)value;
-- (BOOL)allowsScrubbing;
-- (void)setAllowsScrubbing:(BOOL)value;
-- (MMTabBarTearOffStyle)tearOffStyle;
-- (void)setTearOffStyle:(MMTabBarTearOffStyle)tearOffStyle;
+/**
+ *  Reciever's layout orientation
+ */
+@property (assign) MMTabBarOrientation orientation;
+
+/**
+ *  YES: only show close button on hover
+ */
+@property (assign) BOOL onlyShowCloseOnHover;
+
+/**
+ *  YES: can close last (single) tab available
+ */
+@property (assign) BOOL canCloseOnlyTab;
+
+/**
+ *  Disable closing of tabs
+ */
+@property (assign) BOOL disableTabClose;
+
+/**
+ *  Hide receiver if there is a single tab only
+ */
+@property (assign) BOOL hideForSingleTab;
+
+/**
+ *  Visibilty of 'add' button
+ */
+@property (assign) BOOL showAddTabButton;
+
+/**
+ *  Minimum width of tab bar buttons
+ */
+@property (assign) NSInteger buttonMinWidth;
+
+/**
+ *  Minimum width of tab bar buttons
+ */
+@property (assign) NSInteger buttonMaxWidth;
+
+/**
+ *  Optimum width of tab bar buttons
+ */
+@property (assign) NSInteger buttonOptimumWidth;
+
+/**
+ *  Size tab bar buttons to fit
+ */
+@property (assign) BOOL sizeButtonsToFit;
+
+/**
+ *  Should use of overflow menu
+ */
+@property (assign) BOOL useOverflowMenu;
+
+/**
+ *  Allow background closing of tabs
+ */
+@property (assign) BOOL allowsBackgroundTabClosing;
+
+/**
+ *  Allow resizing
+ */
+@property (assign) BOOL allowsResizing;
+
+/**
+ *  Select tabs on mouse down event
+ */
+@property (assign) BOOL selectsTabsOnMouseDown;
+
+/**
+ *  Automatically animates
+ */
+@property (assign) BOOL automaticallyAnimates;
+
+/**
+ *  Assure that active tab is always visible
+ */
+@property (assign) BOOL alwaysShowActiveTab;
+
+/**
+ *  Allow or disallow button scrubbing
+ */
+@property (assign) BOOL allowsScrubbing;
+
+/**
+ *  Tear off style
+ */
+@property (assign) MMTabBarTearOffStyle tearOffStyle;
+
+/**
+ *  Check if tabs should be resized to fit total width
+ */
+@property (assign) BOOL resizeTabsToFitTotalWidth;
+
+/**
+ *  Check if receiver supports specified orientation
+ *
+ *  @param orientation Orientation (@see MMTabBarOrientation)
+ *
+ *  @return YES or NO
+ */
+- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation;
 
 #pragma mark Accessors 
 
-- (NSTabView *)tabView;
-- (void)setTabView:(NSTabView *)view;
-- (id<MMTabBarViewDelegate>)delegate;
-- (void)setDelegate:(id<MMTabBarViewDelegate>)object;
 - (CGFloat)heightOfTabBarButtons;
-- (BOOL)supportsOrientation:(MMTabBarOrientation)orientation;
 
-#pragma mark -
-#pragma mark Visibility
-
-- (BOOL)isOverflowButtonVisible;
-
-#pragma mark -
 #pragma mark Resizing
 
 - (NSRect)dividerRect;
