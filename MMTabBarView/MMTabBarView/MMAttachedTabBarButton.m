@@ -13,6 +13,8 @@
 #import "MMTabStyle.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
+#define MMTabBarViewDidSelectTab     @"MMTabBarViewDidSelectTab"
+
 @interface MMAttachedTabBarButton (/*Private*/)
 
 - (MMAttachedTabBarButton *)_selectedAttachedTabBarButton;
@@ -166,6 +168,10 @@
     if ([tabBarView shouldStartDraggingAttachedTabBarButton:self withMouseDownEvent:theEvent]) {
         [tabBarView startDraggingAttachedTabBarButton:self withMouseDownEvent:theEvent];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MMTabBarViewDidSelectTab
+                                                        object:self];
+    
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
