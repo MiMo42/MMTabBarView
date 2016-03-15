@@ -236,6 +236,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	return YES;
 }
 
+- (NSSize)intrinsicContentSize
+{
+    if ([_style respondsToSelector:@selector(intrinsicContentSizeOfTabBarView:)])
+        return [_style intrinsicContentSizeOfTabBarView:self];
+
+    return NSMakeSize(NSViewNoIntrinsicMetric, NSViewNoIntrinsicMetric);
+}
+
 #pragma mark -
 #pragma mark Characteristics
 
@@ -857,10 +865,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         if (![self supportsOrientation:MMTabBarVerticalOrientation] && _orientation == MMTabBarVerticalOrientation)
             [self setOrientation:MMTabBarHorizontalOrientation];
 
+            // update buttons
         [self _updateAddTabButton];
         [self _updateOverflowPopUpButton];
 
+            // set style of attached buttons
         [[self attachedButtons] makeObjectsPerformSelector:@selector(setStyle:) withObject:_style];
+        
+        [self invalidateIntrinsicContentSize];
         
 		[self update:NO];
 	}
@@ -1104,7 +1116,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
 }
 
--(CGFloat)heightOfTabBarButtons
+- (CGFloat)heightOfTabBarButtons
 {
     if ([_style respondsToSelector:@selector(heightOfTabBarButtonsForTabBarView:)])
         return [_style heightOfTabBarButtonsForTabBarView:self];

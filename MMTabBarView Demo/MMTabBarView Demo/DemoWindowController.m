@@ -211,8 +211,12 @@
 	NSRect tabBarFrame = [tabBar frame], tabViewFrame = [tabView frame];
 	NSRect totalFrame = NSUnionRect(tabBarFrame, tabViewFrame);
 
+    NSSize intrinsicTabBarContentSize = [tabBar intrinsicContentSize];
+
 	if (newOrientation == MMTabBarHorizontalOrientation) {
-		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : 22;
+        if (intrinsicTabBarContentSize.height == NSViewNoIntrinsicMetric)
+            intrinsicTabBarContentSize.height = 22;
+		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : intrinsicTabBarContentSize.height;
 		tabBarFrame.size.width = totalFrame.size.width;
 		tabBarFrame.origin.y = totalFrame.origin.y + totalFrame.size.height - tabBarFrame.size.height;
 		tabViewFrame.origin.x = 13;
@@ -267,7 +271,9 @@
 	[tabBar setStyleNamed:[sender titleOfSelectedItem]];
     
 	[[NSUserDefaults standardUserDefaults] setObject:[sender titleOfSelectedItem]
-	 forKey:@"Style"]; 
+	 forKey:@"Style"];
+    
+    [self _updateForOrientation:[tabBar orientation]];
 }
 
 - (void)configOnlyShowCloseOnHover:(id)sender {
@@ -660,8 +666,7 @@
 	[button_allowScrubbing setState:[defaults boolForKey:@"AllowScrubbing"]];
 
 	[self configStyle:popUp_style];
-    [tabBar setOrientation:[popUp_orientation selectedTag]];    
-//    [self _updateForOrientation:[popUp_orientation selectedTag]];
+    [tabBar setOrientation:[popUp_orientation selectedTag]];
 
     [self configOnlyShowCloseOnHover:button_onlyShowCloseOnHover];    
 	[self configCanCloseOnlyTab:button_canCloseOnlyTab];

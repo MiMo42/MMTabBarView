@@ -53,6 +53,11 @@ StaticImage(YosemiteTabNew)
 #pragma mark -
 #pragma mark Tab View Specific
 
+- (NSSize)intrinsicContentSizeOfTabBarView:(MMTabBarView *)tabBarView
+{
+    return NSMakeSize(NSViewNoIntrinsicMetric, 25);
+}
+
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
         return -1.0f;

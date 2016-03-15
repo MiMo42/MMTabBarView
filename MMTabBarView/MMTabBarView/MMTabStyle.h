@@ -36,6 +36,15 @@
 #pragma mark General
 
 /**
+ *  Get intrinsic content size of tab bar
+ *
+ *  @param tabBarView A tab bar view
+ *
+ *  @return Intrinsic content size
+ */
+- (NSSize)intrinsicContentSizeOfTabBarView:(MMTabBarView *)tabBarView;
+
+/**
  *  Get height of tab bar buttons
  *
  *  @param tabBarView A tab bar view
