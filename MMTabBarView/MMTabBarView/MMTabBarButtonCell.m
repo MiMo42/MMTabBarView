@@ -827,7 +827,7 @@
 
 - (NSSize)_objectCounterSize {
     
-    if ([self showObjectCount] == 0) {
+    if (![self showObjectCount]) {
         return NSZeroSize;
     }
     

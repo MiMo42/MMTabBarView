@@ -33,6 +33,11 @@
 @property (assign) NSInteger objectCount;
 
 /**
+ *  YES: show object count, NO: do not show
+ */
+@property (assign) BOOL showObjectCount;
+
+/**
  *  Color of object count badge
  */
 @property (strong) NSColor   *objectCountColor;
