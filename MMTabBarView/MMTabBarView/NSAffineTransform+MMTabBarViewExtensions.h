@@ -3,7 +3,7 @@
 //  MMTabBarView
 //
 //  Created by Michael Monscheuer on 9/26/12.
-//  Copyright (c) 2012 Michael Monscheuer. All rights reserved.
+//  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
