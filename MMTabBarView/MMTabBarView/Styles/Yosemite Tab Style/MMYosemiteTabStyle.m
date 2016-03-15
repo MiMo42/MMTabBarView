@@ -22,45 +22,32 @@
 @end
 
 @implementation MMYosemiteTabStyle
-@synthesize leftMarginForTabBarView = _leftMargin;
+
+StaticImage(YosemiteTabClose_Front)
+StaticImage(YosemiteTabClose_Front_Pressed)
+StaticImage(YosemiteTabClose_Front_Rollover)
+StaticImageWithFilename(YosemiteTabCloseDirty_Front, AquaTabCloseDirty_Front)
+StaticImageWithFilename(YosemiteTabCloseDirty_Front_Pressed, AquaTabCloseDirty_Front_Pressed)
+StaticImageWithFilename(YosemiteTabCloseDirty_Front_Rollover, AquaTabCloseDirty_Front_Rollover)
+StaticImage(YosemiteTabNew)
 
 + (NSString *)name {
     return @"Yosemite";
 }
 
 - (NSString *)name {
-    return [[self class] name];
+	return [[self class] name];
 }
 
 #pragma mark -
 #pragma mark Creation/Destruction
 
 - (id) init {
-    if ((self = [super init])) {
-        YosemiteCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"YosemiteTabClose_Front"]];
-        YosemiteCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"YosemiteTabClose_Front_Pressed"]];
-        YosemiteCloseButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"YosemiteTabClose_Front_Rollover"]];
-        
-        YosemiteCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
-        YosemiteCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
-        YosemiteCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
-        
-        TabNewYosemite = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"YosemiteTabNew"]];
-        
-        _leftMargin = -1.0f;
-    }
+	if ((self = [super init])) {
+		_leftMarginForTabBarView = -1.0f;
+	}
     
-    return self;
-}
-
-- (void)dealloc {
-    YosemiteCloseButton = nil;
-    YosemiteCloseButtonDown = nil;
-    YosemiteCloseButtonOver = nil;
-    YosemiteCloseDirtyButton = nil;
-    YosemiteCloseDirtyButtonDown = nil;
-    YosemiteCloseDirtyButtonOver = nil;
-    TabNewYosemite = nil;
+	return self;
 }
 
 #pragma mark -
@@ -83,7 +70,7 @@
 - (CGFloat)topMarginForTabBarView:(MMTabBarView *)tabBarView {
     if ([tabBarView orientation] == MMTabBarHorizontalOrientation)
         return 0.0f;
-    
+
     return 0.0f;
 }
 
@@ -117,14 +104,14 @@
 
 //- (NSRect)overflowButtonRectForTabBarView:(MMTabBarView *)tabBarView {
 //    NSRect rect = [tabBarView _overflowButtonRect];
-//
+//    
 //    //rect.origin.y += [tabBarView topMargin];
 //    //rect.size.width = 60;
 //    return rect;
 //}
 
 - (BOOL)supportsOrientation:(MMTabBarOrientation)orientation forTabBarView:(MMTabBarView *)tabBarView {
-    
+
     if (orientation != MMTabBarHorizontalOrientation)
         return NO;
     
@@ -135,10 +122,10 @@
 #pragma mark Drag Support
 
 - (NSRect)draggingRectForTabButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView {
-    
-    NSRect dragRect = [aButton stackingFrame];
-    dragRect.size.width++;
-    return dragRect;
+
+	NSRect dragRect = [aButton stackingFrame];
+	dragRect.size.width++;
+	return dragRect;
     
 }
 
@@ -147,9 +134,9 @@
 
 - (void)updateAddButton:(MMRolloverButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView {
     
-    [aButton setImage:TabNewYosemite];
-    [aButton setAlternateImage:TabNewYosemite];
-    [aButton setRolloverImage:TabNewYosemite];
+    [aButton setImage:_staticYosemiteTabNewImage()];
+    [aButton setAlternateImage:_staticYosemiteTabNewImage()];
+    [aButton setRolloverImage:_staticYosemiteTabNewImage()];
 }
 
 #pragma mark -
@@ -159,19 +146,18 @@
 {
     switch (type) {
         case MMCloseButtonImageTypeStandard:
-            return YosemiteCloseButton;
+            return _staticYosemiteTabClose_FrontImage();
         case MMCloseButtonImageTypeRollover:
-            return YosemiteCloseButtonOver;
+            return _staticYosemiteTabClose_Front_RolloverImage();
         case MMCloseButtonImageTypePressed:
-            return YosemiteCloseButtonDown;
+            return _staticYosemiteTabClose_Front_PressedImage();
             
         case MMCloseButtonImageTypeDirty:
-            return YosemiteCloseDirtyButton;
+            return _staticYosemiteTabCloseDirty_FrontImage();
         case MMCloseButtonImageTypeDirtyRollover:
-            return YosemiteCloseDirtyButtonOver;
+            return _staticYosemiteTabCloseDirty_Front_RolloverImage();
         case MMCloseButtonImageTypeDirtyPressed:
-            return YosemiteCloseDirtyButtonDown;
-            
+            return _staticYosemiteTabCloseDirty_Front_PressedImage();
             
         default:
             break;
@@ -183,20 +169,21 @@
 #pragma mark Drawing
 
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-    //Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
-    rect = [tabBarView bounds];
-//    tabBarView.resizeTabsToFitTotalWidth= YES;
-    
-    NSRect gradientRect = rect;
-    
-    if ([tabBarView isWindowActive])
-    {
+	//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
+	rect = [tabBarView bounds];
+    tabBarView.resizeTabsToFitTotalWidth= YES;
+
+	NSRect gradientRect = rect;
+
+	if (![tabBarView isWindowActive]) {
+		[[NSColor windowBackgroundColor] set];
+	} else {
         NSColor *startColor = [NSColor colorWithDeviceWhite:0.8 alpha:1.000];
         NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:startColor];
         [gradient drawInRect:gradientRect angle:90.0];
     }
-    
-    [[NSColor colorWithCalibratedWhite:0.576 alpha:1.0] set];
+
+    [[NSColor colorWithCalibratedRed:0.642 green:0.633 blue:0.642 alpha:1.000] set];
     [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMinX(rect), NSMinY(rect) + 0.5)
                               toPoint:NSMakePoint(NSMaxX(rect), NSMinY(rect) + 0.5)];
     
@@ -204,17 +191,18 @@
                               toPoint:NSMakePoint(NSMaxX(rect), NSMaxY(rect) - 0.5)];
 }
 
+/*
 - (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-    
-//    NSWindow *window = [tabBarView window];
-//    NSToolbar *toolbar = [window toolbar];
+
+    NSWindow *window = [tabBarView window];
+    NSToolbar *toolbar = [window toolbar];
 //    if (toolbar && [toolbar isVisible])
-//        return;
-    
+        return;
+
     NSRect aRect = [button frame];
-    NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
+	NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
     
-    // draw dividers
+        // draw dividers
     BOOL shouldDisplayRightDivider = [button shouldDisplayRightDivider];
     if ([button tabState] & MMTab_RightIsSelectedMask) {
         if (([button tabState] & (MMTab_PlaceholderOnRight | MMTab_RightIsSliding)) == 0)
@@ -222,24 +210,24 @@
     }
     
     if (shouldDisplayRightDivider) {
-        [lineColor set];
+        [lineColor set];    
         [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(aRect)+.5, NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect)+0.5, NSMaxY(aRect))];
-        
+
         [[[NSColor whiteColor] colorWithAlphaComponent:0.5] set];
         [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMinY(aRect)+1.0)
-                                  toPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMaxY(aRect)-1.0)];
-        
+            toPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMaxY(aRect)-1.0)];
+         
     }
-    
+
     if ([button shouldDisplayLeftDivider]) {
-        [lineColor set];
+        [lineColor set];    
         [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMinX(aRect)+0.5f, NSMinY(aRect)) toPoint:NSMakePoint(NSMinX(aRect)+0.5f, NSMaxY(aRect))];
-        
+
         [[[NSColor whiteColor] colorWithAlphaComponent:0.5] set];
         [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMinX(aRect)+1.5f, NSMinY(aRect)+1.0) toPoint:NSMakePoint(NSMinX(aRect)+1.5f, NSMaxY(aRect)-1.0)];
-    }
+    }    
 }
-
+*/
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView
 {
     MMTabBarView *tabBarView = [controlView enclosingTabBarView];
@@ -250,9 +238,9 @@
     BOOL overflowMode = [button isOverflowButton];
     if ([button isSliding])
         overflowMode = NO;
-    
+        
 //    if (toolbar && [toolbar isVisible]) {
-//        
+
         NSRect aRect = NSZeroRect;
         if (overflowMode) {
             aRect = NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width +1, frame.size.height);
@@ -268,16 +256,16 @@
         } else {
             [self _drawCardBezelInRect:aRect withCapMask:MMBezierShapeAllCaps|MMBezierShapeFlippedVertically usingStatesOfAttachedButton:button ofTabBarView:tabBarView];
         }
-        
-//   } else {
-//        
+     
+//    } else {
+//    
 //        NSRect aRect = NSZeroRect;
 //        if (overflowMode) {
 //            aRect = NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
 //        } else {
 //            aRect = NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
 //        }
-//        
+//
 //        if (overflowMode) {
 //            [self _drawBoxBezelInRect:aRect withCapMask:MMBezierShapeLeftCap usingStatesOfAttachedButton:button ofTabBarView:tabBarView];
 //        } else {
@@ -287,18 +275,18 @@
 }
 
 -(void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
-    
+
     MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
     if ([lastAttachedButton isSliding])
         return;
     
-//    NSWindow *window = [tabBarView window];
-//    NSToolbar *toolbar = [window toolbar];
+    NSWindow *window = [tabBarView window];
+    NSToolbar *toolbar = [window toolbar];
     
     NSRect frame = [overflowButton frame];
     
-//    if (toolbar && [toolbar isVisible]) {
-//        
+    if (toolbar && [toolbar isVisible]) {
+        
         NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
         aRect.size.width += 5.0;
         aRect.origin.y += 1;
@@ -306,66 +294,36 @@
         
         [self _drawCardBezelInRect:aRect withCapMask:MMBezierShapeRightCap|MMBezierShapeFlippedVertically usingStatesOfAttachedButton:lastAttachedButton ofTabBarView:tabBarView];
         
-//    } else {
-//        NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y+0.5, frame.size.width-0.5f, frame.size.height-1.0);
-//        aRect.size.width += 5.0;
-//        
-//        [self _drawBoxBezelInRect:aRect withCapMask:MMBezierShapeRightCap|MMBezierShapeFlippedVertically usingStatesOfAttachedButton:lastAttachedButton ofTabBarView:tabBarView];
-//        
-//        if ([tabBarView showAddTabButton]) {
-//            
-//            NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
-//            [lineColor set];
-//            [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(aRect)+.5, NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect)+0.5, NSMaxY(aRect))];
-//            
-//            [[[NSColor whiteColor] colorWithAlphaComponent:0.5] set];
-//            [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMinY(aRect)+1.0) toPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMaxY(aRect)-1.0)];
-//        }
-//    }
-}
-
-#pragma mark -
-#pragma mark Archiving
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    //[super encodeWithCoder:aCoder];
-    if ([aCoder allowsKeyedCoding]) {
-        [aCoder encodeObject:YosemiteCloseButton forKey:@"YosemiteCloseButton"];
-        [aCoder encodeObject:YosemiteCloseButtonDown forKey:@"YosemiteCloseButtonDown"];
-        [aCoder encodeObject:YosemiteCloseButtonOver forKey:@"YosemiteCloseButtonOver"];
-        [aCoder encodeObject:YosemiteCloseDirtyButton forKey:@"YosemiteCloseDirtyButton"];
-        [aCoder encodeObject:YosemiteCloseDirtyButtonDown forKey:@"YosemiteCloseDirtyButtonDown"];
-        [aCoder encodeObject:YosemiteCloseDirtyButtonOver forKey:@"YosemiteCloseDirtyButtonOver"];
+    } else {
+        NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y+0.5, frame.size.width-0.5f, frame.size.height-1.0);
+        aRect.size.width += 5.0;
+        
+        [self _drawBoxBezelInRect:aRect withCapMask:MMBezierShapeRightCap|MMBezierShapeFlippedVertically usingStatesOfAttachedButton:lastAttachedButton ofTabBarView:tabBarView];
+        
+        if ([tabBarView showAddTabButton]) {
+            
+            NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
+            [lineColor set];
+            [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(aRect)+.5, NSMinY(aRect)) toPoint:NSMakePoint(NSMaxX(aRect)+0.5, NSMaxY(aRect))];
+            
+            [[[NSColor whiteColor] colorWithAlphaComponent:0.5] set];
+            [NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMinY(aRect)+1.0) toPoint:NSMakePoint(NSMaxX(aRect)+1.5f, NSMaxY(aRect)-1.0)];
+        }        
     }
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    // self = [super initWithCoder:aDecoder];
-    //if (self) {
-    if ([aDecoder allowsKeyedCoding]) {
-        YosemiteCloseButton = [aDecoder decodeObjectForKey:@"YosemiteCloseButton"];
-        YosemiteCloseButtonDown = [aDecoder decodeObjectForKey:@"YosemiteCloseButtonDown"];
-        YosemiteCloseButtonOver = [aDecoder decodeObjectForKey:@"YosemiteCloseButtonOver"];
-        YosemiteCloseDirtyButton = [aDecoder decodeObjectForKey:@"YosemiteCloseDirtyButton"];
-        YosemiteCloseDirtyButtonDown = [aDecoder decodeObjectForKey:@"YosemiteCloseDirtyButtonDown"];
-        YosemiteCloseDirtyButtonOver = [aDecoder decodeObjectForKey:@"YosemiteCloseDirtyButtonOver"];
-    }
-    //}
-    return self;
 }
 
 #pragma mark -
 #pragma mark Private Methods
 
 - (void)_drawCardBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView {
-    
+
     NSColor *lineColor = [NSColor colorWithCalibratedWhite:0.576 alpha:1.0];
     CGFloat radius = 0.0f;
-    
+
     //capMask &= ~MMBezierShapeFillPath;
-    
+        
     NSBezierPath *fillPath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:capMask|MMBezierShapeFillPath];
-    
+
     if ([tabBarView isWindowActive]) {
         if ([button state] == NSOnState) {
             NSColor *startColor = [NSColor colorWithDeviceWhite:0.875 alpha:1.000];
@@ -389,7 +347,7 @@
             [gradient drawInBezierPath:fillPath angle:90.0];
             [[NSGraphicsContext currentContext] setShouldAntialias:YES];
         }
-    }
+    }        
 
     //NSBezierPath *strokePath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:capMask];
     //[strokePath stroke];
@@ -410,15 +368,14 @@
 }
 
 - (void)_drawBoxBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView {
-    
+
     capMask &= ~MMBezierShapeFillPath;
     
-    // fill
+        // fill
     if ([button state] == NSOnState) {
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.2] set];
         NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);            
-    } else
-        if ([button mouseHovered]) {
+    } else if ([button mouseHovered]) {
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
         NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
     }

@@ -10,18 +10,7 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabStyle.h"
 
-@interface MMYosemiteTabStyle : NSObject <MMTabStyle> {
-    
-    NSImage				*YosemiteCloseButton;
-    NSImage				*YosemiteCloseButtonDown;
-    NSImage				*YosemiteCloseButtonOver;
-    NSImage				*YosemiteCloseDirtyButton;
-    NSImage				*YosemiteCloseDirtyButtonDown;
-    NSImage				*YosemiteCloseDirtyButtonOver;
-    NSImage             *TabNewYosemite;
-    
-    CGFloat				_leftMargin;
-}
+@interface MMYosemiteTabStyle : NSObject <MMTabStyle>
 
 @property (assign) CGFloat leftMarginForTabBarView;
 

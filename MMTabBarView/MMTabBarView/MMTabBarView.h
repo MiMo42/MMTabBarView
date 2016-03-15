@@ -38,6 +38,15 @@ static NSImage* _static##name##Image() \
     return image; \
 }
 
+#define StaticImageWithFilename(name, filename) \
+static NSImage* _static##name##Image() \
+{ \
+    static NSImage* image = nil; \
+    if (!image) \
+        image = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@#filename]]; \
+    return image; \
+}
+
 @class MMRolloverButton;
 @class MMTabBarViewler;
 @class MMTabBarButton;
@@ -642,7 +651,7 @@ MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
 
 @optional
 
-    // Standard NSTabView delegate methods
+    // Additional NSTabView delegate methods
 - (BOOL)tabView:(NSTabView *)aTabView shouldCloseTabViewItem:(NSTabViewItem *)tabViewItem;
 - (void)tabView:(NSTabView *)aTabView willCloseTabViewItem:(NSTabViewItem *)tabViewItem;
 - (void)tabView:(NSTabView *)aTabView didCloseTabViewItem:(NSTabViewItem *)tabViewItem;
