@@ -87,7 +87,7 @@
     }
         // force reset of mouse hovered state
     if ([self mouseHovered])
-        [[self cell] mouseExited:nil];
+        [[self cell] mouseExited:[NSApp currentEvent]];
 
     // recreate tracking areas and tool tip rects
     
