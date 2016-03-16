@@ -11,9 +11,7 @@
 @class MMAttachedTabBarButton;
 @class MMTabBarView;
 
-@interface MMTabPasteboardItem : NSPasteboardItem {
-    NSUInteger _sourceIndex;
-}
+@interface MMTabPasteboardItem : NSPasteboardItem 
 
 @property (assign) NSUInteger sourceIndex;
 

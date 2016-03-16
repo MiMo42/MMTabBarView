@@ -10,9 +10,7 @@
 
 @implementation MMTabPasteboardItem
 
-@synthesize sourceIndex = _sourceIndex;
-
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _sourceIndex = NSNotFound;

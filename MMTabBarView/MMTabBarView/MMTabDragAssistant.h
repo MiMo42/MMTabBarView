@@ -17,58 +17,33 @@
 
 extern NSString *AttachedTabBarButtonUTI;
 
-@interface MMTabDragAssistant : NSObject <NSAnimationDelegate> {
+@interface MMTabDragAssistant : NSObject <NSAnimationDelegate>
 
-@private
+// Creation/destruction
++ (instancetype)sharedDragAssistant;
 
-	NSPoint							_currentMouseLocation;
+#pragma mark Properties
 
-        // standard drag & drop support
-	MMTabBarView					*_sourceTabBar;
-	MMAttachedTabBarButton			*_attachedTabBarButton;
-
-    MMTabPasteboardItem             *_pasteboardItem;
-	MMTabBarView                    *_destinationTabBar;
-	BOOL							_isDragging;
-        
-        // sliding support
-    BOOL                            _isSliding;
-
-        // Support for dragging into new windows
-	MMTabDragWindowController		*_draggedTab;
-	MMTabDragWindowController		*_draggedView;
-	NSSize							_dragWindowOffset;
-	NSTimer							*_fadeTimer;
-	BOOL							_centersDragWindows;
-	MMTabBarTearOffStyle			_currentTearOffStyle;
-
-        // Animation
-    MMSlideButtonsAnimation         *_slideButtonsAnimation;
-}
-
-@property (retain) MMTabBarView *sourceTabBar;
-@property (retain) MMAttachedTabBarButton *attachedTabBarButton;
-@property (retain) MMTabPasteboardItem *pasteboardItem;
-@property (retain) MMTabBarView *destinationTabBar;
+@property (strong) MMTabBarView *sourceTabBar;
+@property (strong) MMAttachedTabBarButton *attachedTabBarButton;
+@property (strong) MMTabPasteboardItem *pasteboardItem;
+@property (strong) MMTabBarView *destinationTabBar;
 @property (assign) BOOL isDragging;
 @property (assign) NSPoint currentMouseLocation;
 
 @property (assign) BOOL isSliding;
 
-// Creation/destruction
-+ (MMTabDragAssistant *)sharedDragAssistant;
-
 #pragma mark Dragging Source Handling
 
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal ofTabBarView:(MMTabBarView *)tabBarView;
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context ofTabBarView:(MMTabBarView *)tabBarView;
 
 - (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event;
 
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton fromTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event;
 
-- (void)draggedImageBeganAt:(NSPoint)aPoint withTabBarView:(MMTabBarView *)tabBarView;
-- (void)draggedImageMovedTo:(NSPoint)aPoint;
-- (void)draggedImageEndedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
+- (void)draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint withTabBarView:(MMTabBarView *)tabBarView;
+- (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint;
+- (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation;
 
 #pragma mark Dragging Destination Handling
 

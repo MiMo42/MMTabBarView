@@ -60,7 +60,7 @@
 	[toolbar setAutosavesConfiguration:YES];
     [toolbar setShowsBaselineSeparator:NO];
     
-	[[self window] setToolbar:[toolbar autorelease]];
+	[[self window] setToolbar:toolbar];
 
     [tabBar addObserver:self forKeyPath:@"orientation" options:NSKeyValueObservingOptionNew context:NULL];
 
@@ -82,8 +82,6 @@
 	NSTabViewItem *newItem = [[NSTabViewItem alloc] initWithIdentifier:newModel];
 	[tabView addTabViewItem:newItem];
     [tabView selectTabViewItem:newItem];    
-    [newModel release];
-    [newItem release];
 }
 
 - (void)addDefaultTabs {
@@ -111,7 +109,7 @@
         [[tabBar delegate] tabView:tabView willCloseTabViewItem:tabViewItem];
     }
     
-    [tabView removeTabViewItem:[[tabViewItem retain] autorelease]];
+    [tabView removeTabViewItem:tabViewItem];
     
     if (([tabBar delegate]) && ([[tabBar delegate] respondsToSelector:@selector(tabView:didCloseTabViewItem:)])) {
         [[tabBar delegate] tabView:tabView didCloseTabViewItem:tabViewItem];
@@ -188,8 +186,6 @@
 - (void)windowWillClose:(NSNotification *)note {
 
     [tabBar removeObserver:self forKeyPath:@"orientation"];
-
-	[self autorelease];
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
@@ -215,8 +211,12 @@
 	NSRect tabBarFrame = [tabBar frame], tabViewFrame = [tabView frame];
 	NSRect totalFrame = NSUnionRect(tabBarFrame, tabViewFrame);
 
+    NSSize intrinsicTabBarContentSize = [tabBar intrinsicContentSize];
+
 	if (newOrientation == MMTabBarHorizontalOrientation) {
-		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : 22;
+        if (intrinsicTabBarContentSize.height == NSViewNoIntrinsicMetric)
+            intrinsicTabBarContentSize.height = 22;
+		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : intrinsicTabBarContentSize.height;
 		tabBarFrame.size.width = totalFrame.size.width;
 		tabBarFrame.origin.y = totalFrame.origin.y + totalFrame.size.height - tabBarFrame.size.height;
 		tabViewFrame.origin.x = 13;
@@ -271,7 +271,9 @@
 	[tabBar setStyleNamed:[sender titleOfSelectedItem]];
     
 	[[NSUserDefaults standardUserDefaults] setObject:[sender titleOfSelectedItem]
-	 forKey:@"Style"]; 
+	 forKey:@"Style"];
+    
+    [self _updateForOrientation:[tabBar orientation]];
 }
 
 - (void)configOnlyShowCloseOnHover:(id)sender {
@@ -503,17 +505,17 @@
 
 - (NSImage *)tabView:(NSTabView *)aTabView imageForTabViewItem:(NSTabViewItem *)tabViewItem offset:(NSSize *)offset styleMask:(NSUInteger *)styleMask {
 	// grabs whole window image
-	NSImage *viewImage = [[[NSImage alloc] init] autorelease];
+	NSImage *viewImage = [[NSImage alloc] init];
 	NSRect contentFrame = [[[self window] contentView] frame];
 	[[[self window] contentView] lockFocus];
-	NSBitmapImageRep *viewRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:contentFrame] autorelease];
+	NSBitmapImageRep *viewRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:contentFrame];
 	[viewImage addRepresentation:viewRep];
 	[[[self window] contentView] unlockFocus];
 
 	// grabs snapshot of dragged tabViewItem's view (represents content being dragged)
 	NSView *viewForImage = [tabViewItem view];
 	NSRect viewRect = [viewForImage frame];
-	NSImage *tabViewImage = [[[NSImage alloc] initWithSize:viewRect.size] autorelease];
+	NSImage *tabViewImage = [[NSImage alloc] initWithSize:viewRect.size];
 	[tabViewImage lockFocus];
 	[viewForImage drawRect:[viewForImage bounds]];
 	[tabViewImage unlockFocus];
@@ -621,7 +623,7 @@
 		[item setAction:@selector(toggle:)];
 	}
 
-	return [item autorelease];
+	return item;
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
@@ -664,8 +666,7 @@
 	[button_allowScrubbing setState:[defaults boolForKey:@"AllowScrubbing"]];
 
 	[self configStyle:popUp_style];
-    [tabBar setOrientation:[popUp_orientation selectedTag]];    
-//    [self _updateForOrientation:[popUp_orientation selectedTag]];
+    [tabBar setOrientation:[popUp_orientation selectedTag]];
 
     [self configOnlyShowCloseOnHover:button_onlyShowCloseOnHover];    
 	[self configCanCloseOnlyTab:button_canCloseOnlyTab];

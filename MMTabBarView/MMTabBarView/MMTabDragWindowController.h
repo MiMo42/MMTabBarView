@@ -14,20 +14,16 @@
 
 @class MMTabDragView;
 
-@interface MMTabDragWindowController : NSWindowController {
-	MMTabBarTearOffStyle				_tearOffStyle;
-	MMTabDragView						*_view;
-	NSAnimation							*_animation;
-	NSTimer								*_timer;
+@interface MMTabDragWindowController : NSWindowController
 
-	BOOL								_showingAlternate;
-	NSRect								_originalWindowFrame;
-}
-- (id)initWithImage:(NSImage *)image styleMask:(NSUInteger) styleMask tearOffStyle:(MMTabBarTearOffStyle)tearOffStyle;
+- (instancetype)initWithImage:(NSImage *)image styleMask:(NSUInteger) styleMask tearOffStyle:(MMTabBarTearOffStyle)tearOffStyle;
 
-- (NSImage *)image;
-- (NSImage *)alternateImage;
-- (void)setAlternateImage:(NSImage *)image;
-- (BOOL)isAnimating;
+@property (readonly) NSImage *image;
+
+@property (strong) NSImage *alternateImage;
+
+@property (readonly) BOOL isAnimating;
+
 - (void)switchImages;
+
 @end

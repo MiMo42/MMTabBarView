@@ -3,7 +3,7 @@
 //  MMTabBarView Demo
 //
 //  Created by Michael Monscheuer on 9/19/12.
-//  Copyright (c) 2012 Michael Monscheuer. All rights reserved.
+//  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
 #import "MMAppDelegate.h"
@@ -12,10 +12,6 @@
 
 @implementation MMAppDelegate
 
-- (void)dealloc
-{
-    [super dealloc];
-}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)pNotification {
     [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];

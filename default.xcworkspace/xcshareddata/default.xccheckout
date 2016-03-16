@@ -10,29 +10,29 @@
 	<string>default</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>B63C0D76-7988-44C3-920F-0F0E40F98A62</key>
+		<key>B28F34E93FF7C34A6E2F490D54CBCF67304F4394</key>
 		<string>https://github.com/MiMo42/MMTabBarView.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>default.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>B63C0D76-7988-44C3-920F-0F0E40F98A62</key>
+		<key>B28F34E93FF7C34A6E2F490D54CBCF67304F4394</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/MiMo42/MMTabBarView.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>B63C0D76-7988-44C3-920F-0F0E40F98A62</string>
+	<string>B28F34E93FF7C34A6E2F490D54CBCF67304F4394</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>B63C0D76-7988-44C3-920F-0F0E40F98A62</string>
+			<string>B28F34E93FF7C34A6E2F490D54CBCF67304F4394</string>
 			<key>IDESourceControlWCCName</key>
 			<string>MMTabBarView</string>
 		</dict>

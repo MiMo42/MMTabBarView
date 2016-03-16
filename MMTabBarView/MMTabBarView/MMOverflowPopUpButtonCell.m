@@ -3,26 +3,22 @@
 //  MMTabBarView
 //
 //  Created by Michael Monscheuer on 9/24/12.
-//  Copyright (c) 2012 Michael Monscheuer. All rights reserved.
+//  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
 #import "MMOverflowPopUpButtonCell.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 
-@interface MMOverflowPopUpButtonCell (/*Private*/)
-
-- (NSRect)_imageRectForBounds:(NSRect)theRect forImage:(NSImage *)anImage;
+@interface MMOverflowPopUpButtonCell ()
 
 @end
 
 @implementation MMOverflowPopUpButtonCell
+{
+    NSImage *_image;
+}
 
-@dynamic image;
-@synthesize secondImage = _secondImage;
-@synthesize secondImageAlpha = _secondImageAlpha;
-@synthesize bezelDrawingBlock = _bezelDrawingBlock;
-
-- (id)initTextCell:(NSString *)stringValue pullsDown:(BOOL)pullDown {
+- (instancetype)initTextCell:(NSString *)stringValue pullsDown:(BOOL)pullDown {
     self = [super initTextCell:stringValue pullsDown:pullDown];
     if (self) {
         _bezelDrawingBlock = nil;
@@ -36,11 +32,10 @@
 
 - (void)dealloc
 {
-    [_bezelDrawingBlock release], _bezelDrawingBlock = nil;
-    [_image release], _image = nil;
-    [_secondImage release], _secondImage = nil;
+    _bezelDrawingBlock = nil;
+    _image = nil;
+    _secondImage = nil;
     
-    [super dealloc];
 }
 
 #pragma mark -
@@ -54,10 +49,10 @@
 
         // as super class ignores setting image, we store it separately.
     if (_image) {
-        [_image release], _image = nil;
+        _image = nil;
     }
     
-    _image = [image retain];
+    _image = image;
 }
 
 #pragma mark -
@@ -130,12 +125,12 @@
 	}
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
 		if ([aDecoder allowsKeyedCoding]) {
         
-            _image = [[aDecoder decodeObjectForKey:@"MMTabBarOverflowPopUpImage"] retain];
-            _secondImage = [[aDecoder decodeObjectForKey:@"MMTabBarOverflowPopUpSecondImage"] retain];
+            _image = [aDecoder decodeObjectForKey:@"MMTabBarOverflowPopUpImage"];
+            _secondImage = [aDecoder decodeObjectForKey:@"MMTabBarOverflowPopUpSecondImage"];
 		}
 	}
 	return self;

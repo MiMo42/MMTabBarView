@@ -10,32 +10,21 @@
 
 #import <MMTabBarView/MMTabBarItem.h>
 
-@interface DemoFakeModel : NSObject <MMTabBarItem> {
-    NSString    *_title;
-	BOOL        _isProcessing;
-	NSImage     *_icon;
-    NSImage     *_largeImage;
-	NSString    *_iconName;
-	NSInteger   _objectCount;
-    NSColor     *_objectCountColor;
-    BOOL        _showObjectCount;
-	BOOL        _isEdited;
-    BOOL        _hasCloseButton;
-}
+@interface DemoFakeModel : NSObject <MMTabBarItem>
 
 @property (copy)   NSString *title;
-@property (retain) NSImage  *largeImage;
-@property (retain) NSImage  *icon;
-@property (retain) NSString *iconName;
+@property (strong) NSImage  *largeImage;
+@property (strong) NSImage  *icon;
+@property (strong) NSString *iconName;
 
 @property (assign) BOOL      isProcessing;
 @property (assign) NSInteger objectCount;
-@property (retain) NSColor   *objectCountColor;
+@property (strong) NSColor   *objectCountColor;
 @property (assign) BOOL      showObjectCount;
 @property (assign) BOOL      isEdited;
 @property (assign) BOOL      hasCloseButton;
 
 // designated initializer
-- (id)init;
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -158,8 +158,22 @@
 		06789DBF161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */; };
 		069789581610A9E8009BB894 /* MMOverflowPopUpButtonCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 069789561610A9E8009BB894 /* MMOverflowPopUpButtonCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		069789591610A9E8009BB894 /* MMOverflowPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 069789571610A9E8009BB894 /* MMOverflowPopUpButtonCell.m */; };
+		06AE02301B10A21000C65A84 /* MMTabBarButton.Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AE02321B10A50200C65A84 /* MMTabBarButtonCell.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AE02341B10A6F500C65A84 /* MMTabBarView.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AE02361B10AD5500C65A84 /* MMTabBarButton.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */; };
 		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */; };
+		06C9569F1C984932000AAF9D /* MMYosemiteTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06C9569D1C984932000AAF9D /* MMYosemiteTabStyle.h */; };
+		06C956A01C984932000AAF9D /* MMYosemiteTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C9569E1C984932000AAF9D /* MMYosemiteTabStyle.m */; };
+		06C956BA1C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B21C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png */; };
+		06C956BB1C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B31C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png */; };
+		06C956BC1C984E85000AAF9D /* YosemiteTabClose_Front_Rollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B41C984E85000AAF9D /* YosemiteTabClose_Front_Rollover.png */; };
+		06C956BD1C984E85000AAF9D /* YosemiteTabClose_Front_Rollover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B51C984E85000AAF9D /* YosemiteTabClose_Front_Rollover@2x.png */; };
+		06C956BE1C984E85000AAF9D /* YosemiteTabClose_Front.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B61C984E85000AAF9D /* YosemiteTabClose_Front.png */; };
+		06C956BF1C984E85000AAF9D /* YosemiteTabClose_Front@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B71C984E85000AAF9D /* YosemiteTabClose_Front@2x.png */; };
+		06C956C01C984E85000AAF9D /* YosemiteTabNew.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B81C984E85000AAF9D /* YosemiteTabNew.png */; };
+		06C956C11C984E85000AAF9D /* YosemiteTabNew@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B91C984E85000AAF9D /* YosemiteTabNew@2x.png */; };
 		06DB23AA1609F5830071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23A91609F5830071BDA0 /* Cocoa.framework */; };
 		06DB23B41609F5830071BDA0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06DB23B21609F5830071BDA0 /* InfoPlist.strings */; };
 		06DB23B81609F5830071BDA0 /* MMTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB23B71609F5830071BDA0 /* MMTabBarView.m */; };
@@ -322,8 +336,22 @@
 		06789DBD161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+MMTabBarViewExtensions.m"; sourceTree = "<group>"; };
 		069789561610A9E8009BB894 /* MMOverflowPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMOverflowPopUpButtonCell.h; sourceTree = "<group>"; };
 		069789571610A9E8009BB894 /* MMOverflowPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMOverflowPopUpButtonCell.m; sourceTree = "<group>"; };
+		06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTabBarButton.Common.h; sourceTree = "<group>"; };
+		06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarButtonCell.Private.h; sourceTree = "<group>"; };
+		06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarView.Private.h; sourceTree = "<group>"; };
+		06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTabBarButton.Private.h; sourceTree = "<group>"; };
 		06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSafariTabStyle.h; sourceTree = "<group>"; };
 		06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSafariTabStyle.m; sourceTree = "<group>"; };
+		06C9569D1C984932000AAF9D /* MMYosemiteTabStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMYosemiteTabStyle.h; sourceTree = "<group>"; };
+		06C9569E1C984932000AAF9D /* MMYosemiteTabStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMYosemiteTabStyle.m; sourceTree = "<group>"; };
+		06C956B21C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YosemiteTabClose_Front_Pressed.png; sourceTree = "<group>"; };
+		06C956B31C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "YosemiteTabClose_Front_Pressed@2x.png"; sourceTree = "<group>"; };
+		06C956B41C984E85000AAF9D /* YosemiteTabClose_Front_Rollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YosemiteTabClose_Front_Rollover.png; sourceTree = "<group>"; };
+		06C956B51C984E85000AAF9D /* YosemiteTabClose_Front_Rollover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "YosemiteTabClose_Front_Rollover@2x.png"; sourceTree = "<group>"; };
+		06C956B61C984E85000AAF9D /* YosemiteTabClose_Front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YosemiteTabClose_Front.png; sourceTree = "<group>"; };
+		06C956B71C984E85000AAF9D /* YosemiteTabClose_Front@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "YosemiteTabClose_Front@2x.png"; sourceTree = "<group>"; };
+		06C956B81C984E85000AAF9D /* YosemiteTabNew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YosemiteTabNew.png; sourceTree = "<group>"; };
+		06C956B91C984E85000AAF9D /* YosemiteTabNew@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "YosemiteTabNew@2x.png"; sourceTree = "<group>"; };
 		06DB23A61609F5830071BDA0 /* MMTabBarView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MMTabBarView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06DB23A91609F5830071BDA0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		06DB23AC1609F5830071BDA0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -410,6 +438,7 @@
 				0634F0331609FD9000A6C86A /* MMUnifiedTabStyle.h */,
 				0634F0341609FD9000A6C86A /* MMUnifiedTabStyle.m */,
 				06B51CB2160B558700153FA2 /* Safari Tab Style */,
+				06C9569C1C984912000AAF9D /* Yosemite Tab Style */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -439,8 +468,11 @@
 				0634EFE11609FC7F00A6C86A /* MMAttachedTabBarButtonCell.h */,
 				0634EFE21609FC7F00A6C86A /* MMAttachedTabBarButtonCell.m */,
 				0634EFED1609FC7F00A6C86A /* MMTabBarButton.h */,
+				06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */,
+				06AE022F1B10A19000C65A84 /* MMTabBarButton.Common.h */,
 				0634EFEE1609FC7F00A6C86A /* MMTabBarButton.m */,
 				0634EFEF1609FC7F00A6C86A /* MMTabBarButtonCell.h */,
+				06AE02311B10A50200C65A84 /* MMTabBarButtonCell.Private.h */,
 				0634EFF01609FC7F00A6C86A /* MMTabBarButtonCell.m */,
 			);
 			name = "Tab Buttons";
@@ -593,6 +625,31 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		06C9569C1C984912000AAF9D /* Yosemite Tab Style */ = {
+			isa = PBXGroup;
+			children = (
+				06C956A11C98493F000AAF9D /* Images */,
+				06C9569D1C984932000AAF9D /* MMYosemiteTabStyle.h */,
+				06C9569E1C984932000AAF9D /* MMYosemiteTabStyle.m */,
+			);
+			path = "Yosemite Tab Style";
+			sourceTree = "<group>";
+		};
+		06C956A11C98493F000AAF9D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				06C956B21C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png */,
+				06C956B31C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png */,
+				06C956B41C984E85000AAF9D /* YosemiteTabClose_Front_Rollover.png */,
+				06C956B51C984E85000AAF9D /* YosemiteTabClose_Front_Rollover@2x.png */,
+				06C956B61C984E85000AAF9D /* YosemiteTabClose_Front.png */,
+				06C956B71C984E85000AAF9D /* YosemiteTabClose_Front@2x.png */,
+				06C956B81C984E85000AAF9D /* YosemiteTabNew.png */,
+				06C956B91C984E85000AAF9D /* YosemiteTabNew@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		06DB239A1609F5820071BDA0 = {
 			isa = PBXGroup;
 			children = (
@@ -637,6 +694,7 @@
 				066375A116171EEF004A1128 /* MMTabBarItem.h */,
 				0634F0001609FC7F00A6C86A /* MMTabStyle.h */,
 				06DB23B61609F5830071BDA0 /* MMTabBarView.h */,
+				06AE02331B10A6F500C65A84 /* MMTabBarView.Private.h */,
 				06DB23B71609F5830071BDA0 /* MMTabBarView.m */,
 				0634F0261609FD4400A6C86A /* Animations */,
 				0634F0431609FEB200A6C86A /* Button Layout */,
@@ -669,18 +727,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				0634EFD91609FC4C00A6C86A /* MMAttachedTabBarButton.h in Headers */,
+				06AE02361B10AD5500C65A84 /* MMTabBarButton.Private.h in Headers */,
 				0634F0031609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.h in Headers */,
 				0634F0051609FC7F00A6C86A /* MMAttachedTabBarButtonCell.h in Headers */,
 				0634F0071609FC7F00A6C86A /* MMOverflowPopUpButton.h in Headers */,
 				0634F0091609FC7F00A6C86A /* MMProgressIndicator.h in Headers */,
 				0634F00B1609FC7F00A6C86A /* MMRolloverButton.h in Headers */,
 				0634F00D1609FC7F00A6C86A /* MMRolloverButtonCell.h in Headers */,
+				06AE02301B10A21000C65A84 /* MMTabBarButton.Common.h in Headers */,
 				0634F00F1609FC7F00A6C86A /* MMSlideButtonsAnimation.h in Headers */,
 				0634F0111609FC7F00A6C86A /* MMTabBarButton.h in Headers */,
 				0634F0131609FC7F00A6C86A /* MMTabBarButtonCell.h in Headers */,
 				0634F0181609FC7F00A6C86A /* MMTabBarController.h in Headers */,
 				0634F01A1609FC7F00A6C86A /* MMTabDragAssistant.h in Headers */,
+				06AE02341B10A6F500C65A84 /* MMTabBarView.Private.h in Headers */,
 				0634F01C1609FC7F00A6C86A /* MMTabDragView.h in Headers */,
+				06C9569F1C984932000AAF9D /* MMYosemiteTabStyle.h in Headers */,
 				0634F01E1609FC7F00A6C86A /* MMTabDragWindow.h in Headers */,
 				0634F0201609FC7F00A6C86A /* MMTabDragWindowController.h in Headers */,
 				0634F0221609FC7F00A6C86A /* MMTabPasteboardItem.h in Headers */,
@@ -694,6 +756,7 @@
 				0634F09A160A0CDB00A6C86A /* MMTabBarView.h in Headers */,
 				0634F0B2160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h in Headers */,
 				06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */,
+				06AE02321B10A50200C65A84 /* MMTabBarButtonCell.Private.h in Headers */,
 				069789581610A9E8009BB894 /* MMOverflowPopUpButtonCell.h in Headers */,
 				06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */,
 				06789DB6161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h in Headers */,
@@ -766,13 +829,18 @@
 				0634F077160A0C8A00A6C86A /* AquaTabCloseDirty_Front.png in Resources */,
 				0634F078160A0C8A00A6C86A /* AquaTabCloseDirty_Front_Pressed.png in Resources */,
 				0634F079160A0C8A00A6C86A /* AquaTabCloseDirty_Front_Rollover.png in Resources */,
+				06C956C01C984E85000AAF9D /* YosemiteTabNew.png in Resources */,
+				06C956BC1C984E85000AAF9D /* YosemiteTabClose_Front_Rollover.png in Resources */,
 				0634F07A160A0C8A00A6C86A /* AquaTabNew.png in Resources */,
 				0634F07B160A0C8A00A6C86A /* AquaTabNew@2x.png in Resources */,
+				06C956BA1C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png in Resources */,
 				0634F07C160A0C8A00A6C86A /* AquaTabNewPressed.png in Resources */,
+				06C956BE1C984E85000AAF9D /* YosemiteTabClose_Front.png in Resources */,
 				0634F07D160A0C8A00A6C86A /* AquaTabNewPressed@2x.png in Resources */,
 				0634F07E160A0C8A00A6C86A /* AquaTabNewRollover.png in Resources */,
 				0634F07F160A0C8A00A6C86A /* AquaTabNewRollover@2x.png in Resources */,
 				0634F080160A0C8A00A6C86A /* AquaTabsBackground.png in Resources */,
+				06C956C11C984E85000AAF9D /* YosemiteTabNew@2x.png in Resources */,
 				0634F081160A0C8A00A6C86A /* AquaTabsDown.png in Resources */,
 				0634F082160A0C8A00A6C86A /* AquaTabsDownGraphite.png in Resources */,
 				0634F083160A0C8A00A6C86A /* AquaTabsDownNonKey.png in Resources */,
@@ -789,6 +857,7 @@
 				0634F08E160A0C8A00A6C86A /* TabClose_Dirty_Pressed@2x.png in Resources */,
 				0634F08F160A0C8A00A6C86A /* TabClose_Dirty_Rollover.png in Resources */,
 				0634F090160A0C8A00A6C86A /* TabClose_Dirty_Rollover@2x.png in Resources */,
+				06C956BB1C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png in Resources */,
 				0634F091160A0C8A00A6C86A /* TabClose_Front.png in Resources */,
 				0634F092160A0C8A00A6C86A /* TabClose_Front@2x.png in Resources */,
 				0634F093160A0C8A00A6C86A /* TabClose_Front_Pressed.png in Resources */,
@@ -839,10 +908,12 @@
 				066376161617493D004A1128 /* SafariIWAddTabButton.png in Resources */,
 				066376171617493D004A1128 /* SafariIWATFill.png in Resources */,
 				066376181617493D004A1128 /* SafariIWATLeftCap.png in Resources */,
+				06C956BF1C984E85000AAF9D /* YosemiteTabClose_Front@2x.png in Resources */,
 				066376191617493D004A1128 /* SafariIWATLeftCap@2x.png in Resources */,
 				0663761A1617493D004A1128 /* SafariIWATRightCap.png in Resources */,
 				0663761B1617493D004A1128 /* SafariIWATRightCap@2x.png in Resources */,
 				0663761C1617493D004A1128 /* SafariIWBG.png in Resources */,
+				06C956BD1C984E85000AAF9D /* YosemiteTabClose_Front_Rollover@2x.png in Resources */,
 				0663761D1617493D004A1128 /* SafariIWITLeftCap.png in Resources */,
 				0663761E1617493D004A1128 /* SafariIWITLeftCap@2x.png in Resources */,
 				0663761F1617493D004A1128 /* SafariIWITRightCap.png in Resources */,
@@ -861,6 +932,7 @@
 				0634EFDC1609FC6300A6C86A /* MMAttachedTabBarButton.m in Sources */,
 				0634F0041609FC7F00A6C86A /* NSView+MMTabBarViewExtensions.m in Sources */,
 				0634F0061609FC7F00A6C86A /* MMAttachedTabBarButtonCell.m in Sources */,
+				06C956A01C984932000AAF9D /* MMYosemiteTabStyle.m in Sources */,
 				0634F0081609FC7F00A6C86A /* MMOverflowPopUpButton.m in Sources */,
 				0634F00A1609FC7F00A6C86A /* MMProgressIndicator.m in Sources */,
 				0634F00C1609FC7F00A6C86A /* MMRolloverButton.m in Sources */,
@@ -951,6 +1023,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0634F0C8160A1F8100A6C86A /* MMTabBarViewFramework-Debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -967,6 +1040,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0634F0C9160A1F8100A6C86A /* MMTabBarViewFramework-Release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

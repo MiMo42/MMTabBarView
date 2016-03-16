@@ -9,10 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabStyle.h"
 
-@interface MMSafariTabStyle : NSObject <MMTabStyle> {
-
-	NSDictionary* _objectCountStringAttributes;
-    
-}
+@interface MMSafariTabStyle : NSObject <MMTabStyle>
 
 @end

@@ -11,7 +11,7 @@
 		0634F0A0160A0D3F00A6C86A /* DemoWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0634F09E160A0D3F00A6C86A /* DemoWindowController.m */; };
 		0634F0A6160A0D6200A6C86A /* largeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0A5160A0D6200A6C86A /* largeImage.png */; };
 		0634F0AB160A0D7900A6C86A /* DemoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0634F0A7160A0D7900A6C86A /* DemoWindow.xib */; };
-		0634F0B6160A1D5D00A6C86A /* MMTabBarView.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06DB23EA1609F5D80071BDA0 /* MMTabBarView.framework */; };
+		0634F0B6160A1D5D00A6C86A /* MMTabBarView.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06DB23EA1609F5D80071BDA0 /* MMTabBarView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		06DB23CE1609F5B90071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23CD1609F5B90071BDA0 /* Cocoa.framework */; };
 		06DB23D81609F5B90071BDA0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06DB23D61609F5B90071BDA0 /* InfoPlist.strings */; };
 		06DB23DA1609F5B90071BDA0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB23D91609F5B90071BDA0 /* main.m */; };
@@ -208,7 +208,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MM;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Michael Monscheuer";
 			};
 			buildConfigurationList = 06DB23C31609F5B90071BDA0 /* Build configuration list for PBXProject "MMTabBarView Demo" */;
@@ -300,6 +300,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -340,10 +341,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0634F0BB160A1F6500A6C86A /* MMTabBarViewDemo-Debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MMTabBarView Demo/MMTabBarView Demo-Prefix.pch";
 				INFOPLIST_FILE = "MMTabBarView Demo/MMTabBarView Demo-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.monscheuer.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -353,10 +356,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0634F0BC160A1F6500A6C86A /* MMTabBarViewDemo-Release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MMTabBarView Demo/MMTabBarView Demo-Prefix.pch";
 				INFOPLIST_FILE = "MMTabBarView Demo/MMTabBarView Demo-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.monscheuer.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

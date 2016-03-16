@@ -11,99 +11,135 @@
 #import "MMTabBarView.h"
 #import "MMRolloverButton.h"
 
+#import "MMTabBarButton.h"
+
 @class MMTabBarView;
-@class MMTabBarButton;
 @class MMProgressIndicator;
 
 @protocol MMTabStyle;
 
-typedef enum MMCloseButtonImageType : NSUInteger
-{
-    MMCloseButtonImageTypeStandard = 0,
-    MMCloseButtonImageTypeRollover,
-    MMCloseButtonImageTypePressed,
-    MMCloseButtonImageTypeDirty,
-    MMCloseButtonImageTypeDirtyRollover,
-    MMCloseButtonImageTypeDirtyPressed
-} MMCloseButtonImageType;
+@interface MMTabBarButtonCell : MMRolloverButtonCell
 
-typedef enum MMTabStateMask : NSUInteger {
-	MMTab_LeftIsSelectedMask		= 1 << 2,
-	MMTab_RightIsSelectedMask		= 1 << 3,
-    
-    MMTab_LeftIsSliding             = 1 << 4,
-    MMTab_RightIsSliding            = 1 << 5,
-    
-    MMTab_PlaceholderOnLeft         = 1 << 6,
-    MMTab_PlaceholderOnRight        = 1 << 7,
-    
-	MMTab_PositionLeftMask			= 1 << 8,
-	MMTab_PositionMiddleMask		= 1 << 9,
-	MMTab_PositionRightMask         = 1 << 10,
-	MMTab_PositionSingleMask		= 1 << 11
-} MMTabStateMask;
-
-@interface MMTabBarButtonCell : MMRolloverButtonCell {
-
-@private
-    id <MMTabStyle> _style;
-
-        // state
-	MMTabStateMask		    _tabState;
-        
-        // cell values
-    NSImage                 *_icon;
-    NSImage                 *_largeImage;
-    BOOL                    _showObjectCount;
-	NSInteger				_objectCount;
-	NSColor                 *_objectCountColor;
-	BOOL					_isEdited;
-    BOOL                    _isProcessing;
-        
-        // close button
-	BOOL					_hasCloseButton;
-	BOOL					_suppressCloseButton;
-	BOOL					_closeButtonOver;
-}
-
-@property (retain) id <MMTabStyle> style;
-
-@property (retain) NSImage *icon;
-@property (retain) NSImage *largeImage;
-@property (assign) BOOL showObjectCount;
-@property (assign) NSInteger objectCount;
-@property (retain) NSColor *objectCountColor;
-@property (assign) BOOL isEdited;
-@property (assign) BOOL isProcessing;
-
-@property (assign) BOOL hasCloseButton;
-@property (assign) BOOL suppressCloseButton;
-
-@property (assign) MMTabStateMask tabState;
-
+/**
+ *  Default color for object count display
+ *
+ *  @return The default color
+ */
 + (NSColor *)defaultObjectCountColor;
 
-- (MMTabBarButton *)controlView;
-- (void)setControlView:(MMTabBarButton *)aView;
+/**
+ *  The control view
+ */
+@property (assign) MMTabBarButton *controlView;
 
-- (MMTabBarView *)tabBarView;
+/**
+ *  Tab bar view the tab bar button belongs to
+ */
+@property (readonly) MMTabBarView *tabBarView;
 
+#pragma mark Update images
+
+/**
+ *  Update images
+ */
 - (void)updateImages;
+
+#pragma mark Additional Properties
+
+/**
+ *  Tab style
+ */
+@property (strong) id <MMTabStyle> style;
+
+/**
+ *  Icon of receiver
+ */
+@property (strong) NSImage *icon;
+
+/**
+ *  Large image of receiver
+ */
+@property (strong) NSImage *largeImage;
+
+/**
+ *  Visibility of object count
+ */
+@property (assign) BOOL showObjectCount;
+
+/**
+ *  Current object count
+ */
+@property (assign) NSInteger objectCount;
+
+/**
+ *  Color of object count
+ */
+@property (strong) NSColor *objectCountColor;
+
+/**
+ *  Edited state
+ */
+@property (assign) BOOL isEdited;
+
+/**
+ *  Processing state
+ */
+@property (assign) BOOL isProcessing;
+
+/**
+ *  Visibility of close button
+ */
+@property (assign) BOOL hasCloseButton;
+
+/**
+ *  Check if close button should be suppressed
+ */
+@property (assign) BOOL suppressCloseButton;
+
+/**
+ *  Current tab state mask
+ */
+@property (assign) MMTabStateMask tabState;
 
 #pragma mark Progress Indicator Support
 
-- (MMProgressIndicator *)indicator;
+/**
+ *  Get progress indicator
+ */
+@property (readonly) MMProgressIndicator *indicator;
 
 #pragma mark Close Button Support
 
-- (MMRolloverButton *)closeButton;
-- (BOOL)shouldDisplayCloseButton;
+/**
+ *  The close button
+ */
+@property (readonly) MMRolloverButton *closeButton;
+
+/**
+ *  Check if receiver should display close button
+ */
+@property (readonly) BOOL shouldDisplayCloseButton;
+
+/**
+ *  Get close button image
+ *
+ *  @param type Close button image type
+ *
+ *  @return The image
+ */
 - (NSImage *)closeButtonImageOfType:(MMCloseButtonImageType)type;
 
 #pragma mark Cell Values
 
-- (NSAttributedString *)attributedStringValue;
-- (NSAttributedString *)attributedObjectCountStringValue;
+/**
+ *  Attributed string value
+ */
+@property (readonly) NSAttributedString *attributedStringValue;
+
+/**
+ *  Object count string value
+ */
+@property (readonly) NSAttributedString *attributedObjectCountStringValue;
 
 #pragma mark Determining Cell Size
 
@@ -116,8 +152,8 @@ typedef enum MMTabStateMask : NSUInteger {
 - (NSRect)objectCounterRectForBounds:(NSRect)theRect;
 - (NSRect)closeButtonRectForBounds:(NSRect)theRect;
 
-- (CGFloat)minimumWidthOfCell;
-- (CGFloat)desiredWidthOfCell;
+@property (readonly) CGFloat minimumWidthOfCell;
+@property (readonly) CGFloat desiredWidthOfCell;
 
 #pragma mark Drawing
 
@@ -131,11 +167,4 @@ typedef enum MMTabStateMask : NSUInteger {
 - (void)drawIndicatorWithFrame:(NSRect)frame inView:(NSView *)controlView;
 - (void)drawCloseButtonWithFrame:(NSRect)frame inView:(NSView *)controlView;
 
-/*
-#pragma mark Tracking Area Support
-
-- (void)addTrackingAreasForView:(NSView *)view inRect:(NSRect)cellFrame withUserInfo:(NSDictionary *)userInfo mouseLocation:(NSPoint)currentPoint;
-- (void)mouseEntered:(NSEvent *)theEvent;
-- (void)mouseExited:(NSEvent *)theEvent;
-*/
 @end

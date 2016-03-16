@@ -14,63 +14,34 @@
 #import "MMSlideButtonsAnimation.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
-@interface MMTabBarView (SharedPrivate)
+#import "MMTabBarView.Private.h"
+#import "MMTabBarButton.Private.h"
 
-@property (assign) BOOL isReorderingTabViewItems;
-
-@end
-
-@interface MMTabBarButton (SharedPrivate)
-
-- (NSRect)_indicatorRectForBounds:(NSRect)theRect;
-
-@end
-
-@interface MMTabDragAssistant (/*Private*/)
-
-- (NSUInteger)_destinationIndexForButton:(MMAttachedTabBarButton *)aButton atPoint:(NSPoint)aPoint inTabBarView:(MMTabBarView *)tabBarView;
-
-- (NSImage *)_imageForViewOfAttachedButton:(MMAttachedTabBarButton *)aButton forTabBarView:(MMTabBarView *)tabBarView styleMask:(NSUInteger *)outMask;
-- (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window;
-- (void)_expandWindow:(NSWindow *)window atPoint:(NSPoint)point;
-
-- (void)_dragAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView at:(NSPoint)buttonLocation event:(NSEvent *)theEvent source:(id)sourceObject;
-
-- (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView;
-
-- (NSUInteger)_moveAttachedTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView fromIndex:(NSUInteger)sourceIndex toIndex:(NSUInteger)destinationIndex;
-
-- (void)_draggingExitedTabBarView:(MMTabBarView *)tabBarView withPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
-
-- (MMTabPasteboardItem *)_tabPasteboardItemOfDraggingInfo:(id <NSDraggingInfo>)draggingInfo;
-
-- (void)_beginDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem isSourceWindow:(BOOL)isSourceWindow;
-- (void)_endDraggingWindowForPasteboardItem:(MMTabPasteboardItem *)pasteboardItem;
-
-- (void)_fadeInDragWindow:(NSTimer *)timer;
-- (void)_fadeOutDragWindow:(NSTimer *)timer;
-
+@interface MMTabDragAssistant ()
 @end
 
 NSString *AttachedTabBarButtonUTI = @"de.monscheuer.mmtabbarview.attachedbutton";
 
 @implementation MMTabDragAssistant
+{
+        // Support for dragging into new windows
+	MMTabDragWindowController		*_draggedTab;
+	MMTabDragWindowController		*_draggedView;
+	NSSize							_dragWindowOffset;
+	NSTimer							*_fadeTimer;
+	BOOL							_centersDragWindows;
+	MMTabBarTearOffStyle			_currentTearOffStyle;
 
-@synthesize sourceTabBar = _sourceTabBar;
-@synthesize attachedTabBarButton = _attachedTabBarButton;
-@synthesize pasteboardItem = _pasteboardItem;
-@synthesize destinationTabBar = _destinationTabBar;
-@synthesize isDragging = _isDragging;
-@synthesize currentMouseLocation = _currentMouseLocation;
-
-@synthesize isSliding = _isSliding;
+        // Animation
+    MMSlideButtonsAnimation         *_slideButtonsAnimation;
+}
 
 static MMTabDragAssistant *sharedDragAssistant = nil;
 
 #pragma mark -
 #pragma mark Creation/Destruction
 
-+ (MMTabDragAssistant *)sharedDragAssistant {
++ (instancetype)sharedDragAssistant {
 	if (!sharedDragAssistant) {
 		sharedDragAssistant = [[MMTabDragAssistant alloc] init];
 	}
@@ -78,7 +49,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 	return sharedDragAssistant;
 }
 
-- (id)init {
+- (instancetype)init {
 	if ((self = [super init])) {
 		_destinationTabBar = nil;
 		_isDragging = NO;
@@ -93,21 +64,24 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 - (void)dealloc {
     if (_slideButtonsAnimation) {
         [_slideButtonsAnimation stopAnimation];
-        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+        _slideButtonsAnimation = nil;
     }
 
-	[_destinationTabBar release], _destinationTabBar = nil;
-    [_pasteboardItem release], _pasteboardItem = nil;
+	_destinationTabBar = nil;
+    _pasteboardItem = nil;
     
-	[super dealloc];
 }
 
 #pragma mark -
 #pragma mark Dragging Source Handling
 
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal ofTabBarView:(MMTabBarView *)tabBarView {
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context ofTabBarView:(MMTabBarView *)tabBarView {
+    if (context == NSDraggingContextOutsideApplication)
+        return NSDragOperationNone;
+    else if (context == NSDraggingContextWithinApplication)
+        return NSDragOperationMove;
 
-	return(isLocal ? NSDragOperationMove : NSDragOperationNone);
+    return NSDragOperationNone;
 }
 
 - (BOOL)shouldStartDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withMouseDownEvent:(NSEvent *)event {
@@ -124,9 +98,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     [self _dragAttachedTabBarButton:aButton ofTabBarView:tabBarView at:[aButton frame].origin event:event source:tabBarView];
 }
 
-- (void)draggedImageBeganAt:(NSPoint)aPoint withTabBarView:(MMTabBarView *)tabBarView {
+- (void)draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint withTabBarView:(MMTabBarView *)tabBarView {
+
 	if (_draggedTab) {
-		[[_draggedTab window] setFrameTopLeftPoint:aPoint];
+		[[_draggedTab window] setFrameTopLeftPoint:screenPoint];
 		[[_draggedTab window] orderFront:nil];
 
 		if ([[tabBarView tabView] numberOfTabViewItems] == 1) {
@@ -135,37 +110,35 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 	}
 }
 
-- (void)draggedImageMovedTo:(NSPoint)aPoint {
+- (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint {
 	if (_draggedTab) {
 		if (_centersDragWindows) {
 			if ([_draggedTab isAnimating]) {
 				return;
 			}
-
 			//Ignore aPoint, as it seems to give wacky values
 			NSRect frame = [[_draggedTab window] frame];
-			frame.origin = [NSEvent mouseLocation];
+			frame.origin = screenPoint; //[NSEvent mouseLocation];
 			frame.origin.x -= frame.size.width / 2;
 			frame.origin.y -= frame.size.height / 2;
 			[[_draggedTab window] setFrame:frame display:NO];
 		} else {
-			[[_draggedTab window] setFrameTopLeftPoint:aPoint];
+			[[_draggedTab window] setFrameTopLeftPoint:screenPoint];
 		}
 
 		if (_draggedView) {
 			//move the view representation with the tab
 			//the relative position of the dragged view window will be different
 			//depending on the position of the tab bar relative to the controlled tab view
-
-			aPoint.y -= [[_draggedTab window] frame].size.height;
-			aPoint.x -= _dragWindowOffset.width;
-			aPoint.y += _dragWindowOffset.height;
-			[[_draggedView window] setFrameTopLeftPoint:aPoint];
+			screenPoint.y -= [[_draggedTab window] frame].size.height;
+			screenPoint.x -= _dragWindowOffset.width;
+			screenPoint.y += _dragWindowOffset.height;
+			[[_draggedView window] setFrameTopLeftPoint:screenPoint];
 		}
 	}
 }
 
-- (void)draggedImageEndedAt:(NSPoint)aPoint operation:(NSDragOperation)operation {
+- (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
 
     MMTabPasteboardItem *pasteboardItem = [self pasteboardItem];
     
@@ -180,7 +153,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 		if ([self destinationTabBar] == nil &&
 		   sourceDelegate && [sourceDelegate respondsToSelector:@selector(tabView:newTabBarViewForDraggedTabViewItem:atPoint:)]) {
            
-            MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[_attachedTabBarButton tabViewItem] atPoint:aPoint];
+            MMTabBarView *tabBarView = [sourceDelegate tabView:sourceTabView newTabBarViewForDraggedTabViewItem:[_attachedTabBarButton tabViewItem] atPoint:screenPoint];
 
 			if (tabBarView) {
 
@@ -403,13 +376,11 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 	if (_draggedTab) {
 		[[_draggedTab window] orderOut:nil];
-		[_draggedTab release];
 		_draggedTab = nil;
 	}
 
 	if (_draggedView) {
 		[[_draggedView window] orderOut:nil];
-		[_draggedView release];
 		_draggedView = nil;
 	}
 
@@ -463,7 +434,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         i++;
         }
     
-        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+        _slideButtonsAnimation = nil;
     }
 }
 
@@ -620,7 +591,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 	} else {
 		//the delegate doesn't give a custom image, so use an image of the view
 		NSView *tabView = [[aButton tabViewItem] view];
-		viewImage = [[[NSImage alloc] initWithSize:[tabView frame].size] autorelease];
+		viewImage = [[NSImage alloc] initWithSize:[tabView frame].size];
 		[viewImage lockFocus];
 		[tabView drawRect:[tabView bounds]];
 		[viewImage unlockFocus];
@@ -635,7 +606,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
 - (NSImage *)_miniwindowImageOfWindow:(NSWindow *)window {
 	NSRect rect = [window frame];
-	NSImage *image = [[[NSImage alloc] initWithSize:rect.size] autorelease];
+	NSImage *image = [[NSImage alloc] initWithSize:rect.size];
 	[image lockFocus];
 	rect.origin = NSZeroPoint;
 	CGContextCopyWindowCaptureContentsToRect([[NSGraphicsContext currentContext] graphicsPort], *(CGRect *)&rect, [NSApp contextID], [window windowNumber], 0);
@@ -662,17 +633,17 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSDate *expiration = [NSDate distantFuture];
     BOOL   continueDetached = NO;
 
-        // write to pasteboard
-	NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        // create pasteboard item
     MMTabPasteboardItem *pasteboardItem = [[MMTabPasteboardItem alloc] init];
     [pasteboardItem setSourceIndex:[tabBarView indexOfTabViewItem:[aButton tabViewItem]]];
     [pasteboardItem setString:[aButton title] forType:AttachedTabBarButtonUTI];
-    [pboard clearContents];
-    [pboard writeObjects:[NSArray arrayWithObject:pasteboardItem]];
+
+        // create dragging item
+    NSDraggingItem *draggingItem = [[NSDraggingItem alloc] initWithPasteboardWriter:pasteboardItem];
+    
 	[self setSourceTabBar:tabBarView];
 	[self setAttachedTabBarButton:aButton];
     [self setPasteboardItem:pasteboardItem];
-    [pasteboardItem release];
 
         // informal
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMTabDragDidBeginNotification object:pasteboardItem];
@@ -782,11 +753,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         [self setIsSliding:NO];
         [aButton setIsInDraggedSlide:NO];
         
-        [aButton retain];
-            
-        [self _dragDetachedButton:aButton ofTabBarView:tabBarView withEvent:firstEvent pasteboard:pboard source:sourceObject];
+        [self _dragDetachedButton:aButton ofTabBarView:tabBarView withEvent:firstEvent draggingItem:draggingItem source:sourceObject];
         
-        [aButton release];
     } else {
         [self setPasteboardItem:nil];
     }
@@ -797,7 +765,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
    [tabBarView update];
 }
 
-- (void)_dragDetachedButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withEvent:(NSEvent *)theEvent pasteboard:(NSPasteboard *)pboard source:(id)source {
+- (void)_dragDetachedButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView withEvent:(NSEvent *)theEvent draggingItem:(NSDraggingItem *)draggingItem source:(id)source {
 
     [self setIsDragging:YES];
 
@@ -812,15 +780,18 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     _draggedTab = [[MMTabDragWindowController alloc] initWithImage:dragImage styleMask:NSBorderlessWindowMask tearOffStyle:_currentTearOffStyle];
 
     NSPoint location = [aButton frame].origin;
-        
-    [tabBarView dragImage:[[[NSImage alloc] initWithSize:NSMakeSize(1, 1)] autorelease] at:location offset:NSZeroSize event:theEvent pasteboard:pboard source:source slideBack:NO];
+    
+    NSImage *dummyImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
+    [draggingItem setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dummyImage];
+    
+    [tabBarView beginDraggingSessionWithItems:[NSArray arrayWithObject:draggingItem] event:theEvent source:source];
 }
 
 - (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView {
 
     if (_slideButtonsAnimation != nil) {
         [_slideButtonsAnimation stopAnimation];
-        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+        _slideButtonsAnimation = nil;
     }
 
     [aButton slideAnimationWillStart];
@@ -838,7 +809,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
     if (_slideButtonsAnimation != nil) {
         [_slideButtonsAnimation stopAnimation];
-        [_slideButtonsAnimation release], _slideButtonsAnimation = nil;
+        _slideButtonsAnimation = nil;
     }
 
     NSRange slidingRange;

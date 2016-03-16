@@ -96,7 +96,6 @@
     [subviews removeObjectIdenticalTo:self];
     [subviews addObject:self];
     [superview setSubviews:subviews];
-    [subviews release];
 }
 
 @end

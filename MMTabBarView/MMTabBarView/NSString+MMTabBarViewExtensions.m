@@ -3,7 +3,7 @@
 //  MMTabBarView
 //
 //  Created by Michael Monscheuer on 9/19/12.
-//  Copyright (c) 2012 Michael Monscheuer. All rights reserved.
+//  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
 #import "NSString+MMTabBarViewExtensions.h"
@@ -14,7 +14,7 @@
 - (NSString *)stringByTruncatingToLength:(NSUInteger)truncationLength {
     NSUInteger len = [self length];
     if (len < truncationLength)
-        return [[self copy] autorelease];
+        return [self copy];
         
         // Unicode character 2026 is ellipsis
     return [[self substringToIndex:truncationLength - 10] stringByAppendingString:@"\u2026"];

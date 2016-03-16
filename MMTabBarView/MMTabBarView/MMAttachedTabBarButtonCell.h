@@ -7,18 +7,13 @@
 //
 
 #import "MMTabBarButtonCell.h"
-#import "MMTabBarView.h"
 
-@class MMAttachedTabBarButton;
+#import "MMAttachedTabBarButton.h"
 
-@interface MMAttachedTabBarButtonCell : MMTabBarButtonCell {
-
-    BOOL _isOverflowButton;
-}
+@interface MMAttachedTabBarButtonCell : MMTabBarButtonCell
 
 @property (assign) BOOL isOverflowButton;
 
-- (MMAttachedTabBarButton *)controlView;
-- (void)setControlView:(MMAttachedTabBarButton *)aView;
+@property (assign) MMAttachedTabBarButton *controlView;
 
 @end
