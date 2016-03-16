@@ -793,7 +793,7 @@
 		06DB239C1609F5820071BDA0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Michael Monscheuer";
 			};
 			buildConfigurationList = 06DB239F1609F5820071BDA0 /* Build configuration list for PBXProject "MMTabBarView" */;
@@ -983,6 +983,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1031,6 +1032,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MMTabBarView/MMTabBarView-Prefix.pch";
 				INFOPLIST_FILE = "MMTabBarView/MMTabBarView-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.monscheuer.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1048,6 +1050,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MMTabBarView/MMTabBarView-Prefix.pch";
 				INFOPLIST_FILE = "MMTabBarView/MMTabBarView-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.monscheuer.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
