@@ -60,17 +60,6 @@ StaticImage(TabNewMetalRollover)
 	return self;
 }
 
-- (void)dealloc {
-	metalCloseButton = nil;
-	metalCloseButtonDown = nil;
-	metalCloseButtonOver = nil;
-	metalCloseDirtyButton = nil;
-	metalCloseDirtyButtonDown = nil;
-	metalCloseDirtyButtonOver = nil;
-
-	_objectCountStringAttributes = nil;
-}
-
 #pragma mark -
 #pragma mark Tab View Specific
 

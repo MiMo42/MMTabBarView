@@ -25,11 +25,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    _rolloverImage = nil;
-}
-
 - (void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)controlView {
 
     if (_mouseHovered && ![self isHighlighted]) {
