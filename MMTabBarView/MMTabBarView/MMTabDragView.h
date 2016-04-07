@@ -8,14 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MMTabDragView : NSView {
-	NSImage					*_image;
-	NSImage					*_alternateImage;
-	CGFloat					_alpha;
-}
-- (void)setFadeValue:(CGFloat)value;
-- (NSImage *)image;
-- (void)setImage:(NSImage *)image;
-- (NSImage *)alternateImage;
-- (void)setAlternateImage:(NSImage *)image;
+@interface MMTabDragView : NSView
+
+@property (assign) CGFloat alpha;
+@property (strong) NSImage *image;
+@property (strong) NSImage *alternateImage;
+
 @end

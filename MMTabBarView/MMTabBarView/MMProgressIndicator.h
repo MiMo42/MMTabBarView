@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MMProgressIndicator : NSProgressIndicator {
-}
+@interface MMProgressIndicator : NSProgressIndicator 
 
 @end

@@ -11,17 +11,6 @@
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 
 @interface MMCardTabStyle : NSObject <MMTabStyle>
-{
-    NSImage *cardCloseButton;
-    NSImage *cardCloseButtonDown;
-    NSImage *cardCloseButtonOver;
-    NSImage *cardCloseDirtyButton;
-    NSImage *cardCloseDirtyButtonDown;
-    NSImage *cardCloseDirtyButtonOver;
-	    
-    CGFloat _horizontalInset;
-    CGFloat _topMargin;
-}
 
 @property (assign) CGFloat horizontalInset;
 @property (assign) CGFloat topMargin;

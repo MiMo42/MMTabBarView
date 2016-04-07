@@ -14,65 +14,24 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 
-@interface MMTabBarButtonCell (/*Private*/)
-
-- (NSImage *)_closeButtonImageOfType:(MMCloseButtonImageType)type;
-
-- (CGFloat)_leftMargin;
-- (CGFloat)_rightMargin;
-
-- (NSRect)_drawingRectForBounds:(NSRect)theRect;
-- (NSRect)_titleRectForBounds:(NSRect)theRect;
-- (NSRect)_iconRectForBounds:(NSRect)theRect;
-- (NSRect)_largeImageRectForBounds:(NSRect)theRect;
-- (NSRect)_indicatorRectForBounds:(NSRect)theRect;
-- (NSSize)_objectCounterSize;
-- (NSRect)_objectCounterRectForBounds:(NSRect)theRect;
-- (NSSize)_closeButtonSizeForBounds:(NSRect)theRect;
-- (NSRect)_closeButtonRectForBounds:(NSRect)theRect;
-
-- (CGFloat)_minimumWidthOfCell;
-- (CGFloat)_desiredWidthOfCell;
-
-- (NSAttributedString *)_attributedStringValue;
-- (NSAttributedString *)_attributedObjectCountStringValue;
-
-- (void)_updateSubButtons;
-- (void)_updateCloseButtonImages;
-- (void)_updateCloseButton;
-- (void)_updateIndicator;
-
-- (void)_drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (void)_drawBezelWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (void)_drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (void)_drawLargeImageWithFrame:(NSRect)frame inView:(NSView *)controlView;
-- (void)_drawIconWithFrame:(NSRect)frame inView:(NSView *)controlView;
-- (void)_drawTitleWithFrame:(NSRect)frame inView:(NSView *)controlView;
-- (void)_drawObjectCounterWithFrame:(NSRect)frame inView:(NSView *)controlView;
-- (void)_drawIndicatorWithFrame:(NSRect)frame inView:(NSView *)controlView;
-- (void)_drawCloseButtonWithFrame:(NSRect)frame inView:(NSView *)controlView;
-
+@interface MMTabBarButtonCell ()
 @end
 
 @implementation MMTabBarButtonCell
-
-@dynamic style;
-@dynamic hasCloseButton;
-@dynamic suppressCloseButton;
-@synthesize icon = _icon;
-@synthesize largeImage = _largeImage;
-@synthesize showObjectCount = _showObjectCount;
-@synthesize objectCount = _objectCount;
-@synthesize objectCountColor = _objectCountColor;
-@dynamic isEdited;
-@synthesize isProcessing = _isProcessing;
-@synthesize tabState = _tabState;
+{
+    id <MMTabStyle> _style;
+    BOOL            _isProcessing;
+    BOOL            _isEdited;
+    BOOL            _hasCloseButton;
+    BOOL            _suppressCloseButton;
+    BOOL            _closeButtonOver;
+}
 
 + (NSColor *)defaultObjectCountColor {
     return [NSColor colorWithCalibratedWhite:0.3 alpha:0.45];
 }
 
-- (id)init {
+- (instancetype)init {
 	if ((self = [super init])) {
     
         _style = nil;
@@ -81,7 +40,7 @@
         _icon = nil;
         _largeImage = nil;
         _showObjectCount = NO;
-		_objectCountColor = [[NSColor colorWithCalibratedWhite:0.3 alpha:0.45] retain];
+		_objectCountColor = [NSColor colorWithCalibratedWhite:0.3 alpha:0.45];
 		_isEdited = NO;
         _tabState = 0;
         
@@ -90,15 +49,6 @@
 		_closeButtonOver = NO;
 	}
 	return self;
-}
-
-- (void)dealloc {
-    [_style release], _style = nil;
-    [_icon release], _icon = nil;
-    [_largeImage release], _largeImage = nil;
-    [_objectCountColor release], _objectCountColor = nil;
-         
-    [super dealloc];
 }
 
 - (MMTabBarButton *)controlView {
@@ -139,8 +89,8 @@
 
     @synchronized (self) {
     
-        [_style release], _style = nil;
-        _style = [style retain];
+        _style = nil;
+        _style = style;
                 
         [self _updateSubButtons];
     }
@@ -515,10 +465,10 @@
     MMTabBarButtonCell *cellCopy = [super copyWithZone:zone];
     if (cellCopy) {
     
-        cellCopy->_style = [_style retain];
-        cellCopy->_icon = [_icon retain];
-        cellCopy->_largeImage = [_largeImage retain];
-        cellCopy->_objectCountColor = [_objectCountColor retain];
+        cellCopy->_style = _style;
+        cellCopy->_icon = _icon;
+        cellCopy->_largeImage = _largeImage;
+        cellCopy->_objectCountColor = _objectCountColor;
         
         cellCopy->_tabState = _tabState;
         cellCopy->_showObjectCount = _showObjectCount;
@@ -556,14 +506,14 @@
 	}
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
 		if ([aDecoder allowsKeyedCoding]) {
         
-            _style = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellStyle"] retain];
-            _icon = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellIcon"] retain];
-            _largeImage = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellLargeImage"] retain];
-            _objectCountColor = [[aDecoder decodeObjectForKey:@"MMTabBarButtonCellLargeObjectCountColor"] retain];
+            _style = [aDecoder decodeObjectForKey:@"MMTabBarButtonCellStyle"];
+            _icon = [aDecoder decodeObjectForKey:@"MMTabBarButtonCellIcon"];
+            _largeImage = [aDecoder decodeObjectForKey:@"MMTabBarButtonCellLargeImage"];
+            _objectCountColor = [aDecoder decodeObjectForKey:@"MMTabBarButtonCellLargeObjectCountColor"];
             
             _tabState = [aDecoder decodeIntegerForKey:@"MMTabBarButtonCellTabState"];
             _showObjectCount = [aDecoder decodeBoolForKey:@"MMTabBarButtonCellShowObjectCount"];
@@ -587,7 +537,7 @@
 
 	NSMutableAttributedString *attrStr;
 	NSString *contents = [self title];
-	attrStr = [[[NSMutableAttributedString alloc] initWithString:contents] autorelease];
+	attrStr = [[NSMutableAttributedString alloc] initWithString:contents];
 	NSRange range = NSMakeRange(0, [contents length]);
 
 	[attrStr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0] range:range];
@@ -596,7 +546,7 @@
 	// Paragraph Style for Truncating Long Text
 	static NSMutableParagraphStyle *truncatingTailParagraphStyle = nil;
 	if (!truncatingTailParagraphStyle) {
-		truncatingTailParagraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] retain];
+		truncatingTailParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 		[truncatingTailParagraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 		[truncatingTailParagraphStyle setAlignment:NSCenterTextAlignment];
 	}
@@ -614,7 +564,7 @@
     }
 
 	NSString *contents = [NSString stringWithFormat:@"%lu", (unsigned long)[self objectCount]];
-	return [[[NSMutableAttributedString alloc] initWithString:contents attributes:objectCountStringAttributes] autorelease];
+	return [[NSMutableAttributedString alloc] initWithString:contents attributes:objectCountStringAttributes];
 }
 
 #pragma mark > Sub Buttons
@@ -848,7 +798,7 @@
         result.origin.y += (constrainedDrawingRect.size.height - scaledImageSize.height) / 2.0;
     }
         
-    return result;
+    return NSIntegralRect(result);
 }
 
 - (NSRect)_indicatorRectForBounds:(NSRect)theRect {
@@ -869,7 +819,7 @@
 
 - (NSSize)_objectCounterSize {
     
-    if ([self showObjectCount] == 0) {
+    if (![self showObjectCount]) {
         return NSZeroSize;
     }
     
@@ -1096,7 +1046,6 @@
 
     [NSGraphicsContext restoreGraphicsState];
         
-    [shadow release];
 }
 
 - (void)_drawObjectCounterWithFrame:(NSRect)frame inView:(NSView *)controlView {

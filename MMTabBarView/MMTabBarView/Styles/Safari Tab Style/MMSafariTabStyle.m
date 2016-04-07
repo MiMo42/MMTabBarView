@@ -11,23 +11,13 @@
 #import "MMTabBarView.h"
 #import "MMAttachedTabBarButton.h"
 #import "NSView+MMTabBarViewExtensions.h"
-
-@interface MMTabBarView(SharedPrivates)
-
-- (NSRect)_addTabButtonRect;
-- (NSRect)_overflowButtonRect;
-
-@end
-
-@interface MMTabBarButtonCell(SharedPrivates)
-
-- (NSRect)_closeButtonRectForBounds:(NSRect)theRect;
-- (CGFloat)_leftMargin;
-- (CGFloat)_rightMargin;
-
-@end
+#import "MMTabBarView.Private.h"
+#import "MMTabBarButtonCell.Private.h"
 
 @implementation MMSafariTabStyle
+{
+	NSDictionary *_objectCountStringAttributes;
+}
 
 StaticImage(SafariAWATClose)
 StaticImage(SafariAWATClosePressed)
@@ -71,19 +61,13 @@ StaticImage(SafariIWITRightCap)
 #pragma mark -
 #pragma mark Creation/Destruction
 
-- (id) init {
+- (instancetype) init {
 	if((self = [super init])) {
 		_objectCountStringAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Helvetica" size:11.0] toHaveTrait:NSBoldFontMask], NSFontAttributeName,
 										[[NSColor whiteColor] colorWithAlphaComponent:0.85], NSForegroundColorAttributeName,
 										nil, nil];
 	}
 	return self;
-}
-
-- (void)dealloc {
-	[_objectCountStringAttributes release], _objectCountStringAttributes = nil;
-
-	[super dealloc];
 }
 
 #pragma mark -
