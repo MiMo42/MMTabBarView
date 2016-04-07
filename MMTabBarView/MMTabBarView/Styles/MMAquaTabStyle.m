@@ -45,19 +45,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	aquaTabBg = nil;
-	aquaTabBgDown = nil;
-	aquaDividerDown = nil;
-	aquaDivider = nil;
-	aquaCloseButton = nil;
-	aquaCloseButtonDown = nil;
-	aquaCloseButtonOver = nil;
-	aquaCloseDirtyButton = nil;
-	aquaCloseDirtyButtonDown = nil;
-	aquaCloseDirtyButtonOver = nil;
-}
-
 #pragma mark -
 #pragma mark Tab View Specifics
 

@@ -52,15 +52,6 @@
     return self;
 }
 
-- (void)dealloc {
-    cardCloseButton = nil;
-    cardCloseButtonDown = nil;
-    cardCloseButtonOver = nil;
-    cardCloseDirtyButton = nil;
-    cardCloseDirtyButtonDown = nil;
-    cardCloseDirtyButtonOver = nil;
-}
-
 #pragma mark -
 #pragma mark Tab View Specific
 

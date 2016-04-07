@@ -52,12 +52,6 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     return self;
 }
 
-- (void)dealloc
-{
-    _closeButton = nil;
-    _indicator = nil;    
-}
-
 - (MMTabBarButtonCell *)cell {
     return (MMTabBarButtonCell *)[super cell];
 }

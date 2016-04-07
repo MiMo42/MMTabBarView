@@ -58,17 +58,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	liveChatCloseButton = nil;
-	liveChatCloseButtonDown = nil;
-	liveChatCloseButtonOver = nil;
-	liveChatCloseDirtyButton = nil;
-	liveChatCloseDirtyButtonDown = nil;
-	liveChatCloseDirtyButtonOver = nil;
-    
-	_objectCountStringAttributes = nil;
-}
-
 #pragma mark -
 #pragma mark Tab View Specific
 

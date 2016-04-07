@@ -51,16 +51,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	unifiedCloseButton = nil;
-	unifiedCloseButtonDown = nil;
-	unifiedCloseButtonOver = nil;
-	unifiedCloseDirtyButton = nil;
-	unifiedCloseDirtyButtonDown = nil;
-	unifiedCloseDirtyButtonOver = nil;
-
-}
-
 #pragma mark -
 #pragma mark Tab View Specific
 

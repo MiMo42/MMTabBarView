@@ -45,11 +45,6 @@
     return nil;
 }
 
-- (void)dealloc
-{
-    _tabViewItem = nil;
-}
-
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
 }
