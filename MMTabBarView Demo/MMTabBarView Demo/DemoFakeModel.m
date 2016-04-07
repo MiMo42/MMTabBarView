@@ -26,13 +26,4 @@
 	return self;
 }
 
--(void)dealloc {
-    
-    _title = nil;
-    _icon = nil;
-    _iconName = nil;
-    _largeImage = nil;
-    _objectCountColor = nil;
-}
-
 @end

@@ -51,14 +51,6 @@
 	return self;
 }
 
-- (void)dealloc {
-    _style = nil;
-    _icon = nil;
-    _largeImage = nil;
-    _objectCountColor = nil;
-         
-}
-
 - (MMTabBarButton *)controlView {
     return (MMTabBarButton *)[super controlView];
 }

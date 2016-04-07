@@ -30,14 +30,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    _bezelDrawingBlock = nil;
-    _image = nil;
-    _secondImage = nil;
-    
-}
-
 #pragma mark -
 #pragma mark Accessors
 

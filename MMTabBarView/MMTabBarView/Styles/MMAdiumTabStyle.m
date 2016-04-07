@@ -53,19 +53,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	_closeButton = nil;
-	_closeButtonDown = nil;
-	_closeButtonOver = nil;
-
-	_closeDirtyButton = nil;
-	_closeDirtyButtonDown = nil;
-	_closeDirtyButtonOver = nil;
-
-	_gradientImage = nil;
-
-}
-
 #pragma mark -
 #pragma mark Tab View Specific
 
