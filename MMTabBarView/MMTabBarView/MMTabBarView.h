@@ -12,40 +12,36 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define MMTabDragDidEndNotification     @"MMTabDragDidEndNotification"
-#define MMTabDragDidBeginNotification   @"MMTabDragDidBeginNotification"
+#pragma mark Umbrella Header section
 
-#define kMMTabBarViewHeight             22
-// default inset
-#define MARGIN_X                        6
-#define MARGIN_Y                        3
-// padding between objects
-#define kMMTabBarCellPadding            4
-// fixed size objects
-#define kMMMinimumTitleWidth            30
-#define kMMTabBarIndicatorWidth         16.0
-#define kMMTabBarIconWidth              16.0
-#define kMMObjectCounterMinWidth        20.0
-#define kMMObjectCounterRadius          7.0
-#define kMMTabBarViewSourceListHeight   28
+//! Project version number for GameworkSDK.
+FOUNDATION_EXPORT double MMTabBarViewVersionNumber;
 
-#define StaticImage(name) \
-static NSImage* _static##name##Image() \
-{ \
-    static NSImage* image = nil; \
-    if (!image) \
-        image = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@#name]]; \
-    return image; \
-}
+//! Project version string for GameworkSDK.
+FOUNDATION_EXPORT const unsigned char MMTabBarViewVersionString[];
 
-#define StaticImageWithFilename(name, filename) \
-static NSImage* _static##name##Image() \
-{ \
-    static NSImage* image = nil; \
-    if (!image) \
-        image = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@#filename]]; \
-    return image; \
-}
+#import <MMTabBarView/MMTabBarView.Globals.h>
+
+#import <MMTabBarView/MMTabBarItem.h>
+
+#import <MMTabBarView/MMTabBarButton.h>
+#import <MMTabBarView/MMTabBarButtonCell.h>
+
+#import <MMTabBarView/MMAttachedTabBarButton.h>
+#import <MMTabBarView/MMAttachedTabBarButtonCell.h>
+
+#import <MMTabBarView/MMOverflowPopUpButton.h>
+#import <MMTabBarView/MMOverflowPopUpButtonCell.h>
+
+#import <MMTabBarView/MMAdiumTabStyle.h>
+#import <MMTabBarView/MMAquaTabStyle.h>
+#import <MMTabBarView/MMCardTabStyle.h>
+#import <MMTabBarView/MMLiveChatTabStyle.h>
+#import <MMTabBarView/MMMetalTabStyle.h>
+#import <MMTabBarView/MMSafariTabStyle.h>
+#import <MMTabBarView/MMUnifiedTabStyle.h>
+
+#import <MMTabBarView/NSBezierPath+MMTabBarViewExtensions.h>
 
 @class MMRolloverButton;
 @class MMTabBarViewler;
@@ -55,53 +51,6 @@ static NSImage* _static##name##Image() \
 @class MMTabBarController;
 
 @protocol MMTabStyle;
-
-/**
- *  Tab bar orientation
- */
-typedef NS_ENUM(NSUInteger, MMTabBarOrientation){
-/**
- *  Horizontal orientation
- */
-MMTabBarHorizontalOrientation = 0,
-/**
- *  Vertical orientation
- */
-MMTabBarVerticalOrientation
-};
-
-/**
- *  Tear off style
- */
-typedef NS_ENUM(NSUInteger, MMTabBarTearOffStyle){
-/**
- *  Show alpha window
- */
-MMTabBarTearOffAlphaWindow,
-/**
- *  Show mini window
- */
-MMTabBarTearOffMiniwindow
-};
-
-/**
- *  Attached tab bar buttons enumeration options
- */
-typedef NS_ENUM(NSUInteger, MMAttachedButtonsEnumerationOptions){
-/**
- *  No options
- */
-MMAttachedButtonsEnumerationNone               = 0,
-/**
- *  Update tab state
- */
-MMAttachedButtonsEnumerationUpdateTabStateMask = 1 << 1,
-/**
- *  Update button state
- */
-MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
-};
-
 @protocol MMTabBarViewDelegate;
 
 @interface MMTabBarView : NSView <NSDraggingSource, NSDraggingDestination, NSAnimationDelegate>

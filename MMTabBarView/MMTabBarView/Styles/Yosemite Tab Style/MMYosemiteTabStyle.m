@@ -12,6 +12,7 @@
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
+#import "MMOverflowPopUpButton.h"
 
 @implementation MMYosemiteTabStyle
 

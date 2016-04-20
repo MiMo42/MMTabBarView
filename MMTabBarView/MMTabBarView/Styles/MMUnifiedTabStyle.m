@@ -11,6 +11,8 @@
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
+#import "MMTabBarButtonCell.h"
+#import "MMOverflowPopUpButton.h"
 
 @interface MMUnifiedTabStyle ()
 @end

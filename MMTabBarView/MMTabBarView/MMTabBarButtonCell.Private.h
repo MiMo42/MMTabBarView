@@ -6,6 +6,8 @@
 //  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
+#import "MMTabBarButtonCell.h";
+
 @interface MMTabBarButtonCell (PrivateDrawing)
 
 - (NSRect)_closeButtonRectForBounds:(NSRect)theRect;

@@ -10,6 +10,8 @@
 
 #import "MMAttachedTabBarButton.h"
 
+@class MMAttachedTabBarButton;
+
 @interface MMAttachedTabBarButtonCell : MMTabBarButtonCell
 
 @property (assign) BOOL isOverflowButton;
