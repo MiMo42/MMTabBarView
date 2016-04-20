@@ -30,8 +30,13 @@
 
 /**
  *  The control view
+ * 
+ *  TODO: fix, rename "tabBarButton"
  */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-property-type"
 @property (assign) MMTabBarButton *controlView;
+#pragma clang diagnostic pop
 
 /**
  *  Tab bar view the tab bar button belongs to
