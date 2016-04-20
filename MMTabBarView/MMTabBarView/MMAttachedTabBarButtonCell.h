@@ -8,8 +8,6 @@
 
 #import "MMTabBarButtonCell.h"
 
-#import "MMAttachedTabBarButton.h"
-
 @class MMAttachedTabBarButton;
 
 @interface MMAttachedTabBarButtonCell : MMTabBarButtonCell
