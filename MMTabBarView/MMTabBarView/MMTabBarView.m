@@ -232,7 +232,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(intrinsicContentSizeOfTabBarView:)])
         return [_style intrinsicContentSizeOfTabBarView:self];
 
-    return NSMakeSize(NSViewNoIntrinsicMetric, NSViewNoIntrinsicMetric);
+    return NSMakeSize(NSViewNoInstrinsicMetric, NSViewNoInstrinsicMetric);
 }
 
 #pragma mark -

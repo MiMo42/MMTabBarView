@@ -48,7 +48,7 @@ StaticImage(YosemiteTabNewPressed)
 
 - (NSSize)intrinsicContentSizeOfTabBarView:(MMTabBarView *)tabBarView
 {
-    return NSMakeSize(NSViewNoIntrinsicMetric, 25);
+    return NSMakeSize(NSViewNoInstrinsicMetric, 25);
 }
 
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView {
