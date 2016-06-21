@@ -213,7 +213,7 @@
     NSSize intrinsicTabBarContentSize = [tabBar intrinsicContentSize];
 
 	if (newOrientation == MMTabBarHorizontalOrientation) {
-        if (intrinsicTabBarContentSize.height == NSViewNoIntrinsicMetric)
+        if (intrinsicTabBarContentSize.height == NSViewNoInstrinsicMetric)
             intrinsicTabBarContentSize.height = 22;
 		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : intrinsicTabBarContentSize.height;
 		tabBarFrame.size.width = totalFrame.size.width;
