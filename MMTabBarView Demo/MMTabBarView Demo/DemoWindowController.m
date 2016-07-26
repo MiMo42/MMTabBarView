@@ -458,6 +458,10 @@
 	NSLog(@"didCloseTabViewItem: %@", [tabViewItem label]);
 }
 
+- (void)tabView:(NSTabView *)aTabView didDetachTabViewItem:(NSTabViewItem *)tabViewItem {
+	NSLog(@"didDetachTabViewItem: %@", [tabViewItem label]);
+}
+
 - (void)tabView:(NSTabView *)aTabView didMoveTabViewItem:(NSTabViewItem *)tabViewItem toIndex:(NSUInteger)index
 {
     NSLog(@"tab view did move tab view item %@ to index:%ld",[tabViewItem label],index);
