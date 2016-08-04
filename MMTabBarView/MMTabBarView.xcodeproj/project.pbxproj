@@ -177,6 +177,7 @@
 		06DB23AA1609F5830071BDA0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB23A91609F5830071BDA0 /* Cocoa.framework */; };
 		06DB23B41609F5830071BDA0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06DB23B21609F5830071BDA0 /* InfoPlist.strings */; };
 		06DB23B81609F5830071BDA0 /* MMTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06DB23B71609F5830071BDA0 /* MMTabBarView.m */; };
+		50428A0F1D532E0600C42E1E /* MMTabBarView-Framework.h in Headers */ = {isa = PBXBuildFile; fileRef = 50428A0D1D532C8B00C42E1E /* MMTabBarView-Framework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -362,6 +363,8 @@
 		06DB23B51609F5830071BDA0 /* MMTabBarView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MMTabBarView-Prefix.pch"; sourceTree = "<group>"; };
 		06DB23B61609F5830071BDA0 /* MMTabBarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTabBarView.h; sourceTree = "<group>"; };
 		06DB23B71609F5830071BDA0 /* MMTabBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTabBarView.m; sourceTree = "<group>"; };
+		50428A0D1D532C8B00C42E1E /* MMTabBarView-Framework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MMTabBarView-Framework.h"; sourceTree = "<group>"; };
+		50428A0E1D532D0D00C42E1E /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -691,6 +694,8 @@
 		06DB23AF1609F5830071BDA0 /* MMTabBarView */ = {
 			isa = PBXGroup;
 			children = (
+				50428A0D1D532C8B00C42E1E /* MMTabBarView-Framework.h */,
+				50428A0E1D532D0D00C42E1E /* module.modulemap */,
 				066375A116171EEF004A1128 /* MMTabBarItem.h */,
 				0634F0001609FC7F00A6C86A /* MMTabStyle.h */,
 				06DB23B61609F5830071BDA0 /* MMTabBarView.h */,
@@ -754,6 +759,7 @@
 				0634F03D1609FD9000A6C86A /* MMMetalTabStyle.h in Headers */,
 				0634F03F1609FD9000A6C86A /* MMUnifiedTabStyle.h in Headers */,
 				0634F09A160A0CDB00A6C86A /* MMTabBarView.h in Headers */,
+				50428A0F1D532E0600C42E1E /* MMTabBarView-Framework.h in Headers */,
 				0634F0B2160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h in Headers */,
 				06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */,
 				06AE02321B10A50200C65A84 /* MMTabBarButtonCell.Private.h in Headers */,
@@ -1032,6 +1038,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MMTabBarView/MMTabBarView-Prefix.pch";
 				INFOPLIST_FILE = "MMTabBarView/MMTabBarView-Info.plist";
+				MODULEMAP_FILE = MMTabBarView/module.modulemap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1050,6 +1057,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MMTabBarView/MMTabBarView-Prefix.pch";
 				INFOPLIST_FILE = "MMTabBarView/MMTabBarView-Info.plist";
+				MODULEMAP_FILE = MMTabBarView/module.modulemap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
