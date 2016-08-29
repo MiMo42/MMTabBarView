@@ -160,7 +160,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 				}
             }
             else if (_tabBarView.resizeTabsToFitTotalWidth) {
-                width = _tabBarView.frame.size.width / buttonCount;
+                width = _tabBarView.frame.size.width / (CGFloat)buttonCount;
 			} else {
 				width = [_tabBarView buttonOptimumWidth];
 			}
@@ -168,7 +168,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 			width = ceil(width);
 
 			//check to see if there is not enough space to place all tabs as preferred
-			if (totalOccupiedWidth + width >= availableWidth) {
+			if (totalOccupiedWidth + width > availableWidth) {
 				//There's not enough space to add current button at its preferred width!
 
 				//If we're not going to use the overflow menu, cram all the tab buttons into the bar regardless of minimum width
@@ -385,6 +385,15 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 			}
 		}
 	}
+    
+    // Add width to last tab if indivisible
+    if ([_tabBarView resizeTabsToFitTotalWidth]) {
+        if (totalOccupiedWidth != NSWidth(_tabBarView.frame)) {
+            if (newWidths.count > 0) {
+                [newWidths replaceObjectAtIndex:newWidths.count - 1 withObject:[NSNumber numberWithDouble:[[newWidths lastObject] doubleValue] + (NSWidth(_tabBarView.frame) - totalOccupiedWidth)]];
+            }
+        }
+    }
 
 	return newWidths;
 }
