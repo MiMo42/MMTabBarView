@@ -850,6 +850,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	if (_style != newStyle) {
 		_style = newStyle;
 
+        if ([newStyle respondsToSelector:@selector(needsResizeTabsToFitTotalWidth)])
+            self.resizeTabsToFitTotalWidth = [newStyle needsResizeTabsToFitTotalWidth];
+        
             // assure that orientation is valid
         if (![self supportsOrientation:MMTabBarHorizontalOrientation] && _orientation == MMTabBarHorizontalOrientation)
             [self setOrientation:MMTabBarVerticalOrientation];

@@ -40,6 +40,8 @@
 
 #pragma mark General
 
+- (BOOL)needsResizeTabsToFitTotalWidth;
+
 /**
  *  Get intrinsic content size of tab bar
  *
