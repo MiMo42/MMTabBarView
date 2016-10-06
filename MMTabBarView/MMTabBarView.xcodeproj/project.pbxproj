@@ -165,7 +165,7 @@
 		06AE02361B10AD5500C65A84 /* MMTabBarButton.Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AE02351B10AD5500C65A84 /* MMTabBarButton.Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		06B51CAE160B555F00153FA2 /* MMSafariTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06B51CAC160B555F00153FA2 /* MMSafariTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B51CAF160B555F00153FA2 /* MMSafariTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B51CAD160B555F00153FA2 /* MMSafariTabStyle.m */; };
-		06C9569F1C984932000AAF9D /* MMYosemiteTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06C9569D1C984932000AAF9D /* MMYosemiteTabStyle.h */; };
+		06C9569F1C984932000AAF9D /* MMYosemiteTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 06C9569D1C984932000AAF9D /* MMYosemiteTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06C956A01C984932000AAF9D /* MMYosemiteTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C9569E1C984932000AAF9D /* MMYosemiteTabStyle.m */; };
 		06C956BA1C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B21C984E85000AAF9D /* YosemiteTabClose_Front_Pressed.png */; };
 		06C956BB1C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C956B31C984E85000AAF9D /* YosemiteTabClose_Front_Pressed@2x.png */; };
