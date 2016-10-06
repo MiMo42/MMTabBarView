@@ -8,13 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "MMRolloverButton.h"
+
+#import "MMTabBarButton.Common.h"
+
+/*
 #import "MMTabBarView.h"
 #import "MMRolloverButton.h"
 #import "MMProgressIndicator.h"
 #import "MMTabBarButton.Common.h"
-
+*/
 @class MMTabBarView;
 @class MMTabBarButtonCell;
+@class MMProgressIndicator;
 
 @protocol MMTabStyle;
 

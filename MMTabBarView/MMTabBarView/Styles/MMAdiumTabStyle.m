@@ -14,6 +14,7 @@
 #import "NSCell+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 #import "MMTabBarButtonCell.Private.h"
+#import "MMOverflowPopUpButton.h"
 
 // #define Adium_CellPadding 2
 #define Adium_MARGIN_X 4

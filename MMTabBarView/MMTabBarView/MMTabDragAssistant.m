@@ -174,6 +174,8 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 				if ([sourceDelegate respondsToSelector:@selector(tabView:didDropTabViewItem:inTabBarView:)]) {
 					[sourceDelegate tabView:sourceTabView didDropTabViewItem:[_attachedTabBarButton tabViewItem] inTabBarView:tabBarView];
 				}
+                
+                [tabBarView setNeedsUpdate:YES];
 			} else {
 				NSLog(@"Delegate returned no control to add to.");
                 [_sourceTabBar insertAttachedButton:_attachedTabBarButton atTabItemIndex:sourceIndex];
