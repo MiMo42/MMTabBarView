@@ -12,6 +12,7 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 #import "MMTabBarView.Private.h"
+#import "MMOverflowPopUpButton.h"
 
 @interface MMCardTabStyle ()
 @end

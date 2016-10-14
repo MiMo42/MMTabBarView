@@ -8,13 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "MMTabBarView.h"
-#import "MMRolloverButton.h"
+#import "MMRolloverButtonCell.h"
 
-#import "MMTabBarButton.h"
+#import "MMTabBarButton.Common.h"
 
 @class MMTabBarView;
 @class MMProgressIndicator;
+@class MMTabBarButton;
+@class MMRolloverButton;
 
 @protocol MMTabStyle;
 
@@ -29,8 +30,13 @@
 
 /**
  *  The control view
+ * 
+ *  TODO: fix, rename "tabBarButton"
  */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-property-type"
 @property (assign) MMTabBarButton *controlView;
+#pragma clang diagnostic pop
 
 /**
  *  Tab bar view the tab bar button belongs to

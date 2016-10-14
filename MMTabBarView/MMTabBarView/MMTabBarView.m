@@ -232,7 +232,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(intrinsicContentSizeOfTabBarView:)])
         return [_style intrinsicContentSizeOfTabBarView:self];
 
-    return NSMakeSize(NSViewNoIntrinsicMetric, NSViewNoIntrinsicMetric);
+    return NSMakeSize(NSViewNoInstrinsicMetric, NSViewNoInstrinsicMetric);
 }
 
 #pragma mark -
@@ -850,6 +850,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	if (_style != newStyle) {
 		_style = newStyle;
 
+        if ([newStyle respondsToSelector:@selector(needsResizeTabsToFitTotalWidth)])
+            self.resizeTabsToFitTotalWidth = [newStyle needsResizeTabsToFitTotalWidth];
+        
             // assure that orientation is valid
         if (![self supportsOrientation:MMTabBarHorizontalOrientation] && _orientation == MMTabBarHorizontalOrientation)
             [self setOrientation:MMTabBarVerticalOrientation];

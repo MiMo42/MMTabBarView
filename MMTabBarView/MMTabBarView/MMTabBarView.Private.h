@@ -15,4 +15,10 @@
 
 @property (assign) BOOL isReorderingTabViewItems;
 
+#pragma mark Private Actions
+
+- (void)_overflowMenuAction:(id)sender;
+- (void)_didClickTabButton:(id)sender;
+- (void)_didClickCloseButton:(id)sender;
+
 @end

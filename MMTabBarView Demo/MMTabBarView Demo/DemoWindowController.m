@@ -6,8 +6,7 @@
 //  Copyright 2006 Positive Spin Media. All rights reserved.
 //
 
-#import <MMTabBarView/MMTabBarView.h>
-#import <MMTabBarView/MMTabStyle.h>
+@import MMTabBarView;
 
 #import "DemoWindowController.h"
 #import "DemoFakeModel.h"
@@ -133,7 +132,7 @@
 }
 
 - (void)setObjectCountColor:(id)sender {
-	[[[tabView selectedTabViewItem] identifier] setValue:[sender color] forKeyPath:@"objectCountColor"];
+	[[[tabView selectedTabViewItem] identifier] setValue:(id)[sender color] forKeyPath:@"objectCountColor"];
 }
 
 - (IBAction)showObjectCountAction:(id)sender {
@@ -214,7 +213,7 @@
     NSSize intrinsicTabBarContentSize = [tabBar intrinsicContentSize];
 
 	if (newOrientation == MMTabBarHorizontalOrientation) {
-        if (intrinsicTabBarContentSize.height == NSViewNoIntrinsicMetric)
+        if (intrinsicTabBarContentSize.height == NSViewNoInstrinsicMetric)
             intrinsicTabBarContentSize.height = 22;
 		tabBarFrame.size.height = [tabBar isTabBarHidden] ? 1 : intrinsicTabBarContentSize.height;
 		tabBarFrame.size.width = totalFrame.size.width;
