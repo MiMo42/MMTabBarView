@@ -11,6 +11,7 @@
 #import "MMAttachedTabBarButton.h"
 #import "MMTabStyle.h"
 #import "NSString+MMTabBarViewExtensions.h"
+#import "MMTabBarView.Private.h"
 
 #define MAX_OVERFLOW_MENUITEM_TITLE_LENGTH      60
 
