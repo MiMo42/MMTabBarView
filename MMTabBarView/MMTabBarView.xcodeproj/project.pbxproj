@@ -98,7 +98,7 @@
 		0634F0B2160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 0634F0B0160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0634F0B3160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0634F0B1160A1B6600A6C86A /* NSString+MMTabBarViewExtensions.m */; };
 		066375A216171EFC004A1128 /* MMTabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A116171EEF004A1128 /* MMTabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		066375A516172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		066375A516172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 066375A316172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		066375A616172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 066375A416172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.m */; };
 		066375F01617493D004A1128 /* SafariAWATClose.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375BF1617493D004A1128 /* SafariAWATClose.png */; };
 		066375F11617493D004A1128 /* SafariAWATClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 066375C01617493D004A1128 /* SafariAWATClose@2x.png */; };
