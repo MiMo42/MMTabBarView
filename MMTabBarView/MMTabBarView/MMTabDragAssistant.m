@@ -17,6 +17,8 @@
 #import "MMTabBarView.Private.h"
 #import "MMTabBarButton.Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMTabDragAssistant ()
 @end
 
@@ -1054,3 +1056,5 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

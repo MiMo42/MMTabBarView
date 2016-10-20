@@ -14,6 +14,8 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMTabBarButtonCell ()
 @end
 
@@ -460,7 +462,7 @@
 #pragma mark -
 #pragma mark NSCopying
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
     
     MMTabBarButtonCell *cellCopy = [super copyWithZone:zone];
     if (cellCopy) {
@@ -1089,3 +1091,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -16,6 +16,8 @@
 #import "MMOverflowPopUpButton.h"
 #import "MMOverflowPopUpButtonCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMMetalTabStyle ()
 
 @end
@@ -475,3 +477,5 @@ StaticImage(TabNewMetalRollover)
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

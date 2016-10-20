@@ -13,6 +13,8 @@
 #import "MMTabStyle.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMAttachedTabBarButton ()
 @end
 
@@ -22,7 +24,7 @@
     [super initialize];    
 }
 
-+ (Class)cellClass {
++ (nullable Class)cellClass {
     return [MMAttachedTabBarButtonCell class];
 }
 
@@ -49,11 +51,11 @@
     [super drawRect:dirtyRect];
 }
 
-- (MMAttachedTabBarButtonCell *)cell {
+- (nullable MMAttachedTabBarButtonCell *)cell {
     return (MMAttachedTabBarButtonCell *)[super cell];
 }
 
-- (void)setCell:(MMAttachedTabBarButtonCell *)aCell {
+- (void)setCell:(nullable MMAttachedTabBarButtonCell *)aCell {
     [super setCell:aCell];
 }
 
@@ -260,3 +262,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

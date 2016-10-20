@@ -14,6 +14,8 @@
 #import "MMTabBarView.Globals.h"
 #import "MMTabBarButton.Common.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class MMTabBarView;
 @class MMOverflowPopUpButton;
 @class MMRolloverButton;
@@ -464,3 +466,5 @@
 - (NSRect)draggingRectForTabButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView;
 
 @end
+
+NS_ASSUME_NONNULL_END

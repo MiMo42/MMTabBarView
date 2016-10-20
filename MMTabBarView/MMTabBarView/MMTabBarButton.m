@@ -13,6 +13,8 @@
 #import "MMTabDragAssistant.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // Pointer value that we use as the binding context
 NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.ObserverContext";
 
@@ -39,7 +41,7 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     }
 }
 
-+ (Class)cellClass {
++ (nullable Class)cellClass {
     return [MMTabBarButtonCell class];
 }
 
@@ -52,11 +54,11 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     return self;
 }
 
-- (MMTabBarButtonCell *)cell {
+- (nullable MMTabBarButtonCell *)cell {
     return (MMTabBarButtonCell *)[super cell];
 }
 
-- (void)setCell:(MMTabBarButtonCell *)aCell {
+- (void)setCell:(nullable MMTabBarButtonCell *)aCell {
     [super setCell:aCell];
 }
 
@@ -80,7 +82,7 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     [[self cell] calcDrawInfo:[self bounds]];
 }
 
-- (NSMenu *)menuForEvent:(NSEvent *)event {
+- (nullable NSMenu *)menuForEvent:(NSEvent *)event {
 
     MMTabBarView *tabBarView = [self tabBarView];
     
@@ -94,14 +96,14 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 #pragma mark -
 #pragma mark Accessors
 
-- (SEL)closeButtonAction {
+- (nullable SEL)closeButtonAction {
 
     @synchronized(self) {
         return [_closeButton action];
     }
 }
 
-- (void)setCloseButtonAction:(SEL)closeButtonAction {
+- (void)setCloseButtonAction:(nullable SEL)closeButtonAction {
 
     @synchronized(self) {
         [_closeButton setAction:closeButtonAction];
@@ -208,20 +210,20 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
     [self updateCell];
 }
 
-- (NSImage *)icon {
+- (nullable NSImage *)icon {
     return [[self cell] icon];
 }
 
-- (void)setIcon:(NSImage *)anIcon {
+- (void)setIcon:(nullable NSImage *)anIcon {
     [[self cell] setIcon:anIcon];
     [self updateCell];
 }
 
-- (NSImage *)largeImage {
+- (nullable NSImage *)largeImage {
     return [[self cell] largeImage];
 }
 
-- (void)setLargeImage:(NSImage *)anImage {
+- (void)setLargeImage:(nullable NSImage *)anImage {
     [[self cell] setLargeImage:anImage];
     [self updateCell];
 }
@@ -278,7 +280,7 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 #pragma mark -
 #pragma mark NSKeyValueObserving
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context 
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary *)change context:(nullable void *)context 
 {
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
@@ -371,3 +373,5 @@ NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButton.Obser
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

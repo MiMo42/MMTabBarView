@@ -10,6 +10,8 @@
 #import "MMTabStyle.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMLiveChatTabStyle : NSObject <MMTabStyle>
 
 @property (assign) CGFloat leftMarginForTabBarView;
@@ -20,3 +22,5 @@
 - (void)drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
 
 @end
+
+NS_ASSUME_NONNULL_END

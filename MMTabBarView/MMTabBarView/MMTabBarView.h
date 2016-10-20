@@ -44,6 +44,8 @@ FOUNDATION_EXPORT const unsigned char MMTabBarViewVersionString[];
 
 #import <MMTabBarView/NSBezierPath+MMTabBarViewExtensions.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class MMRolloverButton;
 @class MMTabBarViewler;
 @class MMTabBarButton;
@@ -385,7 +387,7 @@ FOUNDATION_EXPORT const unsigned char MMTabBarViewVersionString[];
  *  @param opts  Options (@see MMAttachedButtonsEnumerationOptions)
  *  @param block Block to execute
  */
-- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block;
+- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(nullable void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block;
 
 /**
  *  Enumerate attached tab bar buttons in range with options
@@ -660,3 +662,5 @@ FOUNDATION_EXPORT const unsigned char MMTabBarViewVersionString[];
 - (NSDragOperation)tabView:(NSTabView *)aTabView shouldDropTabViewItem:(NSTabViewItem *)tabViewItem inTabBarView:(MMTabBarView *)tabBarView __attribute__((deprecated("implement -tabView:validateDrop:proposedIndex:inTabBarView: instead.")));
 
 @end
+
+NS_ASSUME_NONNULL_END

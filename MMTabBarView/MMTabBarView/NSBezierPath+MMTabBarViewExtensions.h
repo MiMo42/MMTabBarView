@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, MMBezierShapeCapMask)
 {
     MMBezierShapeLeftCap           = 0x0001,
@@ -26,3 +28,5 @@ typedef NS_ENUM(NSUInteger, MMBezierShapeCapMask)
 + (NSBezierPath *)bezierPathWithRoundedRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask;
 
 @end
+
+NS_ASSUME_NONNULL_END

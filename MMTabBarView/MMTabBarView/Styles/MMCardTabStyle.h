@@ -10,6 +10,8 @@
 #import "MMTabStyle.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMCardTabStyle : NSObject <MMTabStyle>
 
 @property (assign) CGFloat horizontalInset;
@@ -21,3 +23,5 @@
 - (void)drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
 
 @end
+
+NS_ASSUME_NONNULL_END
