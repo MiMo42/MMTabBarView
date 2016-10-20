@@ -10,7 +10,11 @@
    This view provides a control interface to manage a regular NSTabView.  It looks and works like the tabbed browsing interface of many popular browsers.
  */
 
+#if __has_feature(modules)
+@import Cocoa;
+#else
 #import <Cocoa/Cocoa.h>
+#endif
 
 #pragma mark Umbrella Header section
 
@@ -43,6 +47,7 @@ FOUNDATION_EXPORT const unsigned char MMTabBarViewVersionString[];
 #import <MMTabBarView/MMYosemiteTabStyle.h>
 
 #import <MMTabBarView/NSBezierPath+MMTabBarViewExtensions.h>
+#import <MMTabBarView/NSTabViewItem+MMTabBarViewExtensions.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -271,7 +276,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Add attached tab bar button for specified tab view item
  *
- *  @param tab view item to add attached tab bar button for
+ *  @param item view item to add attached tab bar button for
  */
 - (void)addAttachedButtonForTabViewItem:(NSTabViewItem *)item;
 
