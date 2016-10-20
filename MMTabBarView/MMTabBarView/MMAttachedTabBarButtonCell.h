@@ -8,6 +8,8 @@
 
 #import "MMTabBarButtonCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class MMAttachedTabBarButton;
 
 @interface MMAttachedTabBarButtonCell : MMTabBarButtonCell
@@ -25,3 +27,5 @@
 #pragma clang diagnostic pop
 
 @end
+
+NS_ASSUME_NONNULL_END

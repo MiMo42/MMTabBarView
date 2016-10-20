@@ -10,6 +10,8 @@
 
 #import "NSAffineTransform+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation NSBezierPath (MMTabBarViewExtensions)
 
 + (NSBezierPath *)bezierPathWithCardInRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask {
@@ -101,3 +103,5 @@
     return bezier;
 }
 @end
+
+NS_ASSUME_NONNULL_END

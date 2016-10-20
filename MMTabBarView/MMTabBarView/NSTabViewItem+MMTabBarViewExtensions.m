@@ -10,6 +10,8 @@
 
 #import "NSTabViewItem+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation NSTabViewItem (MMTabBarViewExtensions)
 
 static char largeImage_key; //has a unique address (identifier)
@@ -115,3 +117,5 @@ static char showObjectCount_key;
 } 
 
 @end
+
+NS_ASSUME_NONNULL_END

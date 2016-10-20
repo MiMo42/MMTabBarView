@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMTabDragView : NSView
 
 @property (assign) CGFloat alpha;
@@ -15,3 +17,5 @@
 @property (strong) NSImage *alternateImage;
 
 @end
+
+NS_ASSUME_NONNULL_END

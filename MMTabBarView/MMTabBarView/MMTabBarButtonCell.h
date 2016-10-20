@@ -12,6 +12,8 @@
 
 #import "MMTabBarButton.Common.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class MMTabBarView;
 @class MMProgressIndicator;
 @class MMTabBarButton;
@@ -174,3 +176,5 @@
 - (void)drawCloseButtonWithFrame:(NSRect)frame inView:(NSView *)controlView;
 
 @end
+
+NS_ASSUME_NONNULL_END

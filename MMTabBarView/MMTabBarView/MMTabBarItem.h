@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol MMTabBarItem <NSObject>
 
 @optional
@@ -58,3 +60,5 @@
 @property (assign) BOOL hasCloseButton;
 
 @end
+
+NS_ASSUME_NONNULL_END

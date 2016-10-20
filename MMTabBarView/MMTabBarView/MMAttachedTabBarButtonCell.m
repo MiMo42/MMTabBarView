@@ -10,6 +10,8 @@
 
 #import "MMAttachedTabBarButton.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMAttachedTabBarButtonCell
 
 - (instancetype)init {
@@ -33,7 +35,7 @@
 #pragma mark -
 #pragma mark NSCopying
 
-- (instancetype)copyWithZone:(NSZone *)zone {
+- (instancetype)copyWithZone:(nullable NSZone *)zone {
     
     MMAttachedTabBarButtonCell *cellCopy = [super copyWithZone:zone];
     if (cellCopy) {
@@ -65,3 +67,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

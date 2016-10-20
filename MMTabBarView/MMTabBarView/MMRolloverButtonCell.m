@@ -7,6 +7,8 @@
 
 #import "MMRolloverButtonCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMRolloverButtonCell
 {
     MMRolloverButtonType _rolloverButtonType;
@@ -65,7 +67,7 @@
 #pragma mark -
 #pragma mark Tracking Area Support
 
-- (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(NSDictionary *)userInfo mouseLocation:(NSPoint)mouseLocation {
+- (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(nullable NSDictionary *)userInfo mouseLocation:(NSPoint)mouseLocation {
 
     NSTrackingAreaOptions options = 0;
     BOOL mouseIsInside = NO;
@@ -131,7 +133,7 @@
 #pragma mark -
 #pragma mark Copying
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
 
     MMRolloverButtonCell *cellCopy = [super copyWithZone:zone];
     if (cellCopy) {
@@ -144,3 +146,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

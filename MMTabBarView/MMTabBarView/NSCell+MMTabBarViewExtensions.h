@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSCell (MMTabBarViewExtensions)
 
 #pragma mark Image Scaling
@@ -15,3 +17,5 @@
 - (NSSize)mm_scaleImageWithSize:(NSSize)imageSize toFitInSize:(NSSize)canvasSize scalingType:(NSImageScaling)scalingType;
 
 @end
+
+NS_ASSUME_NONNULL_END

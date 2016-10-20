@@ -13,6 +13,8 @@
 #import "NSString+MMTabBarViewExtensions.h"
 #import "MMTabBarView.Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define MAX_OVERFLOW_MENUITEM_TITLE_LENGTH      60
 
 @interface MMTabBarController()
@@ -629,3 +631,5 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
     }
 }
 @end
+
+NS_ASSUME_NONNULL_END

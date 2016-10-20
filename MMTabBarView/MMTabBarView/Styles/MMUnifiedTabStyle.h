@@ -9,8 +9,12 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabStyle.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMUnifiedTabStyle : NSObject <MMTabStyle>
 
 @property (assign) CGFloat leftMarginForTabBarView;
 
 @end
+
+NS_ASSUME_NONNULL_END

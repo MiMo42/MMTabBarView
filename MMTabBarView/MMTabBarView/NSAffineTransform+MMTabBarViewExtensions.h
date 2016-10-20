@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSAffineTransform (MMTabBarViewExtensions)
 
 - (NSAffineTransform *)mm_flipVertical:(NSRect)bounds;
 
 @end
+
+NS_ASSUME_NONNULL_END

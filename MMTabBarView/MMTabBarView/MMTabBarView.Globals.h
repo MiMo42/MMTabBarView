@@ -6,6 +6,8 @@
 //  Copyright © 2016 Michael Monscheuer. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define MMTabDragDidEndNotification     @"MMTabDragDidEndNotification"
 #define MMTabDragDidBeginNotification   @"MMTabDragDidBeginNotification"
 
@@ -86,3 +88,5 @@ MMAttachedButtonsEnumerationUpdateTabStateMask = 1 << 1,
  */
 MMAttachedButtonsEnumerationUpdateButtonState  = 1 << 2
 };
+
+NS_ASSUME_NONNULL_END

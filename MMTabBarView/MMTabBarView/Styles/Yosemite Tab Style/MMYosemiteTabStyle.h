@@ -11,6 +11,8 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabStyle.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMYosemiteTabStyle : NSObject <MMTabStyle>
 
 @property (assign) CGFloat leftMarginForTabBarView;
@@ -23,3 +25,5 @@
 @property (assign) BOOL needsResizeTabsToFitTotalWidth;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -6,6 +6,8 @@
 //  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMTabBarView (PrivateDrawing)
 
 - (void)_drawInteriorInRect:(NSRect)rect;
@@ -22,3 +24,5 @@
 - (void)_didClickCloseButton:(id)sender;
 
 @end
+
+NS_ASSUME_NONNULL_END
