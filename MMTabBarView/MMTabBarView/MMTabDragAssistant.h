@@ -13,6 +13,8 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabBarView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class MMTabDragWindowController, MMTabPasteboardItem;
 
 extern NSString *AttachedTabBarButtonUTI;
@@ -24,10 +26,10 @@ extern NSString *AttachedTabBarButtonUTI;
 
 #pragma mark Properties
 
-@property (strong) MMTabBarView *sourceTabBar;
-@property (strong) MMAttachedTabBarButton *attachedTabBarButton;
-@property (strong) MMTabPasteboardItem *pasteboardItem;
-@property (strong) MMTabBarView *destinationTabBar;
+@property (nullable, strong) MMTabBarView *sourceTabBar;
+@property (nullable, strong) MMAttachedTabBarButton *attachedTabBarButton;
+@property (nullable, strong) MMTabPasteboardItem *pasteboardItem;
+@property (nullable, strong) MMTabBarView *destinationTabBar;
 @property (assign) BOOL isDragging;
 @property (assign) NSPoint currentMouseLocation;
 
@@ -69,3 +71,5 @@ OSStatus CGSSetWindowTransform(NSInteger cid, NSInteger wid, CGAffineTransform t
 @interface NSApplication (CoreGraphicsUndocumented)
 - (NSInteger)contextID;
 @end
+
+NS_ASSUME_NONNULL_END

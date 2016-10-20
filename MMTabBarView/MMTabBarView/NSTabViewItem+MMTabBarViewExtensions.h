@@ -10,6 +10,8 @@
 
 #import "MMTabBarItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSTabViewItem (MMTabBarViewExtensions) <MMTabBarItem>
 
 @property (retain) NSImage *largeImage;
@@ -22,3 +24,5 @@
 @property (assign) BOOL hasCloseButton;
 
 @end
+
+NS_ASSUME_NONNULL_END

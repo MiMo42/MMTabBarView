@@ -6,6 +6,8 @@
 //  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, MMCloseButtonImageType)
 {
     MMCloseButtonImageTypeStandard = 0,
@@ -32,3 +34,5 @@ typedef NS_ENUM(NSUInteger,MMTabStateMask)
 	MMTab_PositionRightMask         = 1 << 10,
 	MMTab_PositionSingleMask		= 1 << 11
 };
+
+NS_ASSUME_NONNULL_END

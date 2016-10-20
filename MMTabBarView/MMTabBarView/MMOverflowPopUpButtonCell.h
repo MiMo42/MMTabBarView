@@ -10,6 +10,8 @@
 
 #import "MMOverflowPopUpButton.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class MMImageTransitionAnimation;
 
 @interface MMOverflowPopUpButtonCell : NSPopUpButtonCell <NSAnimationDelegate>
@@ -22,3 +24,5 @@
 - (void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)controlView alpha:(CGFloat)alpha;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import "NSString+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation NSString (MMTabBarViewExtensions)
 
 // Truncate string to no longer than truncationLength; should be > 10
@@ -21,3 +23,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

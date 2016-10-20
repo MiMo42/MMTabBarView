@@ -14,6 +14,8 @@
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 #import "MMOverflowPopUpButton.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMYosemiteTabStyle
 
 StaticImage(YosemiteTabClose_Front)
@@ -311,3 +313,5 @@ StaticImage(YosemiteTabNewPressed)
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

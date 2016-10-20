@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
 
 @interface MMOverflowPopUpButton : NSPopUpButton 
@@ -24,3 +26,5 @@ typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *cont
 @property (copy) MMCellBezelDrawingBlock bezelDrawingBlock;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "MMTabBarView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define kMMTabDragWindowAlpha 0.75
 #define kMMTabDragAlphaInterval 0.15
 
@@ -27,3 +29,5 @@
 - (void)switchImages;
 
 @end
+
+NS_ASSUME_NONNULL_END

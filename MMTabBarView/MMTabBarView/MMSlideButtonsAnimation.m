@@ -10,6 +10,8 @@
 
 #import "MMTabBarButton.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMSlideButtonsAnimation
 
 - (instancetype)initWithTabBarButtons:(NSSet *)buttons {
@@ -59,3 +61,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

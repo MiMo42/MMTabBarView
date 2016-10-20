@@ -17,6 +17,8 @@
 #import "MMOverflowPopUpButton.h"
 #import "MMOverflowPopUpButtonCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMSafariTabStyle
 {
 	NSDictionary *_objectCountStringAttributes;
@@ -401,3 +403,5 @@ StaticImage(SafariIWITRightCap)
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

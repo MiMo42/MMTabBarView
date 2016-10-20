@@ -16,6 +16,8 @@
 #import "MMTabBarButtonCell.Private.h"
 #import "MMOverflowPopUpButton.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // #define Adium_CellPadding 2
 #define Adium_MARGIN_X 4
 #define kMMAdiumCounterPadding 3.0
@@ -834,3 +836,4 @@
 
 @end
 
+NS_ASSUME_NONNULL_END

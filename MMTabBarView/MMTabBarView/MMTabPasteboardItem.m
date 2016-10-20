@@ -8,6 +8,8 @@
 
 #import "MMTabPasteboardItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMTabPasteboardItem
 
 - (instancetype)init {
@@ -19,3 +21,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

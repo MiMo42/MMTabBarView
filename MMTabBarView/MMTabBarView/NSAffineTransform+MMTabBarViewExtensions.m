@@ -8,6 +8,8 @@
 
 #import "NSAffineTransform+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation NSAffineTransform (MMTabBarViewExtensions)
 
     // initialize the NSAffineTransform so it will flip the contents of bounds
@@ -26,3 +28,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -11,6 +11,8 @@
 #import "MMOverflowPopUpButtonCell.h"
 // #import "MMTabBarView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define TIMER_INTERVAL 1.0 / 15.0
 #define ANIMATION_STEP 0.033f
 
@@ -38,7 +40,7 @@ StaticImage(overflowImagePressed)
 
 @dynamic secondImageAlpha;
 
-+ (Class)cellClass {
++ (nullable Class)cellClass {
     return [MMOverflowPopUpButtonCell class];
 }
 
@@ -62,7 +64,7 @@ StaticImage(overflowImagePressed)
 }
 
 
-- (void)viewWillMoveToSuperview:(NSView *)newSuperview {
+- (void)viewWillMoveToSuperview:(nullable NSView *)newSuperview {
     [super viewWillMoveToSuperview:newSuperview];
     
     [self _stopCellAnimationIfNeeded];
@@ -75,7 +77,7 @@ StaticImage(overflowImagePressed)
     [self _startCellAnimationIfNeeded];
 }
 
-- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+- (void)viewWillMoveToWindow:(nullable NSWindow *)newWindow {
 
     [super viewWillMoveToWindow:newWindow];
     
@@ -136,7 +138,7 @@ StaticImage(overflowImagePressed)
 #pragma mark -
 #pragma mark Animation
 
-+ (id)defaultAnimationForKey:(NSString *)key {
++ (nullable id)defaultAnimationForKey:(NSString *)key {
 
     if ([key isEqualToString:@"isAnimating"]) {
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"secondImageAlpha"];
@@ -185,7 +187,7 @@ StaticImage(overflowImagePressed)
 	[super encodeWithCoder:aCoder];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super initWithCoder:aDecoder])) {
 	}
 	return self;
@@ -230,3 +232,5 @@ StaticImage(overflowImagePressed)
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

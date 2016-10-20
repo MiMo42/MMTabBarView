@@ -9,6 +9,8 @@
 #import "MMProgressIndicator.h"
 #import "MMTabBarView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMTabBarView (MMProgressIndicatorExtensions)
 
 - (void)update;
@@ -25,7 +27,7 @@
 }
 */
 
-- (void)stopAnimation:(id)sender {
+- (void)stopAnimation:(nullable id)sender {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self
 	 selector:@selector(startAnimation:)
 	 object:nil];
@@ -33,3 +35,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

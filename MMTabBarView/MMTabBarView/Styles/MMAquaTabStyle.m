@@ -14,6 +14,8 @@
 #import "MMOverflowPopUpButton.h"
 #import "NSView+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMAquaTabStyle
 {
 	NSImage									*aquaTabBg;
@@ -265,3 +267,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END
