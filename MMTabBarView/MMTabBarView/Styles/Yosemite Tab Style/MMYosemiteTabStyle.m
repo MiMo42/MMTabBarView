@@ -43,7 +43,7 @@ StaticImage(YosemiteTabNewPressed)
 		_leftMarginForTabBarView = 0.f;
         _hasBaseline = YES;
         
-        _selectedTabColor = [NSColor colorWithDeviceWhite:0.875 alpha:1.000];
+        _selectedTabColor = [NSColor colorWithDeviceWhite:0.925 alpha:1.000];
         _unselectedTabColor = [NSColor colorWithDeviceWhite:0.875 alpha:1.000];
         
         _needsResizeTabsToFitTotalWidth = YES;
