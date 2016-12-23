@@ -13,6 +13,7 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
 #import "MMOverflowPopUpButton.h"
+#import "MMTabBarView.Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -90,9 +91,9 @@ StaticImage(YosemiteTabNewPressed)
 }
 
 - (NSRect)addTabButtonRectForTabBarView:(MMTabBarView *)tabBarView {
-    NSRect window = [tabBarView frame];
-    NSSize buttonSize = [self addTabButtonSizeForTabBarView:tabBarView];
-    NSRect rect = NSMakeRect(NSMaxX(window) - buttonSize.width, 0, buttonSize.width, buttonSize.height);
+
+    NSRect rect = [tabBarView _addTabButtonRect];
+
     return rect;
 }
 

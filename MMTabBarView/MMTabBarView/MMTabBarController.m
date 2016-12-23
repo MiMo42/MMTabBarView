@@ -163,7 +163,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 				}
             }
             else if (_tabBarView.resizeTabsToFitTotalWidth) {
-                width = _tabBarView.frame.size.width / (CGFloat)buttonCount;
+                width = availableWidth / (CGFloat)buttonCount;
 			} else {
 				width = [_tabBarView buttonOptimumWidth];
 			}
@@ -388,7 +388,8 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
 			}
 		}
 	}
-    
+    /* MiMo says: this is obscure and breaks add button */
+    /*
     // Add width to last tab if indivisible
     if ([_tabBarView resizeTabsToFitTotalWidth]) {
         if (totalOccupiedWidth != NSWidth(_tabBarView.frame)) {
@@ -397,6 +398,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
             }
         }
     }
+    */
 
 	return newWidths;
 }
