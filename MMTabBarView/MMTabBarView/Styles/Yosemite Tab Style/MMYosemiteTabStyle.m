@@ -43,7 +43,7 @@ StaticImage(YosemiteTabNewPressed)
 		_leftMarginForTabBarView = 0.f;
         _hasBaseline = YES;
         
-        _selectedTabColor = [NSColor colorWithDeviceWhite:0.925 alpha:1.000];
+        _selectedTabColor = [NSColor colorWithDeviceWhite:0.955 alpha:1.000];
         _unselectedTabColor = [NSColor colorWithDeviceWhite:0.875 alpha:1.000];
         
         _needsResizeTabsToFitTotalWidth = YES;
@@ -272,9 +272,12 @@ StaticImage(YosemiteTabNewPressed)
         
         if ([button state] == NSOnState) {
             [[NSGraphicsContext currentContext] setShouldAntialias:NO];
-            [self.selectedTabColor set];
+            [[self.selectedTabColor blendedColorWithFraction:0.4f ofColor:[NSColor whiteColor]] set];
             [fillPath fill];
             [[NSGraphicsContext currentContext] setShouldAntialias:YES];
+        } else {
+            [[self.unselectedTabColor blendedColorWithFraction:0.4f ofColor:[NSColor whiteColor]] set];
+            [fillPath fill];
         }
     }        
     
