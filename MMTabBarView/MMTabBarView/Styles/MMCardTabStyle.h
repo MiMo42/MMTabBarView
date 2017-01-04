@@ -6,9 +6,15 @@
 //
 //
 
+#if __has_feature(modules)
+@import Cocoa;
+#else
 #import <Cocoa/Cocoa.h>
+#endif
 #import "MMTabStyle.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MMCardTabStyle : NSObject <MMTabStyle>
 
@@ -21,3 +27,5 @@
 - (void)drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView;
 
 @end
+
+NS_ASSUME_NONNULL_END

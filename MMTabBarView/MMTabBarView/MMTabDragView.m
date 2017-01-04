@@ -8,6 +8,8 @@
 
 #import "MMTabDragView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation MMTabDragView
 
 - (instancetype)initWithFrame:(NSRect)frame {
@@ -31,3 +33,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

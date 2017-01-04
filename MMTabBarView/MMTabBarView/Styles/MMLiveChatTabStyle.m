@@ -8,10 +8,15 @@
 
 #import "MMLiveChatTabStyle.h"
 #import "MMAttachedTabBarButton.h"
+#import "MMAttachedTabBarButtonCell.h"
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
+#import "MMTabBarButtonCell.h"
+#import "MMOverflowPopUpButton.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MMLiveChatTabStyle ()
 @end
@@ -529,3 +534,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -11,6 +11,10 @@
 #import "MMTabBarView.h"
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSBezierPath+MMTabBarViewExtensions.h"
+#import "MMTabBarButtonCell.h"
+#import "MMOverflowPopUpButton.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MMUnifiedTabStyle ()
 @end
@@ -331,3 +335,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

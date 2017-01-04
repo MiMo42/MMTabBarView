@@ -30,6 +30,8 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "MMTabBarItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define DIVIDER_WIDTH 3
 
 @interface MMTabBarView ()
@@ -160,7 +162,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	[self unregisterDraggedTypes];
 }
 
-- (void)viewWillMoveToWindow:(NSWindow *)aWindow {
+- (void)viewWillMoveToWindow:(nullable NSWindow *)aWindow {
 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 
 	if (_hideShowTabBarAnimation) {
@@ -766,7 +768,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [[self orderedAttachedButtons] enumerateObjectsUsingBlock:block];
 }
 
-- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block {
+- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(nullable void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block {
 
     NSArray *buttons = [self orderedAttachedButtons];
 
@@ -850,6 +852,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	if (_style != newStyle) {
 		_style = newStyle;
 
+        if ([newStyle respondsToSelector:@selector(needsResizeTabsToFitTotalWidth)])
+            self.resizeTabsToFitTotalWidth = [newStyle needsResizeTabsToFitTotalWidth];
+        else
+            self.resizeTabsToFitTotalWidth = NO;
+        
             // assure that orientation is valid
         if (![self supportsOrientation:MMTabBarHorizontalOrientation] && _orientation == MMTabBarHorizontalOrientation)
             [self setOrientation:MMTabBarVerticalOrientation];
@@ -1061,11 +1068,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Accessors
 
-- (id <MMTabBarViewDelegate>)delegate {
+- (nullable id <MMTabBarViewDelegate>)delegate {
 	return _delegate;
 }
 
-- (void)setDelegate:(id <MMTabBarViewDelegate> )object {
+- (void)setDelegate:(nullable id <MMTabBarViewDelegate> )object {
 	_delegate = object;
 
 	NSMutableArray *types = [NSMutableArray arrayWithObject:AttachedTabBarButtonUTI];
@@ -1148,7 +1155,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark KVO
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary *)change context:(nullable void *)context {
 
     // did the tab's identifier change?
     if ([keyPath isEqualToString:@"identifier"]) {
@@ -1726,7 +1733,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     return NSDragOperationNone;
 }
 
-- (void)draggingExited:(id <NSDraggingInfo>)sender {
+- (void)draggingExited:(nullable id <NSDraggingInfo>)sender {
 	[_springTimer invalidate];
 	 _springTimer = nil;
 
@@ -1770,7 +1777,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     return NO;
 }
 
-- (void)concludeDragOperation:(id <NSDraggingInfo>)sender {
+- (void)concludeDragOperation:(nullable id <NSDraggingInfo>)sender {
     // nothing yet
 }
 
@@ -1887,7 +1894,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Mouse Tracking
 
-- (NSView *)hitTest:(NSPoint)aPoint {
+- (nullable NSView *)hitTest:(NSPoint)aPoint {
 
     if ([self orientation] == MMTabBarVerticalOrientation) {
         NSView *superview = [self superview];
@@ -1908,7 +1915,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	return NO;
 }
 
-- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
+- (BOOL)acceptsFirstMouse:(nullable NSEvent *)theEvent {
 	return YES;
 }
 
@@ -2087,7 +2094,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	}
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder 
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
@@ -2140,7 +2147,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	return NO;
 }
 
-- (id)accessibilityAttributeValue:(NSString *)attribute {
+- (nullable id)accessibilityAttributeValue:(NSString *)attribute {
 	id attributeValue = nil;
 	if ([attribute isEqualToString: NSAccessibilityRoleAttribute]) {
 		attributeValue = NSAccessibilityGroupRole;
@@ -2152,7 +2159,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	return attributeValue;
 }
 
-- (id)accessibilityHitTest:(NSPoint)point {
+- (nullable id)accessibilityHitTest:(NSPoint)point {
 	id hitTestResult = self;
 
 	NSEnumerator *enumerator = [[self attachedButtons] objectEnumerator];
@@ -2794,3 +2801,5 @@ StaticImage(AquaTabNewRollover)
     }   
 }
 @end
+
+NS_ASSUME_NONNULL_END

@@ -10,10 +10,17 @@
    Protocol to be observed by all style delegate objects.  These objects handle the drawing responsibilities for MMTabBarButtonCell; once the control has been assigned a style, the background and button cells draw consistent with that style.  Design pattern and implementation by David Smith, Seth Willits, and Chris Forsythe, all touch up and errors by John P. :-)
  */
 
-#import "MMTabBarButtonCell.h"
-#import "MMAttachedTabBarButtonCell.h"
-#import "MMOverflowPopUpButtonCell.h"
-#import "MMTabBarView.h"
+
+#import "MMTabBarView.Globals.h"
+#import "MMTabBarButton.Common.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@class MMTabBarView;
+@class MMOverflowPopUpButton;
+@class MMRolloverButton;
+@class MMTabBarButtonCell;
+@class MMAttachedTabBarButton;
 
 @protocol MMTabStyle <NSObject>
 
@@ -34,6 +41,8 @@
 @optional
 
 #pragma mark General
+
+- (BOOL)needsResizeTabsToFitTotalWidth;
 
 /**
  *  Get intrinsic content size of tab bar
@@ -457,3 +466,5 @@
 - (NSRect)draggingRectForTabButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView;
 
 @end
+
+NS_ASSUME_NONNULL_END

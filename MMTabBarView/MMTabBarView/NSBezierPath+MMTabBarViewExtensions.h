@@ -6,7 +6,13 @@
 //  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
+#if __has_feature(modules)
+@import Cocoa;
+#else
 #import <Cocoa/Cocoa.h>
+#endif
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, MMBezierShapeCapMask)
 {
@@ -26,3 +32,5 @@ typedef NS_ENUM(NSUInteger, MMBezierShapeCapMask)
 + (NSBezierPath *)bezierPathWithRoundedRect:(NSRect)aRect radius:(CGFloat)radius capMask:(MMBezierShapeCapMask)mask;
 
 @end
+
+NS_ASSUME_NONNULL_END

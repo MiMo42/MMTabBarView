@@ -6,8 +6,15 @@
 //  Copyright 2005 Positive Spin Media. All rights reserved.
 //
 
+#if __has_feature(modules)
+@import Cocoa;
+@import QuartzCore;
+#else
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
+#endif
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *controlView);
 
@@ -24,3 +31,5 @@ typedef void (^MMCellBezelDrawingBlock)(NSCell *cell, NSRect frame, NSView *cont
 @property (copy) MMCellBezelDrawingBlock bezelDrawingBlock;
 
 @end
+
+NS_ASSUME_NONNULL_END

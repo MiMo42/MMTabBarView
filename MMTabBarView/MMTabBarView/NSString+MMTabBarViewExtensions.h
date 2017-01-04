@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSString (MMTabBarViewExtensions)
 
 //  Truncate string to no longer than truncationLength; should be > 10
 - (NSString *)stringByTruncatingToLength:(NSUInteger)truncationLength;
 
 @end
+
+NS_ASSUME_NONNULL_END

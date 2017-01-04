@@ -14,6 +14,8 @@
 #import "NSView+MMTabBarViewExtensions.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMTabBarButtonCell ()
 @end
 
@@ -294,7 +296,7 @@
     MMTabBarView *tabBarView = [self tabBarView];
     id <MMTabStyle> tabStyle = [tabBarView style];
 
-    if ([tabStyle respondsToSelector:@selector(objectCounterSizeForTabCell:)]) {
+    if ([tabStyle respondsToSelector:@selector(objectCounterSizeOfTabCell:)]) {
         return [tabStyle objectCounterSizeOfTabCell:self];
     } else {
         return [self _objectCounterSize];
@@ -341,7 +343,7 @@
 - (CGFloat)minimumWidthOfCell {
 
     id <MMTabStyle> style = [self style];
-    if ([style respondsToSelector:@selector(minimumWidthOfTabCell)]) {
+    if ([style respondsToSelector:@selector(minimumWidthOfTabCell:)]) {
         return [style minimumWidthOfTabCell:self];
     } else {
         return [self _minimumWidthOfCell];
@@ -351,7 +353,7 @@
 - (CGFloat)desiredWidthOfCell {
 
     id <MMTabStyle> style = [self style];
-    if ([style respondsToSelector:@selector(desiredWidthOfTabCell)]) {
+    if ([style respondsToSelector:@selector(desiredWidthOfTabCell:)]) {
         return [style desiredWidthOfTabCell:self];
     } else {    
         return [self _desiredWidthOfCell];
@@ -460,7 +462,7 @@
 #pragma mark -
 #pragma mark NSCopying
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
     
     MMTabBarButtonCell *cellCopy = [super copyWithZone:zone];
     if (cellCopy) {
@@ -1089,3 +1091,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

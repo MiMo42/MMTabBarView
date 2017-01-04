@@ -6,15 +6,27 @@
 //
 //
 
+#if __has_feature(modules)
+@import Cocoa;
+#else
 #import <Cocoa/Cocoa.h>
+#endif
 
+#import "MMRolloverButton.h"
+
+#import "MMTabBarButton.Common.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+/*
 #import "MMTabBarView.h"
 #import "MMRolloverButton.h"
 #import "MMProgressIndicator.h"
 #import "MMTabBarButton.Common.h"
-
+*/
 @class MMTabBarView;
 @class MMTabBarButtonCell;
+@class MMProgressIndicator;
 
 @protocol MMTabStyle;
 
@@ -26,11 +38,10 @@
 
 @property (assign) NSRect stackingFrame;
 @property (strong) MMRolloverButton *closeButton;
-@property (assign) SEL closeButtonAction;
+@property (nullable, assign) SEL closeButtonAction;
 @property (readonly, strong) MMProgressIndicator *indicator;
 
-- (MMTabBarButtonCell *)cell;
-- (void)setCell:(MMTabBarButtonCell *)aCell;
+@property (nullable, strong) __kindof MMTabBarButtonCell *cell;
 
 - (MMTabBarView *)tabBarView;
 
@@ -54,8 +65,8 @@
 @property (strong) id <MMTabStyle> style;
 @property (assign) MMTabStateMask tabState;
 
-@property (strong) NSImage *icon;
-@property (strong) NSImage *largeImage;
+@property (nullable, strong) NSImage *icon;
+@property (nullable, strong) NSImage *largeImage;
 
 @property (assign) BOOL showObjectCount;
 @property (assign) NSInteger objectCount;
@@ -72,3 +83,5 @@
 @property (assign) BOOL suppressCloseButton;
 
 @end
+
+NS_ASSUME_NONNULL_END

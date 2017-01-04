@@ -9,6 +9,8 @@
 #import "MMOverflowPopUpButtonCell.h"
 #import "NSCell+MMTabBarViewExtensions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MMOverflowPopUpButtonCell ()
 
 @end
@@ -93,7 +95,7 @@
 #pragma mark -
 #pragma mark Copying
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
     
     MMOverflowPopUpButtonCell *cellCopy = [super copyWithZone:zone];
     if (cellCopy) {
@@ -149,3 +151,5 @@
     return NSIntegralRect(result);
 }
 @end
+
+NS_ASSUME_NONNULL_END

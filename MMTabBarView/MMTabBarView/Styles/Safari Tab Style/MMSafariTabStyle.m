@@ -10,9 +10,14 @@
 
 #import "MMTabBarView.h"
 #import "MMAttachedTabBarButton.h"
+#import "MMAttachedTabBarButtonCell.h"
 #import "NSView+MMTabBarViewExtensions.h"
 #import "MMTabBarView.Private.h"
 #import "MMTabBarButtonCell.Private.h"
+#import "MMOverflowPopUpButton.h"
+#import "MMOverflowPopUpButtonCell.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation MMSafariTabStyle
 {
@@ -398,3 +403,5 @@ StaticImage(SafariIWITRightCap)
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

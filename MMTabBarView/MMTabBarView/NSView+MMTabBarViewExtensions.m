@@ -11,6 +11,8 @@
 #import "MMTabBarView.h"
 #import "MMTabBarButton.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define MMDragStartHysteresisX                 5.0f
 #define MMDragStartHysteresisY                 5.0f
 
@@ -99,3 +101,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -6,9 +6,15 @@
 //  Copyright (c) 2016 Michael Monscheuer. All rights reserved.
 //
 
+#if __has_feature(modules)
+@import Cocoa;
+#else
 #import <Cocoa/Cocoa.h>
+#endif
 
 #import "MMTabBarItem.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface NSTabViewItem (MMTabBarViewExtensions) <MMTabBarItem>
 
@@ -22,3 +28,5 @@
 @property (assign) BOOL hasCloseButton;
 
 @end
+
+NS_ASSUME_NONNULL_END
