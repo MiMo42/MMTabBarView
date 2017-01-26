@@ -100,6 +100,10 @@ NS_ASSUME_NONNULL_BEGIN
     NSPoint mouseLocation = [self convertPoint:mouseLocationInWindowCoos fromView:nil];
     
     [[self cell] addTrackingAreasForView:self inRect:[self bounds] withUserInfo:nil mouseLocation:mouseLocation];   
+
+    if ([self mouse:mouseLocation inRect:[self bounds]]) {
+        [[self cell] mouseEntered:nil];
+    }
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
