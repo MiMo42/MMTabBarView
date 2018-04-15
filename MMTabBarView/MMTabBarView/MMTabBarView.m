@@ -231,8 +231,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSSize)intrinsicContentSize
 {
+	/*CMC EDITED*/
+	//Height auto-adjusts based on if we are hidden or not.  This lets autolayout adjust for when we hide/show the tab bar.
     if ([_style respondsToSelector:@selector(intrinsicContentSizeOfTabBarView:)])
-        return [_style intrinsicContentSizeOfTabBarView:self];
+	{
+		if(_isHidden)
+			return NSMakeSize(NSViewNoIntrinsicMetric, 0);
+		else
+			return [_style intrinsicContentSizeOfTabBarView:self];
+	}
 
     return NSMakeSize(NSViewNoInstrinsicMetric, NSViewNoInstrinsicMetric);
 }
@@ -1294,9 +1301,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		}
 	}
 
-	if (hide)
-        [self setHidden:YES];
-        
+//	if (hide)
+//        [self setHidden:YES];
+	
 	if (_partnerView) {
             // resize self and view
 		NSRect resizeRect;
@@ -1307,13 +1314,25 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		}
 
         if (animate) {
-        
+
+			/*CMC EDITED*/
+			//Animate our intrinsic content size (for people using autolayout)
+			[NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+				context.duration = 0.1;
+				context.allowsImplicitAnimation = YES;
+				[self invalidateIntrinsicContentSize];
+				[self.superview layoutSubtreeIfNeeded];
+			} completionHandler:^{
+				if (hide)
+					[self setHidden:YES];
+			}];
+			
                 // stop running animation
             if (_hideShowTabBarAnimation) {
                 [_hideShowTabBarAnimation stopAnimation];
                 _hideShowTabBarAnimation = nil;
             }
-                
+			
                 // start animated update of partner view
             NSDictionary *partnerAnimDict = [NSDictionary dictionaryWithObjectsAndKeys:
                 _partnerView, NSViewAnimationTargetKey,
@@ -1323,13 +1342,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
                 nil];
 
             NSArray *animDictArray = [NSArray arrayWithObjects:partnerAnimDict,nil];
-                
+			
             _hideShowTabBarAnimation = [[NSViewAnimation alloc] initWithViewAnimations:animDictArray    ];
             [_hideShowTabBarAnimation setDuration:0.1];
             [_hideShowTabBarAnimation setDelegate:self];
             [_hideShowTabBarAnimation startAnimation];
         } else {
             [_partnerView setFrame:resizeRect];
+			[self invalidateIntrinsicContentSize];
+			[self.superview setNeedsLayout: YES];
+			if (hide)
+				[self setHidden:YES];
         }
 	} else {
             // resize self and window
