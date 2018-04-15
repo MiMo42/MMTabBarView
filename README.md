@@ -1,7 +1,7 @@
 MMTabBarView
 ============
 
-A Mac OS X tab bar view that works on 10.9+ with Xcode 8.0 or higher.<br>
+A Mac OS X tab bar view that works on 10.9+ with Xcode 9.3 or higher.<br>
 MMTabBarView is a modernized and view based re-write of PSMTabBarControl, <br>
 which can be found here: https://github.com/dorianj/PSMTabBarControl<br>
 Though MMTabBarView's API is quite similar, it is no drop-in replacement for PSMTabBarControl.
@@ -41,7 +41,7 @@ Thanks to the guys recently improved PSMTabBarControl and inspired me to finally
 
 ## License
 Copyright © 2005, Positive Spin Media. All rights reserved.<br>
-Copyright © 2014, Michael Monscheuer. All rights reserved.<br>
+Copyright © 2018, Michael Monscheuer. All rights reserved.<br>
 
 <hr>
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
