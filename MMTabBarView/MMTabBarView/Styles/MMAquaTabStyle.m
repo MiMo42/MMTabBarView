@@ -245,25 +245,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)_loadImages {
 	// Aqua Tabs Images
-	aquaTabBg = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsBackground"]];
+	aquaTabBg = [[MMTabBarView bundle] imageForResource:@"AquaTabsBackground"];
 
-	aquaTabBgDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDown"]];
+	aquaTabBgDown = [[MMTabBarView bundle] imageForResource:@"AquaTabsDown"];
 
-	aquaTabBgDownGraphite = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDownGraphite"]];
+	aquaTabBgDownGraphite = [[MMTabBarView bundle] imageForResource:@"AquaTabsDownGraphite"];
 
-	aquaTabBgDownNonKey = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsDownNonKey"]];
+	aquaTabBgDownNonKey = [[MMTabBarView bundle] imageForResource:@"AquaTabsDownNonKey"];
 
-	aquaDividerDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsSeparatorDown"]];
+	aquaDividerDown = [[MMTabBarView bundle] imageForResource:@"AquaTabsSeparatorDown"];
 
-	aquaDivider = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabsSeparator"]];
+	aquaDivider = [[MMTabBarView bundle] imageForResource:@"AquaTabsSeparator"];
 
-	aquaCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
-	aquaCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
-	aquaCloseButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Rollover"]];
+	aquaCloseButton = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front"];
+	aquaCloseButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Pressed"];
+	aquaCloseButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Rollover"];
 
-	aquaCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
-	aquaCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
-	aquaCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
+	aquaCloseDirtyButton = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front"];
+	aquaCloseDirtyButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Pressed"];
+	aquaCloseDirtyButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Rollover"];
 }
 
 @end

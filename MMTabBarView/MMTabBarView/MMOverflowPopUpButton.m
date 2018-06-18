@@ -21,7 +21,7 @@ static NSImage* _static##name##Image() \
 { \
     static NSImage* image = nil; \
     if (!image) \
-        image = [[NSImage alloc] initByReferencingFile:[[NSBundle bundleForClass:[MMOverflowPopUpButtonCell class]] pathForImageResource:@#name]]; \
+		image = [[NSBundle bundleForClass:[MMOverflowPopUpButtonCell class]] imageForResource:@#name]; \
     return image; \
 }
 

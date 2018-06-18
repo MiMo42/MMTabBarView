@@ -46,13 +46,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) init {
 	if ((self = [super init])) {
-		liveChatCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
-		liveChatCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
-		liveChatCloseButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Rollover"]];
+		liveChatCloseButton = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front"];
+		liveChatCloseButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Pressed"];
+		liveChatCloseButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Rollover"];
 
-		liveChatCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
-		liveChatCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
-		liveChatCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
+		liveChatCloseDirtyButton = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front"];
+		liveChatCloseDirtyButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Pressed"];
+		liveChatCloseDirtyButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Rollover"];
 
 		_objectCountStringAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
 										[[NSColor whiteColor] colorWithAlphaComponent:0.85], NSForegroundColorAttributeName,

@@ -42,13 +42,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) init {
     if ( (self = [super init]) ) {
-        cardCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
-        cardCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
-        cardCloseButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Rollover"]];
+        cardCloseButton = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front"];
+        cardCloseButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Pressed"];
+        cardCloseButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Rollover"];
         
-        cardCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
-        cardCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
-        cardCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
+        cardCloseDirtyButton = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front"];
+        cardCloseDirtyButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Pressed"];
+        cardCloseDirtyButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Rollover"];
                         
 		_horizontalInset = 3.0;
 	}

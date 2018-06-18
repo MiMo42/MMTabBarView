@@ -51,13 +51,13 @@ StaticImage(TabNewMetalRollover)
 
 - (instancetype) init {
 	if ((self = [super init])) {
-		metalCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Front"]];
-		metalCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Front_Pressed"]];
-		metalCloseButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Front_Rollover"]];
+		metalCloseButton = [[MMTabBarView bundle] imageForResource:@"TabClose_Front"];
+		metalCloseButtonDown = [[MMTabBarView bundle] imageForResource:@"TabClose_Front_Pressed"];
+		metalCloseButtonOver = [[MMTabBarView bundle] imageForResource:@"TabClose_Front_Rollover"];
 
-		metalCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Dirty"]];
-		metalCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Dirty_Pressed"]];
-		metalCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"TabClose_Dirty_Rollover"]];
+		metalCloseDirtyButton = [[MMTabBarView bundle] imageForResource:@"TabClose_Dirty"];
+		metalCloseDirtyButtonDown = [[MMTabBarView bundle] imageForResource:@"TabClose_Dirty_Pressed"];
+		metalCloseDirtyButtonOver = [[MMTabBarView bundle] imageForResource:@"TabClose_Dirty_Rollover"];
 
 		_objectCountStringAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSFontManager sharedFontManager] convertFont:[NSFont fontWithName:@"Helvetica" size:11.0] toHaveTrait:NSBoldFontMask], NSFontAttributeName,
 										[[NSColor whiteColor] colorWithAlphaComponent:0.85], NSForegroundColorAttributeName,

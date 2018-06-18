@@ -585,15 +585,15 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Private Methods
 
 - (void)_loadImages {
-	_closeButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
-	_closeButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
-	_closeButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Rollover"]];
+	_closeButton = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front"];
+	_closeButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Pressed"];
+	_closeButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Rollover"];
 
-	_closeDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
-	_closeDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
-	_closeDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
+	_closeDirtyButton = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front"];
+	_closeDirtyButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Pressed"];
+	_closeDirtyButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Rollover"];
 
-	_gradientImage = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AdiumGradient"]];
+	_gradientImage = [[MMTabBarView bundle] imageForResource:@"AdiumGradient"];
 }
 
 - (void)_drawBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView applyShadow:(BOOL)applyShadow drawRollovers:(BOOL)drawRollovers {

@@ -42,13 +42,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) init {
 	if ((self = [super init])) {
-		unifiedCloseButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front"]];
-		unifiedCloseButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Pressed"]];
-		unifiedCloseButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabClose_Front_Rollover"]];
+		unifiedCloseButton = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front"];
+		unifiedCloseButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Pressed"];
+		unifiedCloseButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabClose_Front_Rollover"];
 
-		unifiedCloseDirtyButton = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front"]];
-		unifiedCloseDirtyButtonDown = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Pressed"]];
-		unifiedCloseDirtyButtonOver = [[NSImage alloc] initByReferencingFile:[[MMTabBarView bundle] pathForImageResource:@"AquaTabCloseDirty_Front_Rollover"]];
+		unifiedCloseDirtyButton = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front"];
+		unifiedCloseDirtyButtonDown = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Pressed"];
+		unifiedCloseDirtyButtonOver = [[MMTabBarView bundle] imageForResource:@"AquaTabCloseDirty_Front_Rollover"];
 
 		_leftMarginForTabBarView = 0.0;
 	}
