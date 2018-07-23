@@ -236,7 +236,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(intrinsicContentSizeOfTabBarView:)])
 	{
 		if(_isHidden)
-			return NSMakeSize(NSViewNoIntrinsicMetric, 0);
+			if (@available(macos 10.11, *)) {
+				return NSMakeSize(NSViewNoIntrinsicMetric, 0);
+			} else {
+				return NSMakeSize(NSViewNoInstrinsicMetric, 0);
+			}
 		else
 			return [_style intrinsicContentSizeOfTabBarView:self];
 	}
