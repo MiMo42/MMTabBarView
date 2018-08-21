@@ -82,6 +82,9 @@
 		0AED2B9F20D8056F0049C786 /* Safari.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AED2B9E20D8056F0049C786 /* Safari.xcassets */; };
 		0AED2BA120D805D60049C786 /* Yosemite.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AED2BA020D805D60049C786 /* Yosemite.xcassets */; };
 		0AED2BA520D806700049C786 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AED2BA420D806700049C786 /* Images.xcassets */; };
+		D0103C8E210FE7C8001D2CC6 /* MMMojaveTabStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = D0103C8C210FE7C8001D2CC6 /* MMMojaveTabStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D0103C8F210FE7C8001D2CC6 /* MMMojaveTabStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = D0103C8D210FE7C8001D2CC6 /* MMMojaveTabStyle.m */; };
+		D09FB6CC2110923D008C3E23 /* MMMojaveTabStyle+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = D09FB6CA2110923D008C3E23 /* MMMojaveTabStyle+Assets.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -172,6 +175,10 @@
 		0AED2B9E20D8056F0049C786 /* Safari.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Safari.xcassets; sourceTree = "<group>"; };
 		0AED2BA020D805D60049C786 /* Yosemite.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Yosemite.xcassets; sourceTree = "<group>"; };
 		0AED2BA420D806700049C786 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MMTabBarView/Images.xcassets; sourceTree = "<group>"; };
+		D0103C8C210FE7C8001D2CC6 /* MMMojaveTabStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMojaveTabStyle.h; sourceTree = "<group>"; };
+		D0103C8D210FE7C8001D2CC6 /* MMMojaveTabStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMMojaveTabStyle.m; sourceTree = "<group>"; };
+		D09FB6C821108F4C008C3E23 /* MMMojaveTabStyle+Assets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MMMojaveTabStyle+Assets.h"; sourceTree = "<group>"; };
+		D09FB6CA2110923D008C3E23 /* MMMojaveTabStyle+Assets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MMMojaveTabStyle+Assets.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +256,7 @@
 				0634F0341609FD9000A6C86A /* MMUnifiedTabStyle.m */,
 				06B51CB2160B558700153FA2 /* Safari Tab Style */,
 				06C9569C1C984912000AAF9D /* Yosemite Tab Style */,
+				D0103C8B210FE7C8001D2CC6 /* Mojave Tab Style */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -418,6 +426,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D0103C8B210FE7C8001D2CC6 /* Mojave Tab Style */ = {
+			isa = PBXGroup;
+			children = (
+				D0103C8C210FE7C8001D2CC6 /* MMMojaveTabStyle.h */,
+				D0103C8D210FE7C8001D2CC6 /* MMMojaveTabStyle.m */,
+				D09FB6C821108F4C008C3E23 /* MMMojaveTabStyle+Assets.h */,
+				D09FB6CA2110923D008C3E23 /* MMMojaveTabStyle+Assets.m */,
+			);
+			path = "Mojave Tab Style";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -461,6 +480,7 @@
 				06789D731611FE1E0080FCFE /* NSCell+MMTabBarViewExtensions.h in Headers */,
 				06789DB6161324D50080FCFE /* NSAffineTransform+MMTabBarViewExtensions.h in Headers */,
 				06789DBE161337770080FCFE /* NSBezierPath+MMTabBarViewExtensions.h in Headers */,
+				D0103C8E210FE7C8001D2CC6 /* MMMojaveTabStyle.h in Headers */,
 				066375A216171EFC004A1128 /* MMTabBarItem.h in Headers */,
 				066375A516172608004A1128 /* NSTabViewItem+MMTabBarViewExtensions.h in Headers */,
 			);
@@ -549,9 +569,11 @@
 				0634F01D1609FC7F00A6C86A /* MMTabDragView.m in Sources */,
 				0634F01F1609FC7F00A6C86A /* MMTabDragWindow.m in Sources */,
 				0634F0211609FC7F00A6C86A /* MMTabDragWindowController.m in Sources */,
+				D0103C8F210FE7C8001D2CC6 /* MMMojaveTabStyle.m in Sources */,
 				0634F0231609FC7F00A6C86A /* MMTabPasteboardItem.m in Sources */,
 				0634F0361609FD9000A6C86A /* MMAdiumTabStyle.m in Sources */,
 				0634F0381609FD9000A6C86A /* MMAquaTabStyle.m in Sources */,
+				D09FB6CC2110923D008C3E23 /* MMMojaveTabStyle+Assets.m in Sources */,
 				0634F03A1609FD9000A6C86A /* MMCardTabStyle.m in Sources */,
 				0634F03C1609FD9000A6C86A /* MMLiveChatTabStyle.m in Sources */,
 				0634F03E1609FD9000A6C86A /* MMMetalTabStyle.m in Sources */,

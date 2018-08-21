@@ -446,8 +446,11 @@
 
 - (BOOL)tabView:(NSTabView *)aTabView shouldCloseTabViewItem:(NSTabViewItem *)tabViewItem {
 	if ([[tabViewItem label] isEqualToString:@"Drake"]) {
-		NSAlert *drakeAlert = [NSAlert alertWithMessageText:@"No Way!" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"I refuse to close a tab named \"Drake\""];
-		[drakeAlert beginSheetModalForWindow:[NSApp keyWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+        NSAlert *drakeAlert = [[NSAlert alloc] init];
+        [drakeAlert setMessageText:@"No Way!"];
+        [drakeAlert setInformativeText:@"I refuse to close a tab named \"Drake\""];
+        [drakeAlert addButtonWithTitle:@"OK"];
+        [drakeAlert beginSheetModalForWindow:[NSApp keyWindow] completionHandler:nil];
 		return NO;
 	}
 	return YES;

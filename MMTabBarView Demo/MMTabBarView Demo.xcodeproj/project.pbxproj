@@ -208,7 +208,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MM;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Michael Monscheuer";
 			};
 			buildConfigurationList = 06DB23C31609F5B90071BDA0 /* Build configuration list for PBXProject "MMTabBarView Demo" */;
