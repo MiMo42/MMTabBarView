@@ -42,6 +42,7 @@ FOUNDATION_EXPORT const unsigned char MMTabBarViewVersionString[];
 #import <MMTabBarView/MMCardTabStyle.h>
 #import <MMTabBarView/MMLiveChatTabStyle.h>
 #import <MMTabBarView/MMMetalTabStyle.h>
+#import <MMTabBarView/MMMojaveTabStyle.h>
 #import <MMTabBarView/MMSafariTabStyle.h>
 #import <MMTabBarView/MMUnifiedTabStyle.h>
 #import <MMTabBarView/MMYosemiteTabStyle.h>
