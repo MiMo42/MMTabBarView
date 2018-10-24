@@ -1558,8 +1558,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)update:(BOOL)animate {
-    
-        // not currently handle draggig?
+	
+	BOOL exitAfterRemovingAttachedButton = NO;
+	
+        // not currently handle dragging?
     if ([[MMTabDragAssistant sharedDragAssistant] isDragging] == NO) {
 
             // hide/show? (these return if already in desired state)
@@ -1568,7 +1570,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         else if (!_isHidden && ![self _shouldDisplayTabBar]) {
             [self hideTabBar:YES animate:animate];
             [self setNeedsUpdate:NO];
-            return;
+            exitAfterRemovingAttachedButton = YES;
         }
     }
 
@@ -1586,6 +1588,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		}
 	}
 
+	if(exitAfterRemovingAttachedButton)
+		return;
+	
     BOOL isDragging = [[MMTabDragAssistant sharedDragAssistant] isDragging];
     MMAttachedTabBarButton *draggedButton = [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
 
