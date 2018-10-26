@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)name
 {
-    return [[self class] name];
+    return self.class.name;
 }
 
 
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     if ((self = [super init]))
     {
-      _leftMarginForTabBarView = 0.0f;
+      _leftMarginForTabBarView = 0.0;
       _needsResizeTabsToFitTotalWidth = YES;
     }
     
@@ -66,19 +66,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGFloat)leftMarginForTabBarView:(MMTabBarView *)tabBarView
 {
-    return (tabBarView.orientation == MMTabBarHorizontalOrientation) ? 0.0f : 0.0f;
+    return (tabBarView.orientation == MMTabBarHorizontalOrientation) ? 0.0 : 0.0;
 }
 
 
 - (CGFloat)rightMarginForTabBarView:(MMTabBarView *)tabBarView
 {
-    return (tabBarView.orientation == MMTabBarHorizontalOrientation) ? 0.0f : 0.0f;
+    return (tabBarView.orientation == MMTabBarHorizontalOrientation) ? 0.0 : 0.0;
 }
 
 
 - (CGFloat)topMarginForTabBarView:(MMTabBarView *)tabBarView
 {
-    return (tabBarView.orientation == MMTabBarHorizontalOrientation) ? 0.0f : 0.0f;
+    return (tabBarView.orientation == MMTabBarHorizontalOrientation) ? 0.0 : 0.0;
 }
 
 
@@ -96,12 +96,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSRect)addTabButtonRectForTabBarView:(MMTabBarView *)tabBarView
 {
-    if (![tabBarView showAddTabButton])
+    if (!tabBarView.showAddTabButton)
         return NSZeroRect;
 
     NSRect rect = NSZeroRect;
-    NSRect bounds = [tabBarView bounds];
-    NSSize buttonSize = [tabBarView addTabButtonSize];
+    NSRect bounds = tabBarView.bounds;
+    NSSize buttonSize = tabBarView.addTabButtonSize;
 
     rect.origin.x = bounds.size.width - buttonSize.width - kMMTabBarCellPadding - 1;
     rect.origin.y = (bounds.size.height - buttonSize.height) / 2;
@@ -120,7 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSRect)closeButtonRectForBounds:(NSRect)theRect ofTabCell:(MMTabBarButtonCell *)cell
 {
-    if ([cell shouldDisplayCloseButton] == NO)
+    if (cell.shouldDisplayCloseButton == NO)
     {
         return NSZeroRect;
     }
@@ -128,7 +128,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSRect drawingRect = [cell drawingRectForBounds:theRect];
     NSSize closeButtonSize = [self closeButtonSizeForBounds:theRect ofTabCell:cell];
     
-    float dy = (drawingRect.size.height - closeButtonSize.height) / 2;
+    CGFloat dy = (drawingRect.size.height - closeButtonSize.height) / 2;
     NSRect result = NSMakeRect(drawingRect.origin.x, drawingRect.origin.y + dy, closeButtonSize.width, closeButtonSize.height);
     
     return result;   
@@ -154,24 +154,24 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSAttributedString *)attributedStringValueForTabCell:(MMTabBarButtonCell *)cell
  {
 	NSMutableAttributedString *attrStr;
-	NSString *contents = [cell title];
+	NSString *contents = cell.title;
 	attrStr = [[NSMutableAttributedString alloc] initWithString:contents];
 	NSColor *textColor = nil;
-	NSRange range = NSMakeRange(0, [contents length]);
+	NSRange range = NSMakeRange(0, contents.length);
 
 	 // Figure out correct text color
     
-    if ( [[cell controlView] state] == NSOnState )
+    if ( cell.controlView.state == NSOnState )
     {
-        textColor = [self colorForPart:MMMtabSelectedFont ofTabBarView:[cell tabBarView]];
+        textColor = [self colorForPart:MMMtabSelectedFont ofTabBarView:cell.tabBarView];
     }
-    else if ( [cell mouseHovered] )
+    else if ( cell.mouseHovered )
     {
-        textColor = [self colorForPart:MMMtabUnselectedHoverFont ofTabBarView:[cell tabBarView]];
+        textColor = [self colorForPart:MMMtabUnselectedHoverFont ofTabBarView:cell.tabBarView];
     }
     else
     {
-        textColor = [self colorForPart:MMMtabUnselectedFont ofTabBarView:[cell tabBarView]];
+        textColor = [self colorForPart:MMMtabUnselectedFont ofTabBarView:cell.tabBarView];
     }
 
 	// Add font attribute
@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
 	static NSMutableParagraphStyle *TruncatingTailParagraphStyle = nil;
 	if (!TruncatingTailParagraphStyle)
 	{
-		TruncatingTailParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+		TruncatingTailParagraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
 		[TruncatingTailParagraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 		[TruncatingTailParagraphStyle setAlignment:NSCenterTextAlignment];
 	}
@@ -197,7 +197,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSRect)draggingRectForTabButton:(MMAttachedTabBarButton *)aButton ofTabBarView:(MMTabBarView *)tabBarView
 {
-    NSRect dragRect = [aButton stackingFrame];
+    NSRect dragRect = aButton.stackingFrame;
     dragRect.size.width++;
     return dragRect;
 }
@@ -228,7 +228,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)drawBezelOfTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect
 {
-    rect = [tabBarView bounds];
+    rect = tabBarView.bounds;
 
     // Oh, I hate to do this, but don't want to screw with the library by adding
     // anything substantial. Instead, let's get the private iVar using this means:
@@ -241,7 +241,7 @@ NS_ASSUME_NONNULL_BEGIN
     // In Mojave, during a mouse press there's also another highlighting; however MMTabBarView
     // doesn't provide the architecture that we need to implement this, but with the hack
     // above we can at least perform the hover behavior of Mojave.
-    if ( [tabBarView showAddTabButton] && [[addTabButton cell] mouseHovered] )
+    if ( tabBarView.showAddTabButton && addTabButton.cell.mouseHovered )
     {
         [[self colorForPart:MMMtabUnselectedHover ofTabBarView:tabBarView] set];
     }
@@ -264,12 +264,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)drawBezelOfTabCell:(MMTabBarButtonCell *)cell withFrame:(NSRect)frame inView:(NSView *)controlView
 {
-    MMTabBarView *tabBarView = [controlView enclosingTabBarView];
+    MMTabBarView *tabBarView = controlView.enclosingTabBarView;
     MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)controlView;
-    BOOL overflowMode = [button isOverflowButton];
+    BOOL overflowMode = button.isOverflowButton;
     NSRect aRect = NSZeroRect;
 
-    if ([button isSliding])
+    if (button.isSliding)
     {
         overflowMode = NO;
     }
@@ -293,14 +293,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)drawBezelOfOverflowButton:(MMOverflowPopUpButton *)overflowButton ofTabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect
 {
-    MMAttachedTabBarButton *lastAttachedButton = [tabBarView lastAttachedButton];
+    MMAttachedTabBarButton *lastAttachedButton = tabBarView.lastAttachedButton;
     
-    if ([lastAttachedButton isSliding])
+    if (lastAttachedButton.isSliding)
     {
         return;
     }
     
-    NSRect frame = [overflowButton frame];
+    NSRect frame = overflowButton.frame;
     NSRect aRect = NSMakeRect(frame.origin.x, frame.origin.y + 2.0, frame.size.width + 5.0, frame.size.height - 4.0);
     
    [self _drawCardBezelInRect:aRect withCapMask:MMBezierShapeFlippedVertically usingStatesOfAttachedButton:lastAttachedButton ofTabBarView:tabBarView];
@@ -312,18 +312,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)_drawCardBezelInRect:(NSRect)aRect withCapMask:(MMBezierShapeCapMask)capMask usingStatesOfAttachedButton:(MMAttachedTabBarButton *)button ofTabBarView:(MMTabBarView *)tabBarView
 {
-    CGFloat radius = 0.0f;
+    CGFloat radius = 0.0;
     
     NSBezierPath *fillPath = [NSBezierPath bezierPathWithCardInRect:aRect radius:radius capMask:capMask|MMBezierShapeFillPath];
 
-    if ([button state] == NSOnState)
+    if (button.state == NSOnState)
     {
-        [[NSGraphicsContext currentContext] setShouldAntialias:NO];
+        [NSGraphicsContext.currentContext setShouldAntialias:NO];
         [[self colorForPart:MMMtabSelected ofTabBarView:tabBarView] set];
         [fillPath fill];
-        [[NSGraphicsContext currentContext] setShouldAntialias:YES];
+        [NSGraphicsContext.currentContext setShouldAntialias:YES];
     }
-    else if ([[button cell] mouseHovered])
+    else if (button.cell.mouseHovered)
     {
         [[self colorForPart:MMMtabUnselectedHover ofTabBarView:tabBarView] set];
         [fillPath fill];
@@ -334,18 +334,18 @@ NS_ASSUME_NONNULL_BEGIN
         [fillPath fill];
     }
 
-    NSBezierPath *bezier = [NSBezierPath bezierPath];
+    NSBezierPath *bezier = NSBezierPath.bezierPath;
 
     [[self colorForPart:MMMbezelMiddle ofTabBarView:tabBarView] set];
     
-    if ([button shouldDisplayLeftDivider])
+    if (button.shouldDisplayLeftDivider)
     {
         [bezier moveToPoint:NSMakePoint(NSMinX(aRect)-0.5, NSMinY(aRect))];
         [bezier lineToPoint:NSMakePoint(NSMinX(aRect)-0.5, NSMaxY(aRect))];
     }
 
-    BOOL shouldDisplayRightDivider = [button shouldDisplayRightDivider];
-    if (([button tabState] & (MMTab_PositionRightMask)) && ![tabBarView showAddTabButton] && ![tabBarView sizeButtonsToFit])
+    BOOL shouldDisplayRightDivider = button.shouldDisplayRightDivider;
+    if ((button.tabState & (MMTab_PositionRightMask)) && !tabBarView.showAddTabButton && !tabBarView.sizeButtonsToFit)
     {
         shouldDisplayRightDivider = NO;
     }

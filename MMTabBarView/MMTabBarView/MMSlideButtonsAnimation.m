@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSParameterAssert(aDict != nil);
     
-    NSMutableArray *animations = [[self viewAnimations] mutableCopy];
+    NSMutableArray *animations = [self.viewAnimations mutableCopy];
     [animations addObject:aDict];
     [self setViewAnimations:animations];
 }
@@ -41,20 +41,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)_viewAnimationsForButtons:(NSSet *)buttons {
 
-    NSMutableArray *animations = [NSMutableArray arrayWithCapacity:[buttons count]];
+    NSMutableArray *animations = [NSMutableArray arrayWithCapacity:buttons.count];
 
     NSDictionary *animDict = nil;
     
     for (MMTabBarButton *aButton in buttons) {
-    
-        animDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-            aButton, NSViewAnimationTargetKey,
-            [NSValue valueWithRect:[aButton frame]], NSViewAnimationStartFrameKey,
-            [NSValue valueWithRect:[aButton stackingFrame]], NSViewAnimationEndFrameKey,
-            nil];
-            
-        [animations addObject:animDict];
-        
+		animDict = @{
+			NSViewAnimationTargetKey: aButton,
+			NSViewAnimationStartFrameKey: [NSValue valueWithRect:aButton.frame],
+			NSViewAnimationEndFrameKey: [NSValue valueWithRect:aButton.stackingFrame]
+		};
+        [animations addObject:animDict];        
     }
     
     return animations;

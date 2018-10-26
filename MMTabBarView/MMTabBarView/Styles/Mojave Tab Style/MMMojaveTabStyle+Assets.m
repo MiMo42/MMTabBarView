@@ -9,7 +9,11 @@
 
 #import "MMMojaveTabStyle+Assets.h"
 #import "MMTabBarView.h"
+#if __has_feature(modules)
+@import Darwin.Availability;
+#else
 #import "Availability.h"
+#endif
 
 
 @implementation MMMojaveTabStyle (Assets)
@@ -53,25 +57,19 @@
     else
     {
 #endif
-        if ( [tabBarView isWindowActive ] )
-        {
-            if ( [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast] )
-                mode = MMMappearanceAquaLightHighContrast;
-            else
-                mode = MMMappearanceAquaLight;
-        }
-        else
-        {
-            if ( [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast] )
-                mode = MMMappearanceAquaLightHighContrastInactive;
-            else
-                mode = MMMappearanceAquaLightInactive;
-        }
+		if ( @available(macos 10.10, *) ) {
+			if ( NSWorkspace.sharedWorkspace.accessibilityDisplayShouldIncreaseContrast )
+				mode = tabBarView.isWindowActive ? MMMappearanceAquaLightHighContrast : MMMappearanceAquaLightHighContrastInactive;
+			else
+				mode = tabBarView.isWindowActive ? MMMappearanceAquaLight : MMMappearanceAquaLightInactive;
+		} else {
+			mode = (tabBarView.isWindowActive) ? MMMappearanceAquaLight : MMMappearanceAquaLightInactive;
+		}
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
     }
 #endif
 
-    return [self assets][@(mode)][@(part)] ? : [self assets][@(MMMappearanceAquaLight)][@(part)];
+    return self.assets[@(mode)][@(part)] ? : self.assets[@(MMMappearanceAquaLight)][@(part)];
 }
 
 inline static NSColor* labelColor(void)
@@ -100,9 +98,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.725 green:0.725 blue:0.725 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.655 green:0.655 blue:0.655 alpha:1.0],
 
-                     @(MMMtabSelectedFont)        : [NSColor textColor],
+                     @(MMMtabSelectedFont)        : NSColor.textColor,
                      @(MMMtabUnselectedFont)      : labelColor(),
-                     @(MMMtabUnselectedHoverFont) : [NSColor textColor],
+                     @(MMMtabUnselectedHoverFont) : NSColor.textColor,
                      
                      @(MMMtabBarBackground)       : [NSColor colorWithSRGBRed:0.710 green:0.706 blue:0.710 alpha:1.0],
 
@@ -128,9 +126,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.867 green:0.867 blue:0.867 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.776 green:0.776 blue:0.776 alpha:1.0],
 
-                     @(MMMtabSelectedFont)        : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedFont)      : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedHoverFont) : [NSColor disabledControlTextColor],
+                     @(MMMtabSelectedFont)        : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedFont)      : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedHoverFont) : NSColor.disabledControlTextColor,
 
                      @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.863 green:0.863 blue:0.863 alpha:1.0],
 
@@ -156,9 +154,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.741 green:0.741 blue:0.741 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.667 green:0.667 blue:0.663 alpha:1.0],
                      
-                     @(MMMtabSelectedFont)        : [NSColor textColor],
+                     @(MMMtabSelectedFont)        : NSColor.textColor,
                      @(MMMtabUnselectedFont)      : labelColor(),
-                     @(MMMtabUnselectedHoverFont) : [NSColor textColor],
+                     @(MMMtabUnselectedHoverFont) : NSColor.textColor,
                      
                      @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.741 green:0.741 blue:0.741 alpha:1.0],
 
@@ -184,9 +182,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.867 green:0.867 blue:0.867 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.776 green:0.776 blue:0.776 alpha:1.0],
                      
-                     @(MMMtabSelectedFont)        : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedFont)      : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedHoverFont) : [NSColor disabledControlTextColor],
+                     @(MMMtabSelectedFont)        : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedFont)      : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedHoverFont) : NSColor.disabledControlTextColor,
 
                      @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.867 green:0.867 blue:0.867 alpha:1.0],
 
@@ -212,9 +210,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.122 green:0.122 blue:0.122 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.110 green:0.110 blue:0.110 alpha:1.0],
 
-                     @(MMMtabSelectedFont)        : [NSColor textColor],
-                     @(MMMtabUnselectedFont)      : [NSColor selectedTextBackgroundColor],
-                     @(MMMtabUnselectedHoverFont) : [NSColor selectedTextBackgroundColor],
+                     @(MMMtabSelectedFont)        : NSColor.textColor,
+                     @(MMMtabUnselectedFont)      : NSColor.selectedTextBackgroundColor,
+                     @(MMMtabUnselectedHoverFont) : NSColor.selectedTextBackgroundColor,
                      
                      @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.112 green:0.112 blue:0.112 alpha:1.0],
 
@@ -240,9 +238,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.122 green:0.122 blue:0.122 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.110 green:0.110 blue:0.110 alpha:1.0],
 
-                     @(MMMtabSelectedFont)        : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedFont)      : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedHoverFont) : [NSColor disabledControlTextColor],
+                     @(MMMtabSelectedFont)        : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedFont)      : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedHoverFont) : NSColor.disabledControlTextColor,
 
                      @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.112 green:0.112 blue:0.112 alpha:1.0],
 
@@ -268,9 +266,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.122 green:0.122 blue:0.122 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.110 green:0.110 blue:0.110 alpha:1.0],
 
-                     @(MMMtabSelectedFont)        : [NSColor textColor],
-                     @(MMMtabUnselectedFont)      : [NSColor selectedTextBackgroundColor],
-                     @(MMMtabUnselectedHoverFont) : [NSColor selectedTextBackgroundColor],
+                     @(MMMtabSelectedFont)        : NSColor.textColor,
+                     @(MMMtabUnselectedFont)      : NSColor.selectedTextBackgroundColor,
+                     @(MMMtabUnselectedHoverFont) : NSColor.selectedTextBackgroundColor,
                      
 					 @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.112 green:0.112 blue:0.112 alpha:1.0],
 
@@ -296,9 +294,9 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselected)          : [NSColor colorWithSRGBRed:0.122 green:0.122 blue:0.122 alpha:1.0],
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.110 green:0.110 blue:0.110 alpha:1.0],
 
-                     @(MMMtabSelectedFont)        : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedFont)      : [NSColor disabledControlTextColor],
-                     @(MMMtabUnselectedHoverFont) : [NSColor disabledControlTextColor],
+                     @(MMMtabSelectedFont)        : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedFont)      : NSColor.disabledControlTextColor,
+                     @(MMMtabUnselectedHoverFont) : NSColor.disabledControlTextColor,
 
 					 @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.112 green:0.112 blue:0.112 alpha:1.0],
 
@@ -335,7 +333,7 @@ inline static NSColor* labelColor(void)
                                [bezier fill];
                            }
 
-                           NSBezierPath *icon = [NSBezierPath bezierPath];
+                           NSBezierPath *icon = NSBezierPath.bezierPath;
 
                            [iconColor set];
                            [icon moveToPoint:NSMakePoint(NSMinX(dstRect)+4.5, NSMinY(dstRect)+4.5)];
@@ -366,8 +364,8 @@ inline static NSColor* labelColor(void)
                                [bezier fill];
                            }
 
-                           float dia = 12.0;
-                           float delta = (dstRect.size.width - dia) / 2;
+                           CGFloat dia = 12.0;
+                           CGFloat delta = (dstRect.size.width - dia) / 2;
 
                            NSBezierPath *outerCircle = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(delta, delta, dia, dia)];
                            [iconColor set];
@@ -392,19 +390,19 @@ inline static NSColor* labelColor(void)
                                      flipped:YES
                               drawingHandler:^BOOL(NSRect dstRect)
                        {
-                           NSBezierPath *icon = [NSBezierPath bezierPath];
+                           NSBezierPath *icon = NSBezierPath.bezierPath;
 
                            [iconColor set];
-                           float minX = NSMinX(dstRect);
-                           float maxX = NSMaxX(dstRect);
-                           float minY = NSMinY(dstRect);
-                           float maxY = NSMaxY(dstRect);
-                           float x1 = (maxX - minX) / 2 - 0.5;
-                           float y1 = minY + 3.5;
-                           float dy1 = maxY - 3.5;
-                           float x2 = minX + 3.5;
-                           float dx2 = maxX - 3.5;
-                           float y2 = (maxY - minY) / 2 - 0.5;
+                           CGFloat minX = NSMinX(dstRect);
+                           CGFloat maxX = NSMaxX(dstRect);
+                           CGFloat minY = NSMinY(dstRect);
+                           CGFloat maxY = NSMaxY(dstRect);
+                           CGFloat x1 = (maxX - minX) / 2 - 0.5;
+                           CGFloat y1 = minY + 3.5;
+                           CGFloat dy1 = maxY - 3.5;
+                           CGFloat x2 = minX + 3.5;
+                           CGFloat dx2 = maxX - 3.5;
+                           CGFloat y2 = (maxY - minY) / 2 - 0.5;
 
                            [icon moveToPoint:NSMakePoint( x1, y1 )];
                            [icon lineToPoint:NSMakePoint( x1, dy1 )];

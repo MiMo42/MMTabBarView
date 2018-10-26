@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MMRolloverButtonType)
 @interface MMRolloverButtonCell : NSButtonCell 
 
 @property (readonly) BOOL mouseHovered;
-@property (strong) NSImage *rolloverImage;
+@property (nullable, strong) NSImage *rolloverImage;
 @property (assign) MMRolloverButtonType rolloverButtonType;
 @property (assign) BOOL simulateClickOnMouseHovered;
 
