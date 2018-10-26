@@ -107,7 +107,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 + (void)initialize
 {
-    if (self == [MMTabBarView class]) {
+    if (self == MMTabBarView.class) {
         if (registeredStyleClasses == nil) {
             registeredStyleClasses = [NSMutableDictionary dictionaryWithCapacity:10];
             
@@ -128,7 +128,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 		// resize
 		[self setPostsFrameChangedNotifications:YES];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(frameDidChange:) name:NSViewFrameDidChangeNotification object:self];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(frameDidChange:) name:NSViewFrameDidChangeNotification object:self];
 	}
 
 	return self;
@@ -136,7 +136,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)dealloc {
     
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[NSNotificationCenter.defaultCenter removeObserver:self];
 
     // assure that pending animation will stop
     if (_slideButtonsAnimation) {
@@ -154,7 +154,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	//unbind all the items to prevent crashing
 	//not sure if this is necessary or not
 	// http://code.google.com/p/maccode/issues/detail?id=35
-    NSSet *tmpButtonArray = [self attachedButtons];
+    NSSet *tmpButtonArray = self.attachedButtons;
     for (MMAttachedTabBarButton *aButton in tmpButtonArray) {
 		[self removeAttachedButton:aButton];
 	}
@@ -163,7 +163,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)viewWillMoveToWindow:(nullable NSWindow *)aWindow {
-	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+	NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
 
     [super viewWillMoveToWindow:aWindow];
 
@@ -177,13 +177,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		 _slideButtonsAnimation = nil;    
     }
     
-    if ([self window]) {
+    if (self.window) {
     
         [center removeObserver:self name:NSWindowDidBecomeKeyNotification object:nil];
         [center removeObserver:self name:NSWindowDidResignKeyNotification object:nil];
         [center removeObserver:self name:NSWindowDidMoveNotification object:nil];
     
-        [[self window] removeObserver:self forKeyPath:@"toolbar.visible"];
+        [self.window removeObserver:self forKeyPath:@"toolbar.visible"];
     }
 
 	if (aWindow) {
@@ -202,15 +202,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)viewWillStartLiveResize {
-    for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
-		[[aButton indicator] stopAnimation:self];
+    for (MMAttachedTabBarButton *aButton in self.attachedButtons) {
+		[aButton.indicator stopAnimation:self];
 	}
 	[self setNeedsDisplay:YES];
 }
 
 -(void)viewDidEndLiveResize {
-    for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
-		[[aButton indicator] startAnimation:self];
+    for (MMAttachedTabBarButton *aButton in self.attachedButtons) {
+		[aButton.indicator startAnimation:self];
 	}
 
 	[self _checkWindowFrame];
@@ -221,10 +221,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 	[super resetCursorRects];
     
-	if ([self orientation] == MMTabBarVerticalOrientation) {
+	if (self.orientation == MMTabBarVerticalOrientation) {
 
-        NSCursor *cursor = [self resizingMouseCursor];
-        [self addCursorRect:[self dividerRect] cursor:cursor];
+        NSCursor *cursor = self.resizingMouseCursor;
+        [self addCursorRect:self.dividerRect cursor:cursor];
 	}
 }
 
@@ -258,7 +258,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
-		bundle = [NSBundle bundleForClass:[MMTabBarView class]];
+		bundle = [NSBundle bundleForClass:MMTabBarView.class];
 	}
 	return bundle;
 }
@@ -272,13 +272,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (CGFloat)availableWidthForButtons {
 
-    CGFloat result = [self frame].size.width - [self leftMargin] - [self rightMargin];
+    CGFloat result = self.frame.size.width - self.leftMargin - self.rightMargin;
         
     result -= _resizeAreaCompensation;
     
         //Don't let attached buttons overlap the add tab button if it is visible
-	if ([self showAddTabButton]) {
-		result -= [self addTabButtonSize].width + 2*kMMTabBarCellPadding;
+	if (self.showAddTabButton) {
+		result -= self.addTabButtonSize.width + 2*kMMTabBarCellPadding;
 	}
     
     return result;
@@ -293,18 +293,18 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (CGFloat)availableHeightForButtons {
 
-    CGFloat result = [self bounds].size.height - [self topMargin] - [self bottomMargin];
+    CGFloat result = self.bounds.size.height - self.topMargin - self.bottomMargin;
     
     result -= _resizeAreaCompensation;
         
 	//Don't let attached buttons overlap the add tab button if it is visible
-	if ([self showAddTabButton]) {
-		result -= [self addTabButtonRect].size.height;
+	if (self.showAddTabButton) {
+		result -= self.addTabButtonRect.size.height;
 	}
 
 	//let room for overflow popup button
-    if ([self useOverflowMenu] && ![_overflowPopUpButton isHidden]) {
-		result -= [self overflowButtonRect].size.height;        
+    if (self.useOverflowMenu && !_overflowPopUpButton.isHidden) {
+		result -= self.overflowButtonRect.size.height;
     }
     
     return result;
@@ -318,25 +318,25 @@ static NSMutableDictionary *registeredStyleClasses = nil;
  */
 
 - (NSRect)genericButtonRect {
-	NSRect aRect = [self frame];
-	aRect.origin.x = [self leftMargin];
-	aRect.origin.y = [self topMargin];
-	aRect.size.width = [self availableWidthForButtons];
-	aRect.size.height = [self heightOfTabBarButtons];
+	NSRect aRect = self.frame;
+	aRect.origin.x = self.leftMargin;
+	aRect.origin.y = self.topMargin;
+	aRect.size.width = self.availableWidthForButtons;
+	aRect.size.height = self.heightOfTabBarButtons;
 	return aRect;
 }
 
 - (BOOL)isWindowActive {
-    NSWindow *window = [self window];
+    NSWindow *window = self.window;
     BOOL windowActive = NO;
     
-    if ([window isKeyWindow]) {
+    if (window.isKeyWindow) {
         windowActive = YES;
     }
-    else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive]) {
+    else if ([window isKindOfClass:NSPanel.class] && NSApp.isActive) {
         windowActive = YES;
     }
-    else if ([window isMainWindow]) {
+    else if (window.isMainWindow) {
         // Don't gray out the tab bar if we're displaying a sheet.
         windowActive = YES;
     }
@@ -364,15 +364,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 + (void)registerDefaultTabStyleClasses {
 
-    [self registerTabStyleClass:[MMAquaTabStyle class]];
-    [self registerTabStyleClass:[MMUnifiedTabStyle class]];
-    [self registerTabStyleClass:[MMAdiumTabStyle class]];
-    [self registerTabStyleClass:[MMMetalTabStyle class]];
-    [self registerTabStyleClass:[MMMojaveTabStyle class]];
-    [self registerTabStyleClass:[MMCardTabStyle class]];
-    [self registerTabStyleClass:[MMLiveChatTabStyle class]];
-    [self registerTabStyleClass:[MMSafariTabStyle class]];
-    [self registerTabStyleClass:[MMYosemiteTabStyle class]];
+    [self registerTabStyleClass:MMAquaTabStyle.class];
+    [self registerTabStyleClass:MMUnifiedTabStyle.class];
+    [self registerTabStyleClass:MMAdiumTabStyle.class];
+    [self registerTabStyleClass:MMMetalTabStyle.class];
+    [self registerTabStyleClass:MMMojaveTabStyle.class];
+    [self registerTabStyleClass:MMCardTabStyle.class];
+    [self registerTabStyleClass:MMLiveChatTabStyle.class];
+    [self registerTabStyleClass:MMSafariTabStyle.class];
+    [self registerTabStyleClass:MMYosemiteTabStyle.class];
 }
 
 + (void)registerTabStyleClass:(Class <MMTabStyle>)aStyleClass {
@@ -384,10 +384,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 + (NSArray *)registeredTabStyleClasses {
-    return [registeredStyleClasses allValues];
+    return registeredStyleClasses.allValues;
 }
 
-+ (Class <MMTabStyle>)registeredClassForStyleName:(NSString *)name {
++ (nullable Class <MMTabStyle>)registeredClassForStyleName:(NSString *)name {
     return [registeredStyleClasses objectForKey:name];
 }
 
@@ -395,21 +395,21 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark Tab View Item Management
 
 - (NSUInteger)numberOfTabViewItems {
-    return [_tabView numberOfTabViewItems];
+    return _tabView.numberOfTabViewItems;
 }
 
 - (NSUInteger)numberOfVisibleTabViewItems {
-    return [[self viewIndexesOfAttachedButtons] count];
+    return self.viewIndexesOfAttachedButtons.count;
 }
 
 - (NSArray *)visibleTabViewItems {
 
-    NSArray *attachedButtons = [self orderedAttachedButtons];
+    NSArray *attachedButtons = self.orderedAttachedButtons;
 
-	NSMutableArray *temp = [NSMutableArray arrayWithCapacity:[attachedButtons count]];
+	NSMutableArray *temp = [NSMutableArray arrayWithCapacity:attachedButtons.count];
     for (MMAttachedTabBarButton *aButton in attachedButtons) {
-		if ([aButton tabViewItem]) {
-			[temp addObject:[aButton tabViewItem]];
+		if (aButton.tabViewItem) {
+			[temp addObject:aButton.tabViewItem];
 		}
 	}
 	return temp;
@@ -423,12 +423,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     return [_tabView indexOfTabViewItem:anItem];
 }
 
-- (NSTabViewItem *)selectedTabViewItem {
-    return [_tabView selectedTabViewItem];
+- (nullable NSTabViewItem *)selectedTabViewItem {
+    return _tabView.selectedTabViewItem;
 }
 
 - (void)selectTabViewItem:(NSTabViewItem *)anItem {
-    return [_tabView selectTabViewItem:anItem];
+    [_tabView selectTabViewItem:anItem];
 }
 
 - (void)moveTabViewItem:(NSTabViewItem *)anItem toIndex:(NSUInteger)index {
@@ -453,19 +453,19 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSTabViewItem *)tabViewItemPinnedToOverflowButton {
     
-    MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
+    MMAttachedTabBarButton *lastButton = self.lastAttachedButton;
     if (!lastButton)
         return nil;
     
-    if ([lastButton isOverflowButton])
-        return [lastButton tabViewItem];
+    if (lastButton.isOverflowButton)
+        return lastButton.tabViewItem;
     
     return nil;
 }
 
 - (void)setTabViewItemPinnedToOverflowButton:(NSTabViewItem *)item {
 
-    MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
+    MMAttachedTabBarButton *lastButton = self.lastAttachedButton;
     if (!lastButton)
         return;
 
@@ -478,29 +478,29 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark Attached Buttons Management
 
 - (NSUInteger)numberOfAttachedButtons {
-    return [[self viewIndexesOfAttachedButtons] count];
+    return self.viewIndexesOfAttachedButtons.count;
 }
 
 - (NSSet *)attachedButtons {
 
-    NSIndexSet *indexes = [self viewIndexesOfAttachedButtons];
+    NSIndexSet *indexes = self.viewIndexesOfAttachedButtons;
 
         // get all attached buttons
-    NSArray *buttons = [[self subviews] objectsAtIndexes:indexes];
+    NSArray *buttons = [self.subviews objectsAtIndexes:indexes];
         
     return [NSSet setWithArray:buttons];
 }
 
 - (NSArray *)orderedAttachedButtons {
 
-    if ([self isSliding]) {
+    if (self.isSliding) {
         NSArray *sortedButtons = [self sortedAttachedButtonsUsingComparator:
             ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
             
-                NSRect stackingFrame1 = [but1 stackingFrame];
-                NSRect stackingFrame2 = [but2 stackingFrame];
+                NSRect stackingFrame1 = but1.stackingFrame;
+                NSRect stackingFrame2 = but2.stackingFrame;
                             
-                if ([self orientation] == MMTabBarHorizontalOrientation) {
+                if (self.orientation == MMTabBarHorizontalOrientation) {
                     
                     if (stackingFrame1.origin.x > stackingFrame2.origin.x)
                         return NSOrderedDescending;
@@ -522,8 +522,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         return [self sortedAttachedButtonsUsingComparator:
             ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
         
-            NSUInteger index1 = [self indexOfTabViewItem:[but1 tabViewItem]],
-                       index2 = [self indexOfTabViewItem:[but2 tabViewItem]];
+            NSUInteger index1 = [self indexOfTabViewItem:but1.tabViewItem],
+                       index2 = [self indexOfTabViewItem:but2.tabViewItem];
         
             if (index1 == NSNotFound || index2 == NSNotFound)
                 return NSOrderedSame;
@@ -540,10 +540,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSArray *)sortedAttachedButtonsUsingComparator:(NSComparator)cmptr {
 
-    NSIndexSet *indexes = [self viewIndexesOfAttachedButtons];
+    NSIndexSet *indexes = self.viewIndexesOfAttachedButtons;
     
         // get all attached buttons
-    NSArray *buttons = [[self subviews] objectsAtIndexes:indexes];
+    NSArray *buttons = [self.subviews objectsAtIndexes:indexes];
 
         // order buttons by index of tab view item
     buttons = [buttons sortedArrayUsingComparator:cmptr];
@@ -556,17 +556,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	NSRect buttonFrame = NSZeroRect,
            lastButtonFrame = NSZeroRect;
            
-    MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
+    MMAttachedTabBarButton *lastButton = self.lastAttachedButton;
     if (lastButton) {
-		lastButtonFrame = [lastButton frame];
+		lastButtonFrame = lastButton.frame;
     }
     
-	if ([self orientation] == MMTabBarHorizontalOrientation) {
-		buttonFrame = [self genericButtonRect];
+	if (self.orientation == MMTabBarHorizontalOrientation) {
+		buttonFrame = self.genericButtonRect;
 		buttonFrame.size.width = 30;
 		buttonFrame.origin.x = lastButtonFrame.origin.x + lastButtonFrame.size.width;
 	} else {
-		buttonFrame = /*lastCellFrame*/ [self genericButtonRect];
+		buttonFrame = /*lastCellFrame*/ self.genericButtonRect;
 		buttonFrame.size.width = lastButtonFrame.size.width;
 		buttonFrame.size.height = 0;
 		buttonFrame.origin.y = lastButtonFrame.origin.y + lastButtonFrame.size.height;
@@ -577,7 +577,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     [button setRolloverButtonType:MMRolloverSwitchButton];
     [button setSimulateClickOnMouseHovered:_allowsScrubbing];
-    [button setStyle:[self style]];
+    [button setStyle:self.style];
 
         // bind it up
 	[self bindPropertiesOfAttachedButton:button andTabViewItem:item];
@@ -586,23 +586,23 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [self addSubview:button];
     
         // add tab item at specified index
-    if ([[_tabView tabViewItems] indexOfObjectIdenticalTo:item] == NSNotFound) {
+    if ([_tabView.tabViewItems indexOfObjectIdenticalTo:item] == NSNotFound) {
         [_tabView insertTabViewItem:item atIndex:index];
         [_tabView selectTabViewItem:item];
     }    
 }
 
 - (void)addAttachedButtonForTabViewItem:(NSTabViewItem *)item {
-  [self insertAttachedButtonForTabViewItem:item atIndex:[self numberOfAttachedButtons]];
+  [self insertAttachedButtonForTabViewItem:item atIndex:self.numberOfAttachedButtons];
 }
 
 - (void)removeAttachedButton:(MMAttachedTabBarButton *)aButton synchronizeTabViewItems:(BOOL)syncTabViewItems {
 
     if (syncTabViewItems) {
-        NSTabViewItem *item = [aButton tabViewItem];
+        NSTabViewItem *item = aButton.tabViewItem;
         if (item) {
                 // remove tab item
-            if ([[_tabView tabViewItems] indexOfObjectIdenticalTo:item] != NSNotFound) {
+            if ([_tabView.tabViewItems indexOfObjectIdenticalTo:item] != NSNotFound) {
                 [_tabView removeTabViewItem:item];
                 return;  // exit here. We will call removeAttachedButton: in -update: 
             }
@@ -615,11 +615,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)removeAttachedButton:(MMAttachedTabBarButton *)aButton {
 
         // only try to unbind if button is attached
-    if ([[self attachedButtons] containsObject:aButton])
+    if ([self.attachedButtons containsObject:aButton])
         [self unbindPropertiesOfAttachedButton:aButton];
 
         // pull button (if it is attached)
-    if ([aButton superview])
+    if (aButton.superview)
         [aButton removeFromSuperview];
 }
 
@@ -627,7 +627,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     [self addSubview:aButton];
 
-    NSTabViewItem *item = [aButton tabViewItem];
+    NSTabViewItem *item = aButton.tabViewItem;
 
         //rebind the button to the new control
     [self bindPropertiesOfAttachedButton:aButton andTabViewItem:item];
@@ -641,10 +641,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSIndexSet *)viewIndexesOfAttachedButtons {
 
-    return [[self subviews] indexesOfObjectsPassingTest:
+    return [self.subviews indexesOfObjectsPassingTest:
         ^BOOL(NSView *aView, NSUInteger idx, BOOL *stop) {
         
-            if ([aView isKindOfClass:[MMAttachedTabBarButton class]])
+            if ([aView isKindOfClass:MMAttachedTabBarButton.class])
                 return YES;
         
             return NO;
@@ -653,10 +653,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSUInteger)viewIndexOfSelectedAttachedButton {
 
-    return [[[self subviews] indexesOfObjectsPassingTest:
+    return [[self.subviews indexesOfObjectsPassingTest:
         ^BOOL(NSView *aView, NSUInteger idx, BOOL *stop) {
         
-            if ([aView isKindOfClass:[MMAttachedTabBarButton class]] && [(MMAttachedTabBarButton *)aView state] == NSOnState)
+            if ([aView isKindOfClass:MMAttachedTabBarButton.class] && [(MMAttachedTabBarButton *)aView state] == NSOnState)
                 return YES;
         
             return NO;
@@ -665,21 +665,20 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (MMAttachedTabBarButton *)selectedAttachedButton {
 
-    NSUInteger indexOfSelectedAttachedButton = [self viewIndexOfSelectedAttachedButton];
+    NSUInteger indexOfSelectedAttachedButton = self.viewIndexOfSelectedAttachedButton;
     if (indexOfSelectedAttachedButton != NSNotFound)
-        return [[self subviews] objectAtIndex:indexOfSelectedAttachedButton];
+        return [self.subviews objectAtIndex:indexOfSelectedAttachedButton];
     else
         return nil;
 }
 
-- (MMAttachedTabBarButton *)lastAttachedButton {
-
-    return [[self orderedAttachedButtons] lastObject];
+- (nullable MMAttachedTabBarButton *)lastAttachedButton {
+    return self.orderedAttachedButtons.lastObject;
 }
 
 - (MMAttachedTabBarButton *)attachedButtonAtPoint:(NSPoint)aPoint {
     MMTabBarButton *tabBarButton = [self tabBarButtonAtPoint:aPoint];
-    if ([tabBarButton isKindOfClass:[MMAttachedTabBarButton class]])
+    if ([tabBarButton isKindOfClass:MMAttachedTabBarButton.class])
         return (MMAttachedTabBarButton *)tabBarButton;
     
     return nil;
@@ -687,9 +686,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (MMAttachedTabBarButton *)attachedButtonForTabViewItem:(NSTabViewItem *)anItem {
 
-    NSSet *buttons = [self attachedButtons];
+    NSSet *buttons = self.attachedButtons;
     for (MMAttachedTabBarButton *aButton in buttons) {
-        if ([aButton tabViewItem] == anItem) {
+        if (aButton.tabViewItem == anItem) {
             return aButton;
         }
     }
@@ -699,7 +698,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSUInteger)indexOfAttachedButton:(MMAttachedTabBarButton *)aButton {
 
-    return [[self orderedAttachedButtons] indexOfObjectIdenticalTo:aButton];
+    return [self.orderedAttachedButtons indexOfObjectIdenticalTo:aButton];
 }
 
 #pragma mark -
@@ -707,7 +706,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index withPrevious:(MMAttachedTabBarButton *)prevButton next:(MMAttachedTabBarButton *)nextButton {
 
-    MMTabStateMask tabStateMask = [aButton tabState];
+    MMTabStateMask tabStateMask = aButton.tabState;
     
         // set position related state
     tabStateMask &= ~(MMTab_PositionRightMask|MMTab_PositionLeftMask|MMTab_PositionMiddleMask|MMTab_PositionSingleMask);
@@ -723,10 +722,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     [aButton setTabState:tabStateMask];
     
         // set selection state related state
-    MMTabStateMask prevButtonTabStateMask = [prevButton tabState];
-    MMTabStateMask nextButtonTabStateMask = [nextButton tabState];
+    MMTabStateMask prevButtonTabStateMask = prevButton.tabState;
+    MMTabStateMask nextButtonTabStateMask = nextButton.tabState;
     
-    if ([aButton state] == NSOnState) {
+    if (aButton.state == NSOnState) {
         prevButtonTabStateMask |= MMTab_RightIsSelectedMask;
         nextButtonTabStateMask |= MMTab_LeftIsSelectedMask;
     } else {
@@ -735,7 +734,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
     
         // set sliding state related state
-    if ([aButton isSliding]) {
+    if (aButton.isSliding) {
         prevButtonTabStateMask |= MMTab_RightIsSliding;
         nextButtonTabStateMask |= MMTab_LeftIsSliding;
     } else {
@@ -757,12 +756,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 -(void)updateTabStateMaskOfAttachedButton:(MMAttachedTabBarButton *)aButton atIndex:(NSUInteger)index {
 
-    NSArray *buttons = [self orderedAttachedButtons];
+    NSArray *buttons = self.orderedAttachedButtons;
 
     MMAttachedTabBarButton *prevButton = nil,
                            *nextButton = nil;
     
-    if (index+1 < [buttons count])
+    if (index+1 < buttons.count)
         nextButton = [buttons objectAtIndex:index+1];
     if (index > 0)
         prevButton = [buttons objectAtIndex:index-1];
@@ -780,25 +779,29 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)enumerateAttachedButtonsUsingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, BOOL *stop))block {
 
-    [[self orderedAttachedButtons] enumerateObjectsUsingBlock:block];
+    [self.orderedAttachedButtons enumerateObjectsUsingBlock:block];
 }
 
-- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(nullable void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block {
+- (void)enumerateAttachedButtonsWithOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(nullable void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))aBlock {
+	void (^block)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop) = aBlock;
+	if (block == nil) {
+		return;
+	}
 
-    NSArray *buttons = [self orderedAttachedButtons];
+    NSArray *buttons = self.orderedAttachedButtons;
 
-    [self enumerateAttachedButtons:buttons inRange:NSMakeRange(0, [buttons count]) withOptions:opts usingBlock:block];
+    [self enumerateAttachedButtons:buttons inRange:NSMakeRange(0, buttons.count) withOptions:opts usingBlock:block];
 }
 
 - (void)enumerateAttachedButtons:(NSArray *)buttons inRange:(NSRange)range withOptions:(MMAttachedButtonsEnumerationOptions)opts usingBlock:(void (^)(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop))block {
 
-    NSUInteger numberOfButtons = [buttons count];
+    NSUInteger numberOfButtons = buttons.count;
     
         // range check
     if (NSMaxRange(range) >= numberOfButtons)
         range.length = numberOfButtons - range.location;
 
-	NSTabViewItem *selectedTabViewItem = [_tabView selectedTabViewItem];
+	NSTabViewItem *selectedTabViewItem = _tabView.selectedTabViewItem;
     
     __block MMAttachedTabBarButton *prevButton = nil;
     
@@ -809,7 +812,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             nextButton = [buttons objectAtIndex:idx+1];
 
         if (opts & MMAttachedButtonsEnumerationUpdateButtonState) {
-            if ([[aButton tabViewItem] isEqualTo:selectedTabViewItem])
+            if ([aButton.tabViewItem isEqualTo:selectedTabViewItem])
                 [aButton setState:NSOnState];
             else
                 [aButton setState:NSOffState];
@@ -832,23 +835,23 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (MMTabBarButton *)tabBarButtonAtPoint:(NSPoint)point
 {
-    if ([self orientation] == MMTabBarHorizontalOrientation &&
-        !NSPointInRect(point, [self genericButtonRect])) {
+    if (self.orientation == MMTabBarHorizontalOrientation &&
+        !NSPointInRect(point, self.genericButtonRect)) {
         return nil;
     }
     
-    if (![self superview])
+    if (!self.superview)
         return nil;
     
         // convert to coos of superview
-    point = [self convertPoint:point toView:[self superview]];
+    point = [self convertPoint:point toView:self.superview];
     
     NSView *viewUnderMouse = [self hitTest:point];
     if (!viewUnderMouse)
         return nil;
         
-    if (![viewUnderMouse isKindOfClass:[MMTabBarButton class]]) {
-        viewUnderMouse = [viewUnderMouse enclosingTabBarButton];
+    if (![viewUnderMouse isKindOfClass:MMTabBarButton.class]) {
+        viewUnderMouse = viewUnderMouse.enclosingTabBarButton;
         if (!viewUnderMouse)
             return nil;
     }
@@ -868,7 +871,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		_style = newStyle;
 
         if ([newStyle respondsToSelector:@selector(needsResizeTabsToFitTotalWidth)])
-            self.resizeTabsToFitTotalWidth = [newStyle needsResizeTabsToFitTotalWidth];
+            self.resizeTabsToFitTotalWidth = newStyle.needsResizeTabsToFitTotalWidth;
         else
             self.resizeTabsToFitTotalWidth = NO;
         
@@ -883,7 +886,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         [self _updateOverflowPopUpButton];
 
             // set style of attached buttons
-        [[self attachedButtons] makeObjectsPerformSelector:@selector(setStyle:) withObject:_style];
+        [self.attachedButtons makeObjectsPerformSelector:@selector(setStyle:) withObject:_style];
         
         [self invalidateIntrinsicContentSize];
         
@@ -892,16 +895,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (NSString *)styleName {
-	return [_style name];
+	return _style.name;
 }
 
 - (void)setStyleNamed:(NSString *)name {
 
-    Class <MMTabStyle> styleClass = [[self class] registeredClassForStyleName:name];
+    Class <MMTabStyle> styleClass = [self.class registeredClassForStyleName:name];
     if (styleClass == NULL)
         return;
 
-    id <MMTabStyle> newStyle = [[(Class)styleClass alloc] init];
+    id <MMTabStyle> newStyle = (id <MMTabStyle>) [(NSObject*) [(Class)styleClass alloc] init];
 	[self setStyle:newStyle];
 }
 
@@ -939,7 +942,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)setCanCloseOnlyTab:(BOOL)value {
 	_canCloseOnlyTab = value;
     
-	if ([self numberOfAttachedButtons] == 1) {
+	if (self.numberOfAttachedButtons == 1) {
         [self setNeedsUpdate:YES];
 	}
 }
@@ -1067,7 +1070,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)setAllowsScrubbing:(BOOL)flag {
 	_allowsScrubbing = flag;
     
-    for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
+    for (MMAttachedTabBarButton *aButton in self.attachedButtons) {
         [aButton setSimulateClickOnMouseHovered:flag];
     }
 }
@@ -1121,8 +1124,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         _tabView = view;
         
         // build buttons from existing tab view items
-        for (NSTabViewItem *item in [_tabView tabViewItems]) {
-            if (![[self visibleTabViewItems] containsObject:item]) {
+        for (NSTabViewItem *item in _tabView.tabViewItems) {
+            if (![self.visibleTabViewItems containsObject:item]) {
                 [self addAttachedButtonForTabViewItem:item];
             }
         }
@@ -1134,7 +1137,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(heightOfTabBarButtonsForTabBarView:)])
         return [_style heightOfTabBarButtonsForTabBarView:self];
     
-    return [self _heightOfTabBarButtons];
+    return self._heightOfTabBarButtons;
 }
 
 - (BOOL)supportsOrientation:(MMTabBarOrientation)orientation {
@@ -1148,7 +1151,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark Visibility
 
 - (BOOL)isOverflowButtonVisible {
-    if ([_overflowPopUpButton frame].size.width != 0.0f && [_overflowPopUpButton frame].size.height != 0.0f && ![_overflowPopUpButton isHidden])
+    if (_overflowPopUpButton.frame.size.width != 0.0 && _overflowPopUpButton.frame.size.height != 0.0 && !_overflowPopUpButton.isHidden)
         return YES;
 
     return NO;
@@ -1159,11 +1162,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSRect)dividerRect {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation || ![self allowsResizing])
+    if (self.orientation == MMTabBarHorizontalOrientation || !self.allowsResizing)
         return NSZeroRect;
 
-    NSRect bounds = [self bounds];
-    NSRect tabViewFrame = [_tabView frame];
+    NSRect bounds = self.bounds;
+    NSRect tabViewFrame = _tabView.frame;
     return NSMakeRect(bounds.size.width - DIVIDER_WIDTH, 0, DIVIDER_WIDTH, tabViewFrame.size.height);
 }
 
@@ -1175,14 +1178,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     // did the tab's identifier change?
     if ([keyPath isEqualToString:@"identifier"]) {
 //        id oldIdentifier = [change objectForKey: NSKeyValueChangeOldKey];
-        
-            // update binding
-        MMAttachedTabBarButton *aButton = [self attachedButtonForTabViewItem:object];
-        if (aButton) {
-            [self _unbindPropertiesOfAttachedButton:aButton];
-            [self _bindPropertiesOfAttachedButton:aButton andTabViewItem:object];
-        }
-    } else if (object == [self window] && [keyPath isEqualToString:@"toolbar.visible"]) {
+		NSTabViewItem* const tabViewItem = object;
+		if (object != nil) {
+				// update binding
+			MMAttachedTabBarButton* const button = [self attachedButtonForTabViewItem:tabViewItem];
+			if (button != nil) {
+				[self _unbindPropertiesOfAttachedButton:button];
+				[self _bindPropertiesOfAttachedButton:button andTabViewItem:tabViewItem];
+			}
+		}
+    } else if (object == self.window && [keyPath isEqualToString:@"toolbar.visible"]) {
     
         [self update:NO];
     
@@ -1205,17 +1210,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     CGFloat partnerOriginalSize, partnerOriginalOrigin, myOriginalSize, myOriginalOrigin, partnerTargetSize, partnerTargetOrigin;
 
         // target values for partner
-	if ([self orientation] == MMTabBarHorizontalOrientation) {
+	if (self.orientation == MMTabBarHorizontalOrientation) {
             // current (original) values
-		myOriginalSize = [self frame].size.height;
-        #pragma unused(myOriginalSize)
-		myOriginalOrigin = [self frame].origin.y;
+		myOriginalSize = self.frame.size.height;
+		myOriginalOrigin = self.frame.origin.y;
 		if (_partnerView) {
-			partnerOriginalSize = [_partnerView frame].size.height;
-			partnerOriginalOrigin = [_partnerView frame].origin.y;
+			partnerOriginalSize = _partnerView.frame.size.height;
+			partnerOriginalOrigin = _partnerView.frame.origin.y;
 		} else {
-			partnerOriginalSize = [[self window] frame].size.height;
-			partnerOriginalOrigin = [[self window] frame].origin.y;
+			partnerOriginalSize = self.window.frame.size.height;
+			partnerOriginalOrigin = self.window.frame.origin.y;
 		}
 
 		if (_partnerView) {
@@ -1257,14 +1261,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		}
 	} else {   // vertical 
             // current (original) values
-		myOriginalSize = [self frame].size.width;
-		myOriginalOrigin = [self frame].origin.x;
+		myOriginalSize = self.frame.size.width;
+		myOriginalOrigin = self.frame.origin.x;
 		if (_partnerView) {
-			partnerOriginalSize = [_partnerView frame].size.width;
-			partnerOriginalOrigin = [_partnerView frame].origin.x;
+			partnerOriginalSize = _partnerView.frame.size.width;
+			partnerOriginalOrigin = _partnerView.frame.origin.x;
 		} else {
-			partnerOriginalSize = [[self window] frame].size.width;
-			partnerOriginalOrigin = [[self window] frame].origin.x;
+			partnerOriginalSize = self.window.frame.size.width;
+			partnerOriginalOrigin = self.window.frame.origin.x;
 		}
 
 		if (_partnerView) {
@@ -1311,14 +1315,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 //	if (hide)
 //        [self setHidden:YES];
-	
-	if (_partnerView) {
+
+	NSView* const partnerView = _partnerView;
+	if (partnerView != nil) {
             // resize self and view
 		NSRect resizeRect;
-		if ([self orientation] == MMTabBarHorizontalOrientation) {
-			resizeRect = NSMakeRect([_partnerView frame].origin.x, partnerTargetOrigin, [_partnerView frame].size.width, partnerTargetSize);
+		if (self.orientation == MMTabBarHorizontalOrientation) {
+			resizeRect = NSMakeRect(partnerView.frame.origin.x, partnerTargetOrigin, partnerView.frame.size.width, partnerTargetSize);
 		} else {
-			resizeRect = NSMakeRect(partnerTargetOrigin, [_partnerView frame].origin.y, partnerTargetSize, [_partnerView frame].size.height);
+			resizeRect = NSMakeRect(partnerTargetOrigin, partnerView.frame.origin.y, partnerTargetSize, partnerView.frame.size.height);
 		}
 
         if (animate) {
@@ -1343,8 +1348,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 			
                 // start animated update of partner view
             NSDictionary *partnerAnimDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                _partnerView, NSViewAnimationTargetKey,
-                [NSValue valueWithRect:[_partnerView frame]], NSViewAnimationStartFrameKey,
+                partnerView, NSViewAnimationTargetKey,
+                [NSValue valueWithRect:partnerView.frame], NSViewAnimationStartFrameKey,
                 [NSValue valueWithRect:resizeRect], NSViewAnimationEndFrameKey,
                 [NSNumber numberWithBool:hide], @"hide",
                 nil];
@@ -1356,7 +1361,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             [_hideShowTabBarAnimation setDelegate:self];
             [_hideShowTabBarAnimation startAnimation];
         } else {
-            [_partnerView setFrame:resizeRect];
+            [partnerView setFrame:resizeRect];
 			[self invalidateIntrinsicContentSize];
 			[self.superview setNeedsLayout: YES];
 			if (hide)
@@ -1365,12 +1370,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	} else {
             // resize self and window
 		NSRect resizeRect;
-		if ([self orientation] == MMTabBarHorizontalOrientation) {
-			resizeRect = NSMakeRect([[self window] frame].origin.x, partnerTargetOrigin, [[self window] frame].size.width, partnerTargetSize);
+		if (self.orientation == MMTabBarHorizontalOrientation) {
+			resizeRect = NSMakeRect(self.window.frame.origin.x, partnerTargetOrigin, self.window.frame.size.width, partnerTargetSize);
 		} else {
-			resizeRect = NSMakeRect(partnerTargetOrigin, [[self window] frame].origin.y, partnerTargetSize, [[self window] frame].size.height);
+			resizeRect = NSMakeRect(partnerTargetOrigin, self.window.frame.origin.y, partnerTargetSize, self.window.frame.size.height);
 		}
-		[[self window] setFrame:resizeRect display:YES];
+		[self.window setFrame:resizeRect display:YES];
 	}
     
     
@@ -1381,11 +1386,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             //send the delegate messages
 		if (_isHidden) {
 			if ([_delegate respondsToSelector:@selector(tabView:tabBarViewDidHide:)]) {
-				[_delegate tabView:[self tabView] tabBarViewDidHide:self];
+				[_delegate tabView:self.tabView tabBarViewDidHide:self];
 			}
 		} else {
 			if ([_delegate respondsToSelector:@selector(tabView:tabBarViewDidUnhide:)]) {
-				[_delegate tabView:[self tabView] tabBarViewDidUnhide:self];
+				[_delegate tabView:self.tabView tabBarViewDidUnhide:self];
 			}
         }
     }   
@@ -1409,7 +1414,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         theSize = [_style addTabButtonSizeForTabBarView:self];
 
     } else {
-        theSize = [self _addTabButtonSize];
+        theSize = self._addTabButtonSize;
     }
     return theSize;
 }
@@ -1421,7 +1426,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(addTabButtonRectForTabBarView:)]) {
         theRect = [_style addTabButtonRectForTabBarView:self];
     } else {
-        theRect = [self _addTabButtonRect];
+        theRect = self._addTabButtonRect;
     }
 
     return theRect;
@@ -1434,7 +1439,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(overflowButtonSizeForTabBarView:)]) {
         theSize = [_style overflowButtonSizeForTabBarView:self];
     } else {
-        theSize = [self _overflowButtonSize];
+        theSize = self._overflowButtonSize;
     }
 
     return theSize;
@@ -1447,7 +1452,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(overflowButtonRectForTabBarView:)]) {
         theRect = [_style overflowButtonRectForTabBarView:self];
     } else {
-        theRect = [self _overflowButtonRect];
+        theRect = self._overflowButtonRect;
     }
 
     return theRect;
@@ -1462,7 +1467,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(rightMarginForTabBarView:)]) {
         margin = [_style rightMarginForTabBarView:self];
     } else {
-        margin = [self _rightMargin];
+        margin = self._rightMargin;
     }
 
     return margin;
@@ -1474,7 +1479,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(leftMarginForTabBarView:)]) {
         margin = [_style leftMarginForTabBarView:self];
     } else {
-        margin = [self _leftMargin];
+        margin = self._leftMargin;
     }
 
     return margin;
@@ -1486,7 +1491,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(topMarginForTabBarView:)]) {
         margin = [_style topMarginForTabBarView:self];
     } else {
-        margin = [self _topMargin];
+        margin = self._topMargin;
     }
 
     return margin;
@@ -1498,7 +1503,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if ([_style respondsToSelector:@selector(bottomMarginForTabBarView:)]) {
         margin = [_style bottomMarginForTabBarView:self];
     } else {
-        margin = [self _bottomMargin];
+        margin = self._bottomMargin;
     }
 
     return margin;
@@ -1510,7 +1515,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)layoutButtons {
     [_controller layoutButtons];
     
-    if (![self isDragging])
+    if (!self.isDragging)
         [self _synchronizeSelection];
 }
 
@@ -1536,7 +1541,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             return;
         
         _needsUpdate = YES;
-        [[NSOperationQueue mainQueue] addOperationWithBlock:
+        [NSOperationQueue.mainQueue addOperationWithBlock:
             ^{
             [self update];
             }];
@@ -1551,7 +1556,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     _needsUpdate = NO;
 
-    if (![[self window] isVisible] || [self isHidden])
+    if (!self.window.isVisible || self.isHidden)
         [self update:NO];
     else
         [self update:_automaticallyAnimates];
@@ -1560,42 +1565,42 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)update:(BOOL)animate {
     
         // not currently handle draggig?
-    if ([[MMTabDragAssistant sharedDragAssistant] isDragging] == NO) {
+    if (MMTabDragAssistant.sharedDragAssistant.isDragging == NO) {
 
             // hide/show? (these return if already in desired state)
-        if (_isHidden && [self _shouldDisplayTabBar])
+        if (_isHidden && self._shouldDisplayTabBar)
             [self hideTabBar:NO animate:animate];
-        else if (!_isHidden && ![self _shouldDisplayTabBar]) {
+        else if (!_isHidden && !self._shouldDisplayTabBar) {
             [self hideTabBar:YES animate:animate];
             [self setNeedsUpdate:NO];
             return;
         }
     }
 
-	NSArray *tabItems = [_tabView tabViewItems];
+	NSArray *tabItems = _tabView.tabViewItems;
         // go through buttons, remove any whose tab view items are not in [_tabView tabViewItems]
-    NSSet *attachedButtons = [self attachedButtons];
+    NSSet *attachedButtons = self.attachedButtons;
     for (MMAttachedTabBarButton *aButton in attachedButtons) {
             //remove the observer binding
-		if ([aButton tabViewItem] && ![tabItems containsObject:[aButton tabViewItem]]) {
-			if ([[self delegate] respondsToSelector:@selector(tabView:didDetachTabViewItem:)]) {
-				[[self delegate] tabView:_tabView didDetachTabViewItem:[aButton tabViewItem]];
+		if (aButton.tabViewItem && ![tabItems containsObject:aButton.tabViewItem]) {
+			if ([self.delegate respondsToSelector:@selector(tabView:didDetachTabViewItem:)]) {
+				[self.delegate tabView:_tabView didDetachTabViewItem:aButton.tabViewItem];
 			}
 
 			[self removeAttachedButton:aButton];
 		}
 	}
 
-    BOOL isDragging = [[MMTabDragAssistant sharedDragAssistant] isDragging];
-    MMAttachedTabBarButton *draggedButton = [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
+    BOOL isDragging = MMTabDragAssistant.sharedDragAssistant.isDragging;
+    MMAttachedTabBarButton *draggedButton = MMTabDragAssistant.sharedDragAssistant.attachedTabBarButton;
 
         // go through tab view items, add button for any not present
-	NSArray *visibleTabViewItems = [self visibleTabViewItems];
+	NSArray *visibleTabViewItems = self.visibleTabViewItems;
     NSUInteger i = 0;
     for (NSTabViewItem *item in tabItems) {
 		if (![visibleTabViewItems containsObject:item]) {
         
-            if (!(isDragging && item == [draggedButton tabViewItem]))
+            if (!(isDragging && item == draggedButton.tabViewItem))
                 [self insertAttachedButtonForTabViewItem:item atIndex:i];
 		}
         ++i;
@@ -1603,7 +1608,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     
 	[self layoutButtons]; //eventually we should only have to call this when we know something has changed
 
-	NSMenu *overflowMenu = [_controller overflowMenu];
+	NSMenu *overflowMenu = _controller.overflowMenu;
 	[_overflowPopUpButton setHidden:(overflowMenu == nil)];
 	[_overflowPopUpButton setMenu:overflowMenu];
     [self _positionOverflowMenu];
@@ -1616,15 +1621,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         }
         
             // start new animation
-        _slideButtonsAnimation = [[MMSlideButtonsAnimation alloc] initWithTabBarButtons:[self attachedButtons]];
+        _slideButtonsAnimation = [[MMSlideButtonsAnimation alloc] initWithTabBarButtons:self.attachedButtons];
         
         if (_showAddTabButton) {
-        
-            NSDictionary *addButtonAnimDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-            _addTabButton, NSViewAnimationTargetKey,
-            [NSValue valueWithRect:[_addTabButton frame]], NSViewAnimationStartFrameKey,
-            [NSValue valueWithRect:[self addTabButtonRect]], NSViewAnimationEndFrameKey,
-            nil];
+			NSDictionary* const addButtonAnimDict = @{
+				NSViewAnimationTargetKey: _addTabButton,
+				NSViewAnimationStartFrameKey: [NSValue valueWithRect:_addTabButton.frame],
+				NSViewAnimationEndFrameKey: [NSValue valueWithRect:self.addTabButtonRect]
+			};
             [_slideButtonsAnimation addAnimationDictionary:addButtonAnimDict];
         } else {
             [self _positionAddTabButton];
@@ -1635,8 +1639,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
       
 	} else {
     
-        for (MMAttachedTabBarButton *aButton in [self attachedButtons])
-            [aButton setFrame:[aButton stackingFrame]];
+        for (MMAttachedTabBarButton *aButton in self.attachedButtons)
+            [aButton setFrame:aButton.stackingFrame];
 
         [self _positionAddTabButton];
 
@@ -1654,27 +1658,27 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
         // ask delegate 
     if (_delegate && [_delegate respondsToSelector:@selector(tabView:shouldDragTabViewItem:inTabBarView:)]) {
-        if (![_delegate tabView:_tabView shouldDragTabViewItem:[aButton tabViewItem] inTabBarView:self])
+        if (![_delegate tabView:_tabView shouldDragTabViewItem:aButton.tabViewItem inTabBarView:self])
             return NO;
     }
     
-    return [[MMTabDragAssistant sharedDragAssistant] shouldStartDraggingAttachedTabBarButton:aButton ofTabBarView:self withMouseDownEvent:event];
+    return [MMTabDragAssistant.sharedDragAssistant shouldStartDraggingAttachedTabBarButton:aButton ofTabBarView:self withMouseDownEvent:event];
 }
 
 - (void)startDraggingAttachedTabBarButton:(MMAttachedTabBarButton *)aButton withMouseDownEvent:(NSEvent *)theEvent {
-    [[MMTabDragAssistant sharedDragAssistant] startDraggingAttachedTabBarButton:aButton fromTabBarView:self withMouseDownEvent:theEvent];
+    [MMTabDragAssistant.sharedDragAssistant startDraggingAttachedTabBarButton:aButton fromTabBarView:self withMouseDownEvent:theEvent];
 }
 
-- (MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems {
-    return [[MMTabDragAssistant sharedDragAssistant] attachedTabBarButton];
+- (nullable MMAttachedTabBarButton *)attachedTabBarButtonForDraggedItems {
+    return MMTabDragAssistant.sharedDragAssistant.attachedTabBarButton;
 }
 
 - (BOOL)isSliding {
-    return [[MMTabDragAssistant sharedDragAssistant] isSliding];
+    return MMTabDragAssistant.sharedDragAssistant.isSliding;
 }
 
 - (BOOL)isDragging {
-    return [[MMTabDragAssistant sharedDragAssistant] isDragging];
+    return MMTabDragAssistant.sharedDragAssistant.isDragging;
 }
 
 #pragma mark -
@@ -1682,7 +1686,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
-	return [[MMTabDragAssistant sharedDragAssistant] draggingSession:session sourceOperationMaskForDraggingContext:context ofTabBarView:self];
+	return [MMTabDragAssistant.sharedDragAssistant draggingSession:session sourceOperationMaskForDraggingContext:context ofTabBarView:self];
 }
 
 - (BOOL)ignoreModifierKeysForDraggingSession:(NSDraggingSession *)session {
@@ -1690,15 +1694,15 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint {
-    [[MMTabDragAssistant sharedDragAssistant] draggingSession:session willBeginAtPoint:screenPoint withTabBarView:self];
+    [MMTabDragAssistant.sharedDragAssistant draggingSession:session willBeginAtPoint:screenPoint withTabBarView:self];
 }
 
 - (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint {
-    [[MMTabDragAssistant sharedDragAssistant] draggingSession:session movedToPoint:screenPoint];
+    [MMTabDragAssistant.sharedDragAssistant draggingSession:session movedToPoint:screenPoint];
 }
 
 - (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
-	[[MMTabDragAssistant sharedDragAssistant] draggingSession:session endedAtPoint:screenPoint operation:operation];
+	[MMTabDragAssistant.sharedDragAssistant draggingSession:session endedAtPoint:screenPoint operation:operation];
 }
 
 #pragma mark -
@@ -1708,11 +1712,11 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     NSDragOperation dragOp = NSDragOperationNone;
 
-    NSPasteboard *pb = [sender draggingPasteboard];
+    NSPasteboard *pb = sender.draggingPasteboard;
     
     if ([pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]]) {
     
-        MMTabDragAssistant *dragAssistant = [MMTabDragAssistant sharedDragAssistant];
+        MMTabDragAssistant *dragAssistant = MMTabDragAssistant.sharedDragAssistant;
         
         dragOp = [dragAssistant draggingEntered:sender inTabBarView:self];
     }
@@ -1722,64 +1726,65 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender {
 
-    NSPasteboard *pb = [sender draggingPasteboard];
+    NSPasteboard *pb = sender.draggingPasteboard;
     
     if ([pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]]) {
         
-        MMTabDragAssistant *dragAssistant = [MMTabDragAssistant sharedDragAssistant];
+        MMTabDragAssistant *dragAssistant = MMTabDragAssistant.sharedDragAssistant;
         return [dragAssistant draggingUpdated:sender inTabBarView:self];
          
-    } else {
-            //something that was accepted by the delegate was dragged on
-
-        NSPoint aPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
-        
-        MMAttachedTabBarButton *destinationButton = (MMAttachedTabBarButton *)[self tabBarButtonAtPoint:aPoint];
-        if (![destinationButton isKindOfClass:[MMAttachedTabBarButton class]])
-            return NSDragOperationNone;
-
-		//Wind the spring for a spring-loaded drop.
-		//The delay time comes from Finder's defaults, which specifies it in milliseconds.
-		//If the delegate can't handle our spring-loaded drop, we'll abort it when the timer fires. See fireSpring:. This is simpler than constantly (checking for spring-loaded awareness and tearing down/rebuilding the timer) at every delegate change.
-
-            //If the user has dragged to a different tab, reset the timer.
-		if (_tabViewItemWithSpring != [destinationButton tabViewItem]) {
-			[_springTimer invalidate];
-			 _springTimer = nil;
-			_tabViewItemWithSpring = [destinationButton tabViewItem];
-		}
-		if (!_springTimer) {
-                //Finder's default delay time, as of Tiger, is 668 ms. If the user has never changed it, there's no setting in its defaults, so we default to that amount.
-			NSNumber *delayNumber = (NSNumber *)CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"SpringingDelayMilliseconds", (CFStringRef)@"com.apple.finder"));
-			NSTimeInterval delaySeconds = delayNumber ?[delayNumber doubleValue] / 1000.0 : 0.668;
-			_springTimer = [NSTimer scheduledTimerWithTimeInterval:delaySeconds
-							 target:self
-							 selector:@selector(fireSpring:)
-							 userInfo:sender
-							 repeats:NO];
-		}
-		return NSDragOperationCopy;    
     }
 
-    return NSDragOperationNone;
+		//something that was accepted by the delegate was dragged on
+
+	NSPoint aPoint = [self convertPoint:sender.draggingLocation fromView:nil];
+
+	MMAttachedTabBarButton *destinationButton = (MMAttachedTabBarButton *)[self tabBarButtonAtPoint:aPoint];
+	if (![destinationButton isKindOfClass:MMAttachedTabBarButton.class])
+		return NSDragOperationNone;
+
+	//Wind the spring for a spring-loaded drop.
+	//The delay time comes from Finder's defaults, which specifies it in milliseconds.
+	//If the delegate can't handle our spring-loaded drop, we'll abort it when the timer fires. See fireSpring:. This is simpler than constantly (checking for spring-loaded awareness and tearing down/rebuilding the timer) at every delegate change.
+
+		//If the user has dragged to a different tab, reset the timer.
+	if (_tabViewItemWithSpring != destinationButton.tabViewItem) {
+		[_springTimer invalidate];
+		 _springTimer = nil;
+		_tabViewItemWithSpring = destinationButton.tabViewItem;
+	}
+	if (!_springTimer) {
+			//Finder's default delay time, as of Tiger, is 668 ms. If the user has never changed it, there's no setting in its defaults, so we default to that amount.
+		NSNumber *delayNumber = (NSNumber *)CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"SpringingDelayMilliseconds", (CFStringRef)@"com.apple.finder"));
+		NSTimeInterval delaySeconds = delayNumber ? delayNumber.doubleValue / 1000.0 : 0.668;
+		_springTimer = [NSTimer scheduledTimerWithTimeInterval:delaySeconds
+						 target:self
+						 selector:@selector(fireSpring:)
+						 userInfo:sender
+						 repeats:NO];
+	}
+	return NSDragOperationCopy;
 }
 
 - (void)draggingExited:(nullable id <NSDraggingInfo>)sender {
 	[_springTimer invalidate];
 	 _springTimer = nil;
 
-	[[MMTabDragAssistant sharedDragAssistant] draggingExitedTabBarView:self draggingInfo:sender];
+	id <NSDraggingInfo> const draggingInfo = sender;
+	if (draggingInfo != nil) {
+		[MMTabDragAssistant.sharedDragAssistant draggingExitedTabBarView:self draggingInfo:draggingInfo];
+	}
 }
 
 - (BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender {
 
-    NSPasteboard *pb = [sender draggingPasteboard];
+    NSPasteboard *pb = sender.draggingPasteboard;
 
         //validate the drag operation only if there's a valid tab bar to drop into    
     if (![pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]])
         return NO;
     
-    if (![[MMTabDragAssistant sharedDragAssistant] destinationTabBar])
+    if (!MMTabDragAssistant.sharedDragAssistant.destinationTabBar)
         return NO;
         
     return YES;
@@ -1787,16 +1792,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
 
-    MMTabDragAssistant *dragAssistant = [MMTabDragAssistant sharedDragAssistant];
+    MMTabDragAssistant *dragAssistant = MMTabDragAssistant.sharedDragAssistant;
         
     if (![dragAssistant performDragOperation:sender forTabBarView:self]) {
 
-        NSPoint aPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
+        NSPoint aPoint = [self convertPoint:sender.draggingLocation fromView:nil];
         MMTabBarButton *tabBarButton = [self tabBarButtonAtPoint:aPoint];
-        if (![tabBarButton isKindOfClass:[MMAttachedTabBarButton class]])
+        if (![tabBarButton isKindOfClass:MMAttachedTabBarButton.class])
             return NO;
         
-        id <MMTabBarViewDelegate> myDelegate = [self delegate];
+        id <MMTabBarViewDelegate> myDelegate = self.delegate;
         if (myDelegate && [myDelegate respondsToSelector:@selector(tabView:acceptedDraggingInfo:onTabViewItem:)]) {
                 
                 //forward the drop to the delegate
@@ -1819,7 +1824,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     NSMenu *menu = nil;
     
-    if ([aButton isKindOfClass:[MMAttachedTabBarButton class]]) {
+    if ([aButton isKindOfClass:MMAttachedTabBarButton.class]) {
     
         NSTabViewItem *tabViewItem = [(MMAttachedTabBarButton *)aButton tabViewItem];
         if (tabViewItem) {
@@ -1835,8 +1840,8 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (NSMenu *)menuForTabViewItem:(NSTabViewItem *)aTabViewItem withEvent:(NSEvent *)anEvent {
 	NSMenu *menu = nil;
 
-	if (aTabViewItem && [[self delegate] respondsToSelector:@selector(tabView:menuForTabViewItem:)]) {
-		menu = [[self delegate] tabView:_tabView menuForTabViewItem:aTabViewItem];
+	if (aTabViewItem && [self.delegate respondsToSelector:@selector(tabView:menuForTabViewItem:)]) {
+		menu = [self.delegate tabView:_tabView menuForTabViewItem:aTabViewItem];
 	}
 	return menu;
 }
@@ -1853,7 +1858,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)unbindPropertiesOfAttachedButton:(MMAttachedTabBarButton *)aButton {
 
-    NSTabViewItem *item = [aButton tabViewItem];
+    NSTabViewItem *item = aButton.tabViewItem;
     if (!item)
         return;
 
@@ -1927,10 +1932,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (nullable NSView *)hitTest:(NSPoint)aPoint {
 
-    if ([self orientation] == MMTabBarVerticalOrientation) {
-        NSView *superview = [self superview];
+    if (self.orientation == MMTabBarVerticalOrientation) {
+        NSView *superview = self.superview;
         if (superview) {
-            NSRect dividerRect = [self dividerRect];
+            NSRect dividerRect = self.dividerRect;
             dividerRect = [self convertRect:dividerRect toView:superview];
             
             if (NSPointInRect(aPoint, dividerRect)) {
@@ -1956,12 +1961,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)mouseDown:(NSEvent *)theEvent {
 
-	NSPoint mousePt = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-	NSRect frame = [self frame];
+	NSPoint mousePt = [self convertPoint:theEvent.locationInWindow fromView:nil];
+	NSRect frame = self.frame;
 
         // begin resizing if appropriate
-    if ([self orientation] == MMTabBarVerticalOrientation && [self allowsResizing] && (mousePt.x > frame.size.width - 3)) {
-        if ([self mm_dragShouldBeginFromMouseDown:theEvent withExpiration:[NSDate distantFuture] xHysteresis:0.0 yHysteresis:0]) {
+    if (self.orientation == MMTabBarVerticalOrientation && self.allowsResizing && (mousePt.x > frame.size.width - 3)) {
+        if ([self mm_dragShouldBeginFromMouseDown:theEvent withExpiration:NSDate.distantFuture xHysteresis:0.0 yHysteresis:0]) {
             [self _beginResizingWithMouseDownEvent:theEvent];
         }
     }
@@ -1974,12 +1979,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     NSAssert1(timer == _springTimer, @"Spring fired by unrecognized timer %@", timer);
 
-    id <NSDraggingInfo> sender = [timer userInfo];
+    id <NSDraggingInfo> sender = timer.userInfo;
     
-    NSPoint aPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
+    NSPoint aPoint = [self convertPoint:sender.draggingLocation fromView:nil];
     MMAttachedTabBarButton *button = [self attachedButtonAtPoint:aPoint];
     if (button != nil) {
-        [_tabView selectTabViewItem:[button tabViewItem]];
+        [_tabView selectTabViewItem:button.tabViewItem];
 
         _tabViewItemWithSpring = nil;
         [_springTimer invalidate];
@@ -1991,10 +1996,18 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark Menu Validation
 
 - (BOOL)validateMenuItem:(NSMenuItem *)sender {
-	[sender setState:([[sender representedObject] isEqualTo:[_tabView selectedTabViewItem]]) ? NSOnState : NSOffState];
+	NSMenuItem* const menuItem = sender;
+	if (menuItem == nil) {
+		return NO;
+	}
+	NSTabViewItem* const tabViewItem = menuItem.representedObject;
+	if (tabViewItem == nil) {
+		return NO;
+	}
+	[sender setState:([tabViewItem isEqualTo:_tabView.selectedTabViewItem]) ? NSOnState : NSOffState];
 
-	return [[self delegate] respondsToSelector:@selector(tabView:validateOverflowMenuItem:forTabViewItem:)] ?
-		   [[self delegate] tabView:[self tabView] validateOverflowMenuItem:sender forTabViewItem:[sender representedObject]] : YES;
+	return [self.delegate respondsToSelector:@selector(tabView:validateOverflowMenuItem:forTabViewItem:)] ?
+		   [self.delegate tabView:self.tabView validateOverflowMenuItem:menuItem forTabViewItem:tabViewItem] : YES;
 }
 
 #pragma mark -
@@ -2004,22 +2017,22 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     [self _synchronizeSelection];
     
-	if ([[self delegate] respondsToSelector:@selector(tabView:didSelectTabViewItem:)]) {
-		[[self delegate] performSelector:@selector(tabView:didSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
+	if ([self.delegate respondsToSelector:@selector(tabView:didSelectTabViewItem:)]) {
+		[self.delegate performSelector:@selector(tabView:didSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
     }
 }
 
 - (BOOL)tabView:(NSTabView *)aTabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem {
-	if ([[self delegate] respondsToSelector:@selector(tabView:shouldSelectTabViewItem:)]) {
-		return [[self delegate] tabView:aTabView shouldSelectTabViewItem:tabViewItem];
+	if ([self.delegate respondsToSelector:@selector(tabView:shouldSelectTabViewItem:)]) {
+		return [self.delegate tabView:aTabView shouldSelectTabViewItem:tabViewItem];
 	} else {
 		return YES;
 	}
 }
 
 - (void)tabView:(NSTabView *)aTabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {
-	if ([[self delegate] respondsToSelector:@selector(tabView:willSelectTabViewItem:)]) {
-		[[self delegate] performSelector:@selector(tabView:willSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
+	if ([self.delegate respondsToSelector:@selector(tabView:willSelectTabViewItem:)]) {
+		[self.delegate performSelector:@selector(tabView:willSelectTabViewItem:) withObject:aTabView withObject:tabViewItem];
 	}
 }
 
@@ -2029,14 +2042,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         return;
         
         // do nothing, if we are reordering the tab view items
-    if ([self isReorderingTabViewItems])
+    if (self.isReorderingTabViewItems)
         return;
     
     [self setNeedsUpdate:YES];
 
         // pass along for other delegate responses
-	if ([[self delegate] respondsToSelector:@selector(tabViewDidChangeNumberOfTabViewItems:)]) {
-		[[self delegate] performSelector:@selector(tabViewDidChangeNumberOfTabViewItems:) withObject:aTabView];
+	if ([self.delegate respondsToSelector:@selector(tabViewDidChangeNumberOfTabViewItems:)]) {
+		[self.delegate performSelector:@selector(tabViewDidChangeNumberOfTabViewItems:) withObject:aTabView];
 	}
 }
 
@@ -2056,9 +2069,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     if (animation == _hideShowTabBarAnimation) {
         NSArray *animations = [(NSViewAnimation*)animation viewAnimations];
-        NSDictionary *animDict = [animations lastObject];
+        NSDictionary *animDict = animations.lastObject;
         
-        BOOL isHidden = [[animDict objectForKey:@"hide"] boolValue];
+        BOOL isHidden = [(NSNumber*) [animDict objectForKey:@"hide"] boolValue];
         if (!isHidden)
             [self setHidden:NO];
             
@@ -2067,12 +2080,12 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         
             //send the delegate messages
 		if (isHidden) {
-			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarViewDidHide:)]) {
-				[[self delegate] tabView:[self tabView] tabBarViewDidHide:self];
+			if ([self.delegate respondsToSelector:@selector(tabView:tabBarViewDidHide:)]) {
+				[self.delegate tabView:self.tabView tabBarViewDidHide:self];
 			}
 		} else {
-			if ([[self delegate] respondsToSelector:@selector(tabView:tabBarViewDidUnhide:)]) {
-				[[self delegate] tabView:[self tabView] tabBarViewDidUnhide:self];
+			if ([self.delegate respondsToSelector:@selector(tabView:tabBarViewDidUnhide:)]) {
+				[self.delegate tabView:self.tabView tabBarViewDidUnhide:self];
 			}
         }        
     }
@@ -2099,7 +2112,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)encodeWithCoder:(NSCoder *)aCoder 
 {
 	[super encodeWithCoder:aCoder];
-	if ([aCoder allowsKeyedCoding]) {
+	if (aCoder.allowsKeyedCoding) {
 		[aCoder encodeObject:_tabView forKey:@"MMtabView"];
 		[aCoder encodeObject:_overflowPopUpButton forKey:@"MMOverflowPopUpButton"];
 		[aCoder encodeObject:_addTabButton forKey:@"MMaddTabButton"];
@@ -2136,9 +2149,9 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 		
             // resize
 		[self setPostsFrameChangedNotifications:YES];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(frameDidChange:) name:NSViewFrameDidChangeNotification object:self];
+		[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(frameDidChange:) name:NSViewFrameDidChangeNotification object:self];
         
-		if ([aDecoder allowsKeyedCoding]) {
+		if (aDecoder.allowsKeyedCoding) {
 			_tabView = [aDecoder decodeObjectForKey:@"MMtabView"];
 			_overflowPopUpButton = [aDecoder decodeObjectForKey:@"MMOverflowPopUpButton"];
 			_addTabButton = [aDecoder decodeObjectForKey:@"MMaddTabButton"];
@@ -2183,18 +2196,18 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (nullable NSArray *)accessibilityChildren {
-    return NSAccessibilityUnignoredChildren([[self attachedButtons] allObjects]);
+    return NSAccessibilityUnignoredChildren(self.attachedButtons.allObjects);
 }
 
 - (nullable id)accessibilityHitTest:(NSPoint)point {
 	id hitTestResult = self;
 
-	NSEnumerator *enumerator = [[self attachedButtons] objectEnumerator];
+	NSEnumerator *enumerator = self.attachedButtons.objectEnumerator;
 	MMAttachedTabBarButton *aButton = nil;
 	MMAttachedTabBarButton *highlightedButton = nil;
 
-	while(!highlightedButton && (aButton = [enumerator nextObject])) {
-		if ([[aButton cell] isHighlighted]) {
+	while(!highlightedButton && (aButton = enumerator.nextObject)) {
+		if (aButton.cell.isHighlighted) {
 			highlightedButton = aButton;
 		}
 	}
@@ -2217,50 +2230,50 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)_overflowMenuAction:(id)sender {
-	NSTabViewItem *tabViewItem = (NSTabViewItem *)[sender representedObject];
+	NSTabViewItem *tabViewItem = (NSTabViewItem *)[(NSMenuItem*) sender representedObject];
 	[_tabView selectTabViewItem:tabViewItem];
 }
 
 - (void)_didClickTabButton:(id)sender {
-	[_tabView selectTabViewItem:[sender tabViewItem]];
+	[_tabView selectTabViewItem:[(MMAttachedTabBarButton*) sender tabViewItem]];
 }
 
 - (void)_didClickCloseButton:(id)sender {
 
-    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)[sender enclosingTabBarButton];
-    if (!button || ![button isKindOfClass:[MMAttachedTabBarButton class]])
+    MMAttachedTabBarButton *button = (MMAttachedTabBarButton *)[(NSButton*) sender enclosingTabBarButton];
+    if (!button || ![button isKindOfClass:MMAttachedTabBarButton.class])
         {
         NSBeep();
         return;
         }
     
-    NSTabViewItem *tabViewItem = [button tabViewItem];
-    if (!tabViewItem || ![tabViewItem isKindOfClass:[NSTabViewItem class]])
+    NSTabViewItem *tabViewItem = button.tabViewItem;
+    if (!tabViewItem || ![tabViewItem isKindOfClass:NSTabViewItem.class])
         {
         NSBeep();
         return;
         }
 
-    if (([self numberOfAttachedButtons] == 1) && (![self canCloseOnlyTab])) {
+    if ((self.numberOfAttachedButtons == 1) && (!self.canCloseOnlyTab)) {
         NSBeep();
 		return;
 	}
 
 
-    if (([self delegate]) && ([[self delegate] respondsToSelector:@selector(tabView:shouldCloseTabViewItem:)])) {
-        if (![[self delegate] tabView:_tabView shouldCloseTabViewItem:tabViewItem]) {
+    if ((self.delegate) && ([self.delegate respondsToSelector:@selector(tabView:shouldCloseTabViewItem:)])) {
+        if (![self.delegate tabView:_tabView shouldCloseTabViewItem:tabViewItem]) {
              return;
          }
     }
 
-    if (([self delegate]) && ([[self delegate] respondsToSelector:@selector(tabView:willCloseTabViewItem:)])) {
-         [[self delegate] tabView:_tabView willCloseTabViewItem:tabViewItem];
+    if ((self.delegate) && ([self.delegate respondsToSelector:@selector(tabView:willCloseTabViewItem:)])) {
+         [self.delegate tabView:_tabView willCloseTabViewItem:tabViewItem];
     }
      
     [_tabView removeTabViewItem:tabViewItem];
      
-    if (([self delegate]) && ([[self delegate] respondsToSelector:@selector(tabView:didCloseTabViewItem:)])) {
-         [[self delegate] tabView:_tabView didCloseTabViewItem:tabViewItem];
+    if ((self.delegate) && ([self.delegate respondsToSelector:@selector(tabView:didCloseTabViewItem:)])) {
+         [self.delegate tabView:_tabView didCloseTabViewItem:tabViewItem];
     }
 
 }
@@ -2270,10 +2283,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 	// trying to address the drawing artifacts for the progress indicators - hackery follows
 	// this one fixes the "blanking" effect when the control hides and shows itself
-    for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
-		[[aButton indicator] stopAnimation:self];
+    for (MMAttachedTabBarButton *aButton in self.attachedButtons) {
+		[aButton.indicator stopAnimation:self];
 
-		[[aButton indicator] performSelector:@selector(startAnimation:) withObject:nil afterDelay:0.0];
+		[aButton.indicator performSelector:@selector(startAnimation:) withObject:nil afterDelay:0.0];
 	}
 
 	[self update:NO];
@@ -2326,7 +2339,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (CGFloat)_rightMargin {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
+    if (self.orientation == MMTabBarHorizontalOrientation)
         return MARGIN_X;
     else
         return 0.0;
@@ -2334,7 +2347,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (CGFloat)_leftMargin {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
+    if (self.orientation == MMTabBarHorizontalOrientation)
         return MARGIN_X;
     else
         return 0.0;
@@ -2342,7 +2355,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (CGFloat)_topMargin {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
+    if (self.orientation == MMTabBarHorizontalOrientation)
         return 0.0;
     else
         return MARGIN_Y;
@@ -2350,7 +2363,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (CGFloat)_bottomMargin {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
+    if (self.orientation == MMTabBarHorizontalOrientation)
         return 0.0;
     else
         return MARGIN_Y;
@@ -2358,41 +2371,41 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSSize)_addTabButtonSize {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
-       return NSMakeSize(12.0,[self frame].size.height);
+    if (self.orientation == MMTabBarHorizontalOrientation)
+       return NSMakeSize(12.0,self.frame.size.height);
     else
-        return NSMakeSize([self frame].size.width,18.0);
+        return NSMakeSize(self.frame.size.width,18.0);
 }
 
 - (NSRect)_addTabButtonRect {
     
-    if (![self showAddTabButton])
+    if (!self.showAddTabButton)
         return NSZeroRect;
 
     NSRect theRect;
-    NSSize buttonSize = [self addTabButtonSize];
-    NSSize overflowButtonSize = [self overflowButtonSize];
+    NSSize buttonSize = self.addTabButtonSize;
+    NSSize overflowButtonSize = self.overflowButtonSize;
     
-    if ([self orientation] == MMTabBarHorizontalOrientation) {
+    if (self.orientation == MMTabBarHorizontalOrientation) {
         CGFloat xOffset = kMMTabBarCellPadding;
-        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        MMAttachedTabBarButton *lastAttachedButton = self.lastAttachedButton;
         if (lastAttachedButton) {
-            xOffset += NSMaxX([lastAttachedButton stackingFrame]);
+            xOffset += NSMaxX(lastAttachedButton.stackingFrame);
             
-            if ([lastAttachedButton isOverflowButton]) {
+            if (lastAttachedButton.isOverflowButton) {
                 xOffset += kMMTabBarCellPadding;
                 xOffset += overflowButtonSize.width;
             }
         }
                 
-        theRect = NSMakeRect(xOffset, NSMinY([self bounds]), buttonSize.width, buttonSize.height);
+        theRect = NSMakeRect(xOffset, NSMinY(self.bounds), buttonSize.width, buttonSize.height);
     } else {
         CGFloat yOffset = 0;
-        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        MMAttachedTabBarButton *lastAttachedButton = self.lastAttachedButton;
         if (lastAttachedButton)
-            yOffset += NSMaxY([lastAttachedButton stackingFrame]);
+            yOffset += NSMaxY(lastAttachedButton.stackingFrame);
         
-        theRect = NSMakeRect(NSMinX([self bounds]), yOffset, buttonSize.width, buttonSize.height);
+        theRect = NSMakeRect(NSMinX(self.bounds), yOffset, buttonSize.width, buttonSize.height);
     }
             
     return theRect;  
@@ -2400,34 +2413,34 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 	
 - (NSSize)_overflowButtonSize {
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
-        return NSMakeSize(14.0,[self frame].size.height);
+    if (self.orientation == MMTabBarHorizontalOrientation)
+        return NSMakeSize(14.0,self.frame.size.height);
     else
-        return NSMakeSize([self frame].size.width,18.0);
+        return NSMakeSize(self.frame.size.width,18.0);
 }
 
 - (NSRect)_overflowButtonRect {
 
-    if (![self useOverflowMenu])
+    if (!self.useOverflowMenu)
         return NSZeroRect;
 
     NSRect theRect;
-    NSSize buttonSize = [self overflowButtonSize];
+    NSSize buttonSize = self.overflowButtonSize;
     
-    if ([self orientation] == MMTabBarHorizontalOrientation) {
-        CGFloat xOffset = 0.0f; //kMMTabBarCellPadding;
-        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+    if (self.orientation == MMTabBarHorizontalOrientation) {
+        CGFloat xOffset = 0.0; //kMMTabBarCellPadding;
+        MMAttachedTabBarButton *lastAttachedButton = self.lastAttachedButton;
         if (lastAttachedButton)
-            xOffset += NSMaxX([lastAttachedButton stackingFrame]);
+            xOffset += NSMaxX(lastAttachedButton.stackingFrame);
                 
-        theRect = NSMakeRect(xOffset, NSMinY([self bounds]), buttonSize.width, buttonSize.height);
+        theRect = NSMakeRect(xOffset, NSMinY(self.bounds), buttonSize.width, buttonSize.height);
     } else {
         CGFloat yOffset = 0;
-        MMAttachedTabBarButton *lastAttachedButton = [self lastAttachedButton];
+        MMAttachedTabBarButton *lastAttachedButton = self.lastAttachedButton;
         if (lastAttachedButton)
-            yOffset += NSMaxY([lastAttachedButton stackingFrame]);
+            yOffset += NSMaxY(lastAttachedButton.stackingFrame);
         
-        theRect = NSMakeRect(NSMinX([self bounds]), yOffset, buttonSize.width, buttonSize.height);
+        theRect = NSMakeRect(NSMinX(self.bounds), yOffset, buttonSize.width, buttonSize.height);
     }
             
     return theRect;
@@ -2437,7 +2450,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     
     [self drawBezelInRect:aRect];
     
-    if ([self frame].size.height < 2)
+    if (self.frame.size.height < 2)
         return;
     
     [self drawButtonBezelsInRect:aRect];
@@ -2450,13 +2463,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)_drawButtonBezelsInRect:(NSRect)rect {
 
-    NSArray *buttons = [self orderedAttachedButtons];
+    NSArray *buttons = self.orderedAttachedButtons;
 
         // find selected button
     NSUInteger selIndex = NSNotFound;
     NSUInteger i = 0;
     for (MMAttachedTabBarButton *aButton in buttons) {
-        if ([aButton state] == NSOnState) {
+        if (aButton.state == NSOnState) {
             selIndex = i;
             break;
         }
@@ -2474,7 +2487,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         i++;
     }
 
-    if ([self isOverflowButtonVisible]) {
+    if (self.isOverflowButtonVisible) {
         [self drawBezelOfOverflowButton:_overflowPopUpButton inRect:rect];
     }
 }
@@ -2490,16 +2503,16 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 - (void)_drawInteriorInRect:(NSRect)rect {
 
         // no tab view == not connected
-	if (![self tabView]) {
+	if (!self.tabView) {
 		NSRect labelRect = rect;
 		labelRect.size.height -= 4.0;
 		labelRect.origin.y += 4.0;
 		NSMutableAttributedString *attrStr;
 		NSString *contents = @"MMTabBarView";
 		attrStr = [[NSMutableAttributedString alloc] initWithString:contents];
-		NSRange range = NSMakeRange(0, [contents length]);
+		NSRange range = NSMakeRange(0, contents.length);
 		[attrStr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0] range:range];
-		NSMutableParagraphStyle *centeredParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+		NSMutableParagraphStyle *centeredParagraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
         [centeredParagraphStyle setAlignment:NSCenterTextAlignment];
         
 		[attrStr addAttribute:NSParagraphStyleAttributeName value:centeredParagraphStyle range:range];
@@ -2511,14 +2524,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)_positionOverflowMenu {
 
-    NSRect buttonRect = [self overflowButtonRect];
+    NSRect buttonRect = self.overflowButtonRect;
     if (!NSEqualRects(buttonRect, NSZeroRect))
         [_overflowPopUpButton setFrame:buttonRect];
 }
 
 - (void)_positionAddTabButton {
-	if (!NSIsEmptyRect([self addTabButtonRect])) {
-		[_addTabButton setFrame:[self addTabButtonRect]];
+	if (!NSIsEmptyRect(self.addTabButtonRect)) {
+		[_addTabButton setFrame:self.addTabButtonRect];
 	}
 
     [_addTabButton setHidden:!_showAddTabButton];
@@ -2527,17 +2540,17 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (void)_checkWindowFrame {
         //figure out if the new frame puts the control in the way of the resize widget
-	NSWindow *window = [self window];
+	NSWindow *window = self.window;
 
 	if (window) {
-		NSRect resizeWidgetFrame = [[window contentView] frame];
+		NSRect resizeWidgetFrame = window.contentView.frame;
 		resizeWidgetFrame.origin.x += resizeWidgetFrame.size.width - 22;
 		resizeWidgetFrame.size.width = 22;
 		resizeWidgetFrame.size.height = 22;
 
-		if ([window showsResizeIndicator] && NSIntersectsRect([self frame], resizeWidgetFrame)) {
+		if (window.showsResizeIndicator && NSIntersectsRect(self.frame, resizeWidgetFrame)) {
                 //the resize widgets are larger on metal windows
-			_resizeAreaCompensation = [window styleMask] & NSTexturedBackgroundWindowMask ? 20 : 8;
+			_resizeAreaCompensation = window.styleMask & NSTexturedBackgroundWindowMask ? 20 : 8;
 		} else {
 			_resizeAreaCompensation = 0;
 		}
@@ -2548,10 +2561,10 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
     id <MMTabBarItem> dataSource = nil;
     
-    if ([item identifier] &&
-        [[item identifier] conformsToProtocol:@protocol(MMTabBarItem)] &&
-        [[item identifier] respondsToSelector:sel]) {
-        dataSource = [item identifier];
+    if (item.identifier &&
+        [(NSObject*) item.identifier conformsToProtocol:@protocol(MMTabBarItem)] &&
+        [(NSObject*) item.identifier respondsToSelector:sel]) {
+        dataSource = item.identifier;
     } else if ([item conformsToProtocol:@protocol(MMTabBarItem)] &&
                [item respondsToSelector:sel]) {
         dataSource = (id <MMTabBarItem>)item;
@@ -2575,7 +2588,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     }
     
         // progress indicator binding
-    [[aButton indicator] setHidden:YES];
+    [aButton.indicator setHidden:YES];
     dataSource = [self _dataSourceForSelector:@selector(isProcessing) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"isProcessing" toObject:dataSource withKeyPath:@"isProcessing" options:nil];
@@ -2598,7 +2611,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
         }
     
         // object count color binding
-	[aButton setObjectCountColor:[MMAttachedTabBarButtonCell defaultObjectCountColor]];
+	[aButton setObjectCountColor:MMAttachedTabBarButtonCell.defaultObjectCountColor];
     dataSource = [self _dataSourceForSelector:@selector(objectCountColor) withTabViewItem:item];
     if (dataSource)
         [aButton bind:@"objectCountColor" toObject:dataSource withKeyPath:@"objectCountColor" options:nil];
@@ -2643,28 +2656,28 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 }
 
 - (void)_synchronizeSelection {
-    NSTabViewItem *selectedTabViewItem = [_tabView selectedTabViewItem];
+    NSTabViewItem *selectedTabViewItem = _tabView.selectedTabViewItem;
     
     MMAttachedTabBarButton *buttonToSelect = [self attachedButtonForTabViewItem:selectedTabViewItem];
 
     if (!buttonToSelect) {
-        MMAttachedTabBarButton *lastButton = [self lastAttachedButton];
-        if ([lastButton isOverflowButton]) {
+        MMAttachedTabBarButton *lastButton = self.lastAttachedButton;
+        if (lastButton.isOverflowButton) {
             [self setTabViewItemPinnedToOverflowButton:selectedTabViewItem];
             buttonToSelect = lastButton;
         }
     }
     
         // reset state masks
-    for (MMAttachedTabBarButton *aButton in [self attachedButtons]) {
+    for (MMAttachedTabBarButton *aButton in self.attachedButtons) {
     
-        [aButton setTabState:[aButton tabState] & ~(MMTab_RightIsSelectedMask|MMTab_LeftIsSelectedMask)];
+        [aButton setTabState:aButton.tabState & ~(MMTab_RightIsSelectedMask|MMTab_LeftIsSelectedMask)];
         
         if (aButton == buttonToSelect) {
-            if ([aButton state] != NSOnState)
+            if (aButton.state != NSOnState)
                 [aButton setState:NSOnState];
         } else {
-            if ([aButton state] != NSOffState)
+            if (aButton.state != NSOffState)
                 [aButton setState:NSOffState];
         }
     }
@@ -2678,13 +2691,13 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 
 - (NSCursor *)resizingMouseCursor {
 
-    if (NSWidth([self frame]) <= [self buttonMinWidth]) {
-        return [NSCursor resizeRightCursor];
+    if (NSWidth(self.frame) <= self.buttonMinWidth) {
+        return NSCursor.resizeRightCursor;
     }
-    else if (NSWidth([self frame]) >= [self buttonMaxWidth])
-        return [NSCursor resizeLeftCursor];
+    else if (NSWidth(self.frame) >= self.buttonMaxWidth)
+        return NSCursor.resizeLeftCursor;
     else  {
-        return [NSCursor resizeLeftRightCursor];
+        return NSCursor.resizeLeftRightCursor;
     }
 }
 
@@ -2694,51 +2707,49 @@ static NSMutableDictionary *registeredStyleClasses = nil;
             *firstEvent = nil,
             *dragEvent = nil,
             *mouseUp = nil;
-    NSDate *expiration = [NSDate distantFuture];
+    NSDate *expiration = NSDate.distantFuture;
 
-    if ([self orientation] == MMTabBarHorizontalOrientation)
+    if (self.orientation == MMTabBarHorizontalOrientation)
         return;
 
     [self setIsResizing:YES];
                 
-    NSCursor *cursor = [self resizingMouseCursor];
+    NSCursor *cursor = self.resizingMouseCursor;
     [cursor set];
             
-    while ((nextEvent = [[self window] nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
+    while ((nextEvent = [self.window nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
 
         if (firstEvent == nil) {
             firstEvent = nextEvent;
         }
         
-        if ([nextEvent type] == NSLeftMouseDragged) {
+        if (nextEvent.type == NSLeftMouseDragged) {
             dragEvent = nextEvent;
-            #pragma unused(dragEvent)
-            
-            NSPoint currentPoint = [self convertPoint:[nextEvent locationInWindow] fromView:nil];
-            NSRect frame = [self frame];
-            CGFloat resizeAmount = [nextEvent deltaX];
+
+            NSPoint currentPoint = [self convertPoint:nextEvent.locationInWindow fromView:nil];
+            NSRect frame = self.frame;
+            CGFloat resizeAmount = nextEvent.deltaX;
             if ((currentPoint.x > frame.size.width && resizeAmount > 0) || (currentPoint.x < frame.size.width && resizeAmount < 0)) {
 
-                cursor = [self resizingMouseCursor];
+                cursor = self.resizingMouseCursor;
                 [cursor set];
 
-                NSRect partnerFrame = [_partnerView frame];
+                NSRect partnerFrame = _partnerView.frame;
 
                 //do some bounds checking
-                if ((frame.size.width + resizeAmount >= [self buttonMinWidth]) && (frame.size.width + resizeAmount <= [self buttonMaxWidth])) {
+                if ((frame.size.width + resizeAmount >= self.buttonMinWidth) && (frame.size.width + resizeAmount <= self.buttonMaxWidth)) {
                     frame.size.width += resizeAmount;
                     partnerFrame.size.width -= resizeAmount;
                     partnerFrame.origin.x += resizeAmount;
 
                     [self setFrame:frame];
                     [_partnerView setFrame:partnerFrame];
-                    [[self superview] setNeedsDisplay:YES];
+                    [self.superview setNeedsDisplay:YES];
                 }
             }
                     
-        } else if ([nextEvent type] == NSLeftMouseUp) {
+        } else if (nextEvent.type == NSLeftMouseUp) {
             mouseUp = nextEvent;
-            #pragma unused(mouseUp)
             break;
         }
         
@@ -2754,14 +2765,14 @@ static NSMutableDictionary *registeredStyleClasses = nil;
     if (!_hideForSingleTab)
         return YES;
     
-    if ([_tabView numberOfTabViewItems] <= 1)
+    if (_tabView.numberOfTabViewItems <= 1)
         return NO;
 
     return YES;
 }
 
 -(void)_updateImages {
-    [[self attachedButtons] makeObjectsPerformSelector:@selector(updateImages)];
+    [self.attachedButtons makeObjectsPerformSelector:@selector(updateImages)];
     [self _updateAddTabButton];
     [self _updateOverflowPopUpButton];
 }
@@ -2777,7 +2788,7 @@ StaticImage(AquaTabNewRollover)
         _addTabButton = nil;
     }
         // new tab button
-	NSRect addTabButtonRect = [self addTabButtonRect];
+	NSRect addTabButtonRect = self.addTabButtonRect;
 	_addTabButton = [[MMRolloverButton alloc] initWithFrame:addTabButtonRect];
     
     [_addTabButton setImage:_staticAquaTabNewImage()];
@@ -2810,7 +2821,7 @@ StaticImage(AquaTabNewRollover)
     if (!_overflowPopUpButton)
         {
             // the overflow button/menu
-        NSRect overflowButtonRect = [self overflowButtonRect];
+        NSRect overflowButtonRect = self.overflowButtonRect;
         _overflowPopUpButton = [[MMOverflowPopUpButton alloc] initWithFrame:overflowButtonRect pullsDown:YES];
         [_overflowPopUpButton setAutoresizingMask:NSViewNotSizable | NSViewMinXMargin];
         [_overflowPopUpButton setHidden:YES];
@@ -2821,7 +2832,7 @@ StaticImage(AquaTabNewRollover)
     if (_style && [_style respondsToSelector:@selector(updateOverflowPopUpButton:ofTabBarView:)])
         [_style updateOverflowPopUpButton:_overflowPopUpButton ofTabBarView:self];
     
-    if (_useOverflowMenu && _tabView && [self numberOfAttachedButtons] != [_tabView numberOfTabViewItems]) {
+    if (_useOverflowMenu && _tabView && self.numberOfAttachedButtons != (NSUInteger) _tabView.numberOfTabViewItems) {
        [_overflowPopUpButton setHidden:NO];    
     } else {
        [_overflowPopUpButton setHidden:YES];
