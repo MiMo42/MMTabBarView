@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 	NSImage				*liveChatCloseDirtyButtonDown;
 	NSImage				*liveChatCloseDirtyButtonOver;
 
-	NSDictionary		*_objectCountStringAttributes;
+	NSDictionary<NSAttributedStringKey, id> *_objectCountStringAttributes;
 }
 
 + (NSString *)name {

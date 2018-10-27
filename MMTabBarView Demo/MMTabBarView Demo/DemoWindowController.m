@@ -41,7 +41,7 @@
 - (void)awakeFromNib {
 
 	[NSUserDefaults.standardUserDefaults registerDefaults:
-	 [NSDictionary dictionaryWithObjectsAndKeys:
+	 [NSDictionary<NSString*, id> dictionaryWithObjectsAndKeys:
 		  @"Card", @"Style",
 		  @"Horizontal", @"Orientation",
 		  @"Miniwindow", @"Tear-Off",
@@ -261,7 +261,7 @@
 #pragma mark -
 #pragma mark KVO 
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
 
     if (object == tabBar) {
         if ([keyPath isEqualToString:@"orientation"]) {
@@ -512,12 +512,12 @@
     [self addNewTab:aTabView];
 }
 
-- (NSArray *)allowedDraggedTypesForTabView:(NSTabView *)aTabView {
-	return [NSArray arrayWithObjects:NSFilenamesPboardType, NSStringPboardType, nil];
+- (NSArray<NSPasteboardType> *)allowedDraggedTypesForTabView:(NSTabView *)aTabView {
+	return @[NSFilenamesPboardType, NSStringPboardType];
 }
 
 - (BOOL)tabView:(NSTabView *)aTabView acceptedDraggingInfo:(id <NSDraggingInfo>)draggingInfo onTabViewItem:(NSTabViewItem *)tabViewItem {
-	NSPasteboardType const pasteboardType = [draggingInfo.draggingPasteboard.types objectAtIndex:0];
+	NSPasteboardType const pasteboardType = draggingInfo.draggingPasteboard.types[0];
 	if (pasteboardType == nil) {
 		return NO;
 	}
@@ -675,18 +675,12 @@
 	return item;
 }
 
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
-	return [NSArray arrayWithObjects:@"TabField",
-			NSToolbarFlexibleSpaceItemIdentifier,
-			@"DrawerItem",
-			nil];
+- (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar {
+	return @[@"TabField", NSToolbarFlexibleSpaceItemIdentifier, @"DrawerItem"];
 }
 
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
-	return [NSArray arrayWithObjects:@"TabField",
-			NSToolbarFlexibleSpaceItemIdentifier,
-			@"DrawerItem",
-			nil];
+- (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar {
+	return @[@"TabField", NSToolbarFlexibleSpaceItemIdentifier, @"DrawerItem"];
 }
 
 - (IBAction)toggleToolbar:(id)sender {
