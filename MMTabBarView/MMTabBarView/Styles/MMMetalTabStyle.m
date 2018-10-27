@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 	NSImage					*metalCloseDirtyButtonDown;
 	NSImage					*metalCloseDirtyButtonOver;
 
-	NSDictionary			*_objectCountStringAttributes;
+	NSDictionary<NSAttributedStringKey, id> *_objectCountStringAttributes;
 }
 
 StaticImage(TabNewMetal)

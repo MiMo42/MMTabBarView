@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!superview)
         return;
     
-    NSMutableArray *subviews = [superview.subviews mutableCopy];
+    NSMutableArray<__kindof NSView *> *subviews = [superview.subviews mutableCopy];
     [subviews removeObjectIdenticalTo:self];
     [subviews addObject:self];
     [superview setSubviews:subviews];

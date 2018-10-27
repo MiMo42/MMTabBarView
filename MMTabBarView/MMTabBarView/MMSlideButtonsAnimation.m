@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation MMSlideButtonsAnimation
 
-- (instancetype)initWithTabBarButtons:(NSSet *)buttons {
+- (instancetype)initWithTabBarButtons:(NSSet<__kindof MMTabBarButton *> *)buttons {
 
-    NSArray *viewAnimations = [self _viewAnimationsForButtons:buttons];
+    NSArray<NSDictionary<NSViewAnimationKey, id> *> *viewAnimations = [self _viewAnimationsForButtons:buttons];
 
     self = [super initWithViewAnimations:viewAnimations];
     if (self)
@@ -27,11 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (void)addAnimationDictionary:(NSDictionary *)aDict {
+- (void)addAnimationDictionary:(NSDictionary<NSViewAnimationKey, id> *)aDict {
 
     NSParameterAssert(aDict != nil);
     
-    NSMutableArray *animations = [self.viewAnimations mutableCopy];
+    NSMutableArray<NSDictionary<NSViewAnimationKey, id> *> *animations = [self.viewAnimations mutableCopy];
     [animations addObject:aDict];
     [self setViewAnimations:animations];
 }
@@ -39,11 +39,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 #pragma mark Private Methods
 
-- (NSArray *)_viewAnimationsForButtons:(NSSet *)buttons {
+- (NSArray<NSDictionary<NSViewAnimationKey, id> *> *)_viewAnimationsForButtons:(NSSet<__kindof MMTabBarButton *> *)buttons {
 
-    NSMutableArray *animations = [NSMutableArray arrayWithCapacity:buttons.count];
+    NSMutableArray<NSDictionary<NSViewAnimationKey, id> *> *animations = [NSMutableArray arrayWithCapacity:buttons.count];
 
-    NSDictionary *animDict = nil;
+    NSDictionary<NSViewAnimationKey, id> *animDict = nil;
     
     for (MMTabBarButton *aButton in buttons) {
 		animDict = @{

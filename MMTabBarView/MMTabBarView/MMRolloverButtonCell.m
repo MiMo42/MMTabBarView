@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 #pragma mark Tracking Area Support
 
-- (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(nullable NSDictionary *)userInfo mouseLocation:(NSPoint)mouseLocation {
+- (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(nullable NSDictionary<id, id> *)userInfo mouseLocation:(NSPoint)mouseLocation {
 
     NSTrackingAreaOptions options = 0;
     BOOL mouseIsInside = NO;

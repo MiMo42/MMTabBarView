@@ -83,9 +83,9 @@ inline static NSColor* labelColor(void)
 	return NSColor.textColor;
 }
 
-- (NSDictionary *)assets
+- (NSDictionary<NSNumber*, NSDictionary<NSNumber*, id>*> *)assets
 {
-    static NSDictionary *assets = nil;
+    static NSDictionary<NSNumber*, NSDictionary<NSNumber*, id>*> *assets = nil;
 
     if ( !assets )
         assets = @{

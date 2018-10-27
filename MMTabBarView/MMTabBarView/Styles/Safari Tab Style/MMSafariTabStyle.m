@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation MMSafariTabStyle
 {
-	NSDictionary *_objectCountStringAttributes;
+	NSDictionary<NSAttributedStringKey, id> *_objectCountStringAttributes;
 }
 
 StaticImage(SafariAWATClose)
@@ -260,7 +260,7 @@ StaticImage(SafariIWITRightCap)
 	[NSGraphicsContext restoreGraphicsState];
 }
 
-- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray<MMAttachedTabBarButton *> *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
     BOOL isWindowActive = tabBarView.isWindowActive;
     NSUInteger numberOfButtons = buttons.count;
@@ -269,9 +269,9 @@ StaticImage(SafariIWITRightCap)
                            *nextButton = nil;
     
     if (index > 0)
-        prevButton = [buttons objectAtIndex:index-1];
+        prevButton = buttons[index-1];
     if (index+1 < numberOfButtons)
-        nextButton = [buttons objectAtIndex:index+1];
+        nextButton = buttons[index+1];
 
     NSImage *left = nil,
             *center = nil,

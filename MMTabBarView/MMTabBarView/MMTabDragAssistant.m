@@ -320,7 +320,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     
     NSPasteboard *pb = sender.draggingPasteboard;
     
-    if (![pb canReadItemWithDataConformingToTypes:[NSArray arrayWithObject:AttachedTabBarButtonUTI]])
+    if (![pb canReadItemWithDataConformingToTypes:@[AttachedTabBarButtonUTI]])
         return success;
  
         // get (single) pasteboard item
@@ -427,10 +427,10 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 - (void)_finalizeAnimation:(NSAnimation *)animation {
     if (animation == _slideButtonsAnimation) {
         
-        NSArray *viewAnimations = _slideButtonsAnimation.viewAnimations;
+        NSArray<NSDictionary<NSViewAnimationKey, id> *> *viewAnimations = _slideButtonsAnimation.viewAnimations;
         
         MMAttachedTabBarButton *aButton = nil;
-        for (NSDictionary *anAnimDict in viewAnimations) {
+        for (NSDictionary<NSViewAnimationKey, id> *anAnimDict in viewAnimations) {
             aButton = [anAnimDict objectForKey:NSViewAnimationTargetKey];
             if ([aButton isKindOfClass:MMAttachedTabBarButton.class]) {
                 [aButton slideAnimationDidEnd];
@@ -441,7 +441,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
 
         [tabBarView updateTabStateMaskOfAttachedButtons];
         
-        NSArray *attachedButtons = tabBarView.orderedAttachedButtons;
+        NSArray<MMAttachedTabBarButton *> *attachedButtons = tabBarView.orderedAttachedButtons;
         NSUInteger numberOfAttachedButtons = attachedButtons.count;
         NSUInteger numberOfTabViewItems = tabBarView.numberOfTabViewItems;
         
@@ -484,7 +484,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         MMAttachedTabBarButton *overButton = nil;
         NSUInteger overButtonIndex = NSNotFound;
         
-        NSArray *sortedButtons = [tabBarView sortedAttachedButtonsUsingComparator:
+        NSArray<MMAttachedTabBarButton *> *sortedButtons = [tabBarView sortedAttachedButtonsUsingComparator:
             ^NSComparisonResult(MMAttachedTabBarButton *but1, MMAttachedTabBarButton *but2) {
             
                 NSRect stackingFrame1 = but1.stackingFrame;
@@ -805,7 +805,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSImage *dummyImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
     [draggingItem setDraggingFrame:NSMakeRect(location.x, location.y, 1, 1) contents:dummyImage];
     
-    [tabBarView beginDraggingSessionWithItems:[NSArray arrayWithObject:draggingItem] event:theEvent source:source];
+    [tabBarView beginDraggingSessionWithItems:@[draggingItem] event:theEvent source:source];
 }
 
 - (void)_slideBackTabBarButton:(MMAttachedTabBarButton *)aButton inTabBarView:(MMTabBarView *)tabBarView {
@@ -836,7 +836,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSRange slidingRange;
     CGFloat slidingDirection = 0.0;
 
-    NSArray *sortedButtons = tabBarView.orderedAttachedButtons;
+    NSArray<MMAttachedTabBarButton *> *sortedButtons = tabBarView.orderedAttachedButtons;
     NSUInteger numberOfButtons = sortedButtons.count;
     
     if (destinationIndex > sourceIndex) {
@@ -851,7 +851,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         slidingDirection = 1.0;
     }
     
-    NSArray *slidingButtons = [sortedButtons objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:slidingRange]];
+    NSArray<MMAttachedTabBarButton *> *slidingButtons = [sortedButtons objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:slidingRange]];
     
     CGFloat slidingAmount = 0;
     if (tabBarView.orientation == MMTabBarHorizontalOrientation)
@@ -882,7 +882,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
         else
             positionOfMovedButton = NSMaxY(stackingFrame);
     } else {
-        MMAttachedTabBarButton *firstSlidedButton = [slidingButtons objectAtIndex:0];
+        MMAttachedTabBarButton *firstSlidedButton = slidingButtons[0];
         NSRect stackingFrame = firstSlidedButton.stackingFrame;
         if (tabBarView.orientation == MMTabBarHorizontalOrientation)
             positionOfMovedButton = NSMinX(stackingFrame) - NSWidth(aButton.slidingFrame);
@@ -947,7 +947,7 @@ static MMTabDragAssistant *sharedDragAssistant = nil;
     NSPasteboard *pb = draggingInfo.draggingPasteboard;
 
         // get (single) pasteboard item
-    NSArray *pasteboardItems = pb.pasteboardItems;
+    NSArray<NSPasteboardItem *> *pasteboardItems = pb.pasteboardItems;
     for (NSPasteboardItem *anItem in pasteboardItems) {
         if ([anItem isKindOfClass:MMTabPasteboardItem.class])
             return (MMTabPasteboardItem *)anItem;

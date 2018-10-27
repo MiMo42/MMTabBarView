@@ -477,7 +477,7 @@ NS_ASSUME_NONNULL_BEGIN
 	[NSGraphicsContext restoreGraphicsState];
 }
 
-- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray<MMAttachedTabBarButton *> *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
     [self _drawBezelWithFrame:button.frame usingStatesOfAttachedButton:button ofTabBarView:tabBarView applyShadow:YES drawRollovers:NO];
 }

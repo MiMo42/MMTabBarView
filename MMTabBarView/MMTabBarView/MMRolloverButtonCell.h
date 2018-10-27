@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, MMRolloverButtonType)
 
 #pragma mark Tracking Area Support
 
-- (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(nullable NSDictionary *)userInfo mouseLocation:(NSPoint)mouseLocation;
+- (void)addTrackingAreasForView:(NSView *)controlView inRect:(NSRect)cellFrame withUserInfo:(nullable NSDictionary<id, id> *)userInfo mouseLocation:(NSPoint)mouseLocation;
 - (void)mouseEntered:(NSEvent *)event;
 - (void)mouseExited:(NSEvent *)event;
 

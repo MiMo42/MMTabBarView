@@ -151,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
 	 toPoint:NSMakePoint(NSMaxX(rect), NSMinY(rect) + 0.5)];
 }
 
-- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
+- (void)drawBezelOfButton:(MMAttachedTabBarButton *)button atIndex:(NSUInteger)index inButtons:(NSArray<MMAttachedTabBarButton *> *)buttons indexOfSelectedButton:(NSUInteger)selIndex tabBarView:(MMTabBarView *)tabBarView inRect:(NSRect)rect {
 
     NSWindow *window = tabBarView.window;
     NSToolbar *toolbar = window.toolbar;
