@@ -188,22 +188,28 @@ NS_ASSUME_NONNULL_BEGIN
     return draggingRect;
 }
 
+inline static NSBitmapImageRep* imageForView(NSView* const inView, NSRect const inBounds) {
+	if (@available(macOS 10.14, *)) {
+		NSBitmapImageRep* const imageRep = [inView bitmapImageRepForCachingDisplayInRect:inView.visibleRect];
+		[inView cacheDisplayInRect:inBounds toBitmapImageRep:imageRep];
+		return imageRep;
+	}
+	[inView lockFocus];
+	[inView display];  // forces update to ensure that we get current state
+	NSBitmapImageRep* imageRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:inBounds];
+	[inView unlockFocus];
+	return imageRep;
+}
+
 - (NSImage *)dragImage {
 
         // assure that we will draw the tab bar contents correctly
     [self setFrame:self.stackingFrame];
 
-    MMTabBarView *tabBarView = self.tabBarView;
-
-    NSRect draggingRect = self.draggingRect;
-        
-	[tabBarView lockFocus];
-    [tabBarView display];  // forces update to ensure that we get current state
-	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:draggingRect];
-	[tabBarView unlockFocus];
-	NSImage *image = [[NSImage alloc] initWithSize:rep.size];
-	[image addRepresentation:rep];
-	NSImage *returnImage = [[NSImage alloc] initWithSize:rep.size];
+	NSBitmapImageRep* const imageRep = imageForView(self.tabBarView, self.draggingRect);
+	NSImage* image = [[NSImage alloc] initWithSize:imageRep.size];
+	[image addRepresentation:imageRep];
+	NSImage* returnImage = [[NSImage alloc] initWithSize:imageRep.size];
 	[returnImage lockFocus];
     [image drawAtPoint:NSMakePoint(0.0, 0.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 	[returnImage unlockFocus];
