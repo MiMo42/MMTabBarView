@@ -1052,7 +1052,6 @@ inline static bool useShadow(NSView* const inView) {
 	if (useShadow(controlView)) {
 		NSShadow *shadow = [[NSShadow alloc] init];
 		[shadow setShadowColor:[NSColor.whiteColor colorWithAlphaComponent:0.4]];
-		[shadow setShadowColor:[NSColor.whiteColor colorWithAlphaComponent:0.6]];
 		[shadow setShadowBlurRadius:1.0];
 		[shadow setShadowOffset:NSMakeSize(0.0, -1.0)];
 		[shadow set];
