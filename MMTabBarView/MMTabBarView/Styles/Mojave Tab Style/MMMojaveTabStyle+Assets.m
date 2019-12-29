@@ -83,6 +83,17 @@ inline static NSColor* labelColor(void)
 	return NSColor.textColor;
 }
 
+inline static NSColor* secondaryLabelColor(void)
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
+	if ( @available(macos 10.10, *) )
+	{
+		return NSColor.secondaryLabelColor;
+	}
+#endif
+	return NSColor.selectedTextBackgroundColor;
+}
+
 - (NSDictionary<NSNumber*, NSDictionary<NSNumber*, id>*> *)assets
 {
     static NSDictionary<NSNumber*, NSDictionary<NSNumber*, id>*> *assets = nil;
@@ -211,8 +222,8 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.110 green:0.110 blue:0.110 alpha:1.0],
 
                      @(MMMtabSelectedFont)        : NSColor.textColor,
-                     @(MMMtabUnselectedFont)      : NSColor.selectedTextBackgroundColor,
-                     @(MMMtabUnselectedHoverFont) : NSColor.selectedTextBackgroundColor,
+                     @(MMMtabUnselectedFont)      : secondaryLabelColor(),
+                     @(MMMtabUnselectedHoverFont) : secondaryLabelColor(),
                      
                      @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.112 green:0.112 blue:0.112 alpha:1.0],
 
@@ -267,8 +278,8 @@ inline static NSColor* labelColor(void)
                      @(MMMtabUnselectedHover)     : [NSColor colorWithSRGBRed:0.110 green:0.110 blue:0.110 alpha:1.0],
 
                      @(MMMtabSelectedFont)        : NSColor.textColor,
-                     @(MMMtabUnselectedFont)      : NSColor.selectedTextBackgroundColor,
-                     @(MMMtabUnselectedHoverFont) : NSColor.selectedTextBackgroundColor,
+                     @(MMMtabUnselectedFont)      : secondaryLabelColor(),
+                     @(MMMtabUnselectedHoverFont) : secondaryLabelColor(),
                      
 					 @(MMMtabBarBackground)   : [NSColor colorWithSRGBRed:0.112 green:0.112 blue:0.112 alpha:1.0],
 
