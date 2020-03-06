@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL                            _needsUpdate;
 
     // delegate
-    id <MMTabBarViewDelegate>       _delegate;
+    id <MMTabBarViewDelegate> __weak _delegate;
 }
 
 static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasses = nil;
