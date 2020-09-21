@@ -161,7 +161,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	 // Figure out correct text color
     
-    if ( cell.controlView.state == NSOnState )
+    if ( cell.tabBarButton.state == NSOnState )
     {
         textColor = [self colorForPart:MMMtabSelectedFont ofTabBarView:cell.tabBarView];
     }
