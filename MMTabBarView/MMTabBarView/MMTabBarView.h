@@ -614,6 +614,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tabView:(NSTabView *)aTabView willCloseTabViewItem:(NSTabViewItem *)tabViewItem;
 - (void)tabView:(NSTabView *)aTabView didCloseTabViewItem:(NSTabViewItem *)tabViewItem;
 - (void)tabView:(NSTabView *)aTabView didDetachTabViewItem:(NSTabViewItem *)tabViewItem;
+- (void)tabView:(NSTabView *)aTabView willMoveTabViewItem:(NSTabViewItem *)tabViewItem toIndex:(NSUInteger)index;
 - (void)tabView:(NSTabView *)aTabView didMoveTabViewItem:(NSTabViewItem *)tabViewItem toIndex:(NSUInteger)index;
 
     // Informal tab bar visibility methods
