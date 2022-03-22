@@ -102,7 +102,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)mouseExited:(NSEvent *)event {
     _mouseHovered = NO;
-    [(NSControl *)self.controlView updateCell:self];
+    // Call this later or else MacOS 12.3 throws exception
+    [self.controlView performSelectorOnMainThread:@selector(updateCell:) withObject:self waitUntilDone:NO];
 }
 
 #pragma mark -
